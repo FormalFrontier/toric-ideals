@@ -18,36 +18,22 @@ sources:
   - title: "The Rising Sea: Foundations of Algebraic Geometry"
     authors:
       - "Ravi Vakil"
-    id: "Formal Frontier library s-98b197900a254be3b038fd296f43f763/v001, October 21, 2025 draft"
     type: "book"
     location: "Exercise 3.6.F"
     relationship: "adapts"
     note: >-
-      Mathematical motivation for the Hankel-minor and rational-normal-curve
-      parametrization. This library proves a positive-degree kernel statement
-      over arbitrary commutative coefficient rings and records the low-degree
-      boundaries; it does not formalize the book as a whole or its geometric
-      language. No book material is redistributed and no author participation
-      or endorsement is claimed.
+      October 21, 2025 draft. Motivation for the Hankel-minor and
+      rational-normal-curve parametrization.
+      The project adapts its own earlier source-research definitions and descent
+      argument; no book material is reproduced, and no author participation or
+      endorsement is claimed. This library does not formalize the book as a whole.
   - title: "Fiberwise kernel normalization and terminal-exponent uniqueness"
     type: "original-proof"
     relationship: "independently-proves"
     note: >-
-      Later original Formal Frontier proof work on coefficientwise normalization,
-      terminal-exponent uniqueness and the reverse Hankel-ideal inclusion was
-      contributed in toric-ideals commit
-      f79cb8935ecbe86e20b7b5ef1f1fb1f7db92bab6. The prior project-source
-      definitions and descent argument have separate adaptation credit below.
-
-related_formalizations:
-  - id: "FormalFrontier/source-vakil-foag at a544fbf84cf0f00411e9d921747b37d2b2bd7bc7"
-    relationship: "adapts"
-    note: >-
-      Project-created source-scratch formalization in
-      VakilResearch/Exercise36FGeneralScratch.lean (file SHA256
-      2379eca10995bd53b14c3389d23581f3dc8134c41ba5fa35eb1115de1bc91ce6).
-      Its definitions and descent arguments informed this library; the later
-      uniqueness, kernel proof and generic normalization are distinct work.
+      Later original Formal Frontier proof work establishes coefficientwise
+      normalization, terminal-exponent uniqueness and the reverse Hankel-ideal
+      inclusion, distinct from the adapted source-research descent argument.
 
 status:
   scope: >-
@@ -83,13 +69,12 @@ review:
   notes: >-
     Mathematical development, native module/test interfaces and earlier
     standalone documentation received independent agent review and owner
-    acceptance. Those historical reviews do not certify later artifacts. Exact
-    assembly review, findings, acceptance and publication are recorded separately
-    for each commit and tree. Schema validity is not release acceptance or
-    source coverage.
+    acceptance. Historical reviews do not certify later changes; review of the
+    present candidate and release acceptance are separate, as is source coverage.
 
 acknowledgements: >-
   The project depends on mathlib without bundling it. Ravi Vakil's exercise is
   mathematical motivation and does not imply participation or endorsement.
-  Atlas added the native example and documentation assembly; docs/README.md
-  preserves credit to Anchor's original documentation recipe and later adapters.
+  Atlas added the native example and Markdown reference using a recipe adapted
+  from Anchor's original project documentation work. Lean and doc-gen4 are
+  separately credited tools, not bundled documentation or source material.
