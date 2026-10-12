@@ -52,6 +52,12 @@ the split quadric.
   [`hankelIdeal_isRadical_iff`](ToricIdeals/RationalNormalCurve.lean) gives the
   same characterization of ideal radicality. No nontriviality, domain, field,
   cancellation or positive-degree assumption is needed.
+- **Noetherian quotient in every degree:** For any `[CommRing R]` and every
+  `n : ℕ`, including zero,
+  [`quotient_isNoetherianRing_iff`](ToricIdeals/RationalNormalCurve/Noetherian.lean)
+  says that the quotient by the Hankel minors is Noetherian **if and only if
+  `R` is Noetherian**. No field, domain, nontriviality or positive-degree
+  assumption is needed.
 - **Split-quadric exponent normal forms:** For the substitution
   `(w, x, y, z) ↦ (W, WT, Y, YT)`, the additive exponent map is
   `E(a, b, c, d) = (a+b, c+d, b+d)`. Its image is exactly the cone
@@ -161,6 +167,12 @@ by `ToricIdeals`.
   though it equals `⊤` and is neither proper nor prime; its quotient is not a
   domain. These are characterizations, not assertions of a nonempty or
   irreducible spectrum.
+- **Noetherianity:** For `(R : Type u) [CommRing R]` and every `n : ℕ`,
+  `quotient_isNoetherianRing_iff R n` states
+  `IsNoetherianRing (Source R n ⧸ hankelIdeal R n) ↔ IsNoetherianRing R`.
+  At degree zero this is the full one-variable polynomial quotient by `⊥`,
+  not the parametrization kernel or image. The zero coefficient ring is
+  included, as are Noetherian rings with zero divisors or nilpotents.
 - **Split-quadric reduction:** `exponentMap` maps `Fin 4 →₀ ℕ` additively to
   `Fin 3 →₀ ℕ` with the coordinates displayed above. `reduce` replaces
   `k = min(a, d)` copies of `wz` by `xy`, giving
@@ -280,6 +292,17 @@ use both characterizations with concrete witnesses:
 - `zero_coefficients_reduced_radical_unit_zero`: over `ZMod 1` at degrees zero
   and two, the quotient units equal zero. The quotients are reduced but not
   domains, and the ideals are radical.
+
+For Noetherianity, import `ToricIdeals.RationalNormalCurve.Noetherian` or the
+root module. Apply `(quotient_isNoetherianRing_iff R n).mpr` to a proof of
+`IsNoetherianRing R`; `.mp` recovers coefficient Noetherianity. The stored
+[positive models](ToricIdealsTest/RationalNormalCurveNoetherianModels.lean)
+use both directions over arbitrary commutative rings and specialize the
+criterion to `ZMod 4`, `ZMod 1` and `ℤ × ℤ`. The
+[negative models](ToricIdealsTest/RationalNormalCurveNoetherianNegativeModels.lean)
+show that `ℕ → ZMod 2` is not Noetherian using a strictly ascending chain of
+coordinate-unit ideals, and hence that its Hankel quotient is non-Noetherian
+in every degree, including zero.
 
 ## Build
 
