@@ -3,15 +3,16 @@ version: "v0.4"
 project:
   name: "Toric Ideals"
   description: >-
-    Reusable Lean theory of coefficientwise fiber normalization for additive
-    monoid algebras and the Hankel-minor presentation of the degree-n rational
+    Reusable Lean theory of coefficientwise fiber normalization over arbitrary
+    rings, its kernel and ideal-membership criteria for additive monoid
+    algebras, and the Hankel-minor presentation of the degree-n rational
     normal curve's monomial-map kernel for positive n over arbitrary commutative
     rings, with low-degree boundaries, a quotient-to-image equivalence and
     domain-dependent consequences.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
-    - "Atlas (Formal Frontier)"
+    - "Almanac (Formal Frontier)"
   license: "Apache-2.0"
 
 sources:
@@ -37,7 +38,9 @@ sources:
 
 status:
   scope: >-
-    The generic coefficientwise kernel principle and the specified Hankel-minor
+    The generic coefficientwise normalization principle for arbitrary index
+    functions, its kernel criteria for additive exponent homomorphisms between
+    additive monoids over any ring, and the specified Hankel-minor
     presentation, degree-zero and degree-one boundaries, quotient-to-image
     equivalence and domain-dependent prime/spectrum results. No general
     classification of toric ideals or whole-source coverage is asserted.
@@ -46,18 +49,20 @@ automation:
   methods:
     - method: "agent"
       tool_setup: >-
-        Formal Frontier agent-managed Lean development in a pinned Lean 4 and
-        mathlib Lake project, with Git-recorded contributions and separate
-        independent agent review of accepted mathematical changes.
+        AI-assisted Lean development in a pinned Lean 4 and mathlib Lake project.
   notes: >-
-    AI agents developed and independently reviewed the integrated mathematical
-    code and earlier standalone documentation. Atlas assembled the named README
-    example and native Markdown reference using a recipe adapted from Anchor's
-    original ideal-completion tooling through integral-closure and minimal-primes.
+    AI agents developed the mathematical code and documentation, with independent
+    agent review of the mathematics. Atlas assembled the named README example and
+    native Markdown reference using a recipe adapted from Anchor's original
+    ideal-completion tooling through integral-closure and minimal-primes.
     No model, cost, benchmark comparison or human-review claim is made here.
 
 fidelity:
   divergences: >-
+    Coefficientwise normalization needs neither coefficient nor exponent
+    commutativity; its arbitrary-function form asserts membership of elements
+    with vanishing fiber sums, not multiplicativity. Kernel equality for additive
+    exponent homomorphisms separately requires the ideal to lie in the kernel.
     The curve kernel equality generalizes the motivating example to arbitrary
     commutative coefficient rings for positive n. Domain and irreducible-spectrum
     consequences require a domain; the degree-zero equality fails for nontrivial
@@ -67,10 +72,8 @@ fidelity:
 review:
   status: "agent-reviewed mathematical development"
   notes: >-
-    Mathematical development, native module/test interfaces and earlier
-    standalone documentation received independent agent review and owner
-    acceptance. Historical reviews do not certify later changes; review of the
-    present candidate and release acceptance are separate, as is source coverage.
+    The mathematical code and module/test interfaces received independent agent
+    review.
 
 acknowledgements: >-
   The project depends on mathlib without bundling it. Ravi Vakil's exercise is

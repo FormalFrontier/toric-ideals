@@ -4,7 +4,9 @@ Authors: Formal Frontier Agents
 -/
 module
 
+import Mathlib.Algebra.MvPolynomial.Nilpotent
 public import Mathlib.Data.Finsupp.Weight
+import Mathlib.RingTheory.Ideal.Quotient.Nilpotent
 public import Mathlib.RingTheory.MvPolynomial.Ideal
 public import Mathlib.RingTheory.Spectrum.Prime.Topology
 public import ToricIdeals.MonoidAlgebra.FiberNormalization
@@ -728,6 +730,106 @@ theorem quotient_isDomain [IsDomain k] (n : ℕ) (hn : 1 ≤ n) :
     IsDomain (Source k n ⧸ hankelIdeal k n) := by
   rw [Ideal.Quotient.isDomain_iff_prime]
   exact hankelIdeal_isPrime k n hn
+
+/-- For every `n`, the Hankel ideal is prime exactly when the coefficient ring is
+a domain. The Hankel presentation is motivated by Vakil, *The Rising Sea*,
+Exercise 3.6.F.
+
+At `n = 0` the ideal is `⊥`, so primality still detects the coefficient domain.
+This does not extend `hankelIdeal_eq_ker` to degree zero: over a nontrivial ring,
+the sole variable maps to `1` and the parametrization kernel is strictly larger. -/
+theorem hankelIdeal_isPrime_iff (R : Type u) [CommRing R] (n : ℕ) :
+    (hankelIdeal R n).IsPrime ↔ IsDomain R := by
+  constructor
+  · intro hprime
+    let : (hankelIdeal R n).IsPrime := hprime
+    have hcomap : (hankelIdeal R n).comap
+        (MvPolynomial.C : R →+* Source R n) = ⊥ := by
+      apply le_antisymm ?_ bot_le
+      intro r hr
+      change (MvPolynomial.C r : Source R n) ∈ hankelIdeal R n at hr
+      have hzero := hankelIdeal_le_ker R n hr
+      change rncMap R n (MvPolynomial.C r) = 0 at hzero
+      have hconstant : rncMap R n (MvPolynomial.C r) =
+          (MvPolynomial.C r : Target R) := by
+        rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
+        change AddMonoidAlgebra.mapDomain (rncExponent n)
+            (AddMonoidAlgebra.single 0 r) = AddMonoidAlgebra.single 0 r
+        rw [AddMonoidAlgebra.mapDomain_single, map_zero]
+      rw [hconstant] at hzero
+      exact Ideal.mem_bot.mpr (MvPolynomial.C_eq_zero.mp hzero)
+    let : (⊥ : Ideal R).IsPrime := by
+      rw [← hcomap]
+      exact Ideal.comap_isPrime
+        (MvPolynomial.C : R →+* Source R n) (hankelIdeal R n)
+    exact IsDomain.of_bot_isPrime R
+  · intro hdomain
+    let : IsDomain R := hdomain
+    cases n with
+    | zero =>
+      rw [hankelIdeal_zero]
+      infer_instance
+    | succ n =>
+      exact hankelIdeal_isPrime R (n + 1) (Nat.succ_le_succ (Nat.zero_le n))
+
+/-- For every `n`, the quotient by the Hankel minors is a domain exactly when
+the coefficient ring is a domain. This is the quotient formulation of
+`hankelIdeal_isPrime_iff`, via Mathlib's `Ideal.Quotient.isDomain_iff_prime`.
+
+At `n = 0` there are no minors, and the quotient is the one-variable polynomial
+ring. Both sides fail for the zero coefficient ring. Nontriviality alone is not
+enough: a product of two nontrivial commutative rings has zero divisors, and its
+Hankel quotient is not a domain. -/
+theorem quotient_isDomain_iff (R : Type u) [CommRing R] (n : ℕ) :
+    IsDomain (Source R n ⧸ hankelIdeal R n) ↔ IsDomain R := by
+  rw [Ideal.Quotient.isDomain_iff_prime]
+  exact hankelIdeal_isPrime_iff R n
+
+/-- For every degree, the quotient by the Hankel minors is reduced exactly when
+its coefficient ring is reduced. This includes zero rings and reduced rings
+with zero divisors. At degree zero the ideal is `⊥`, giving the one-variable
+polynomial ring; no identification with the parametrization kernel or image is
+asserted at that degree. -/
+theorem quotient_isReduced_iff (R : Type u) [CommRing R] (n : ℕ) :
+    IsReduced (Source R n ⧸ hankelIdeal R n) ↔ IsReduced R := by
+  constructor
+  · intro hquotient
+    let : IsReduced (Source R n ⧸ hankelIdeal R n) := hquotient
+    have hconstant (r : R) : rncMap R n (C r) = (C r : Target R) := by
+      rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
+      change AddMonoidAlgebra.mapDomain (rncExponent n)
+          (AddMonoidAlgebra.single 0 r) = AddMonoidAlgebra.single 0 r
+      rw [AddMonoidAlgebra.mapDomain_single, map_zero]
+    let f : R →+* Source R n ⧸ hankelIdeal R n :=
+      (Ideal.Quotient.mk (hankelIdeal R n)).comp (MvPolynomial.C : R →+* Source R n)
+    have hf : Function.Injective f := by
+      intro a b hab
+      have hker := hankelIdeal_le_ker R n (Ideal.Quotient.eq.mp hab)
+      change rncMap R n (C a - C b) = 0 at hker
+      rw [map_sub, hconstant, hconstant, sub_eq_zero] at hker
+      exact MvPolynomial.C_injective (Fin 2) R hker
+    exact isReduced_of_injective f hf
+  · intro hR
+    let : IsReduced R := hR
+    cases n with
+    | zero =>
+      rw [hankelIdeal_zero]
+      exact isReduced_of_injective (RingEquiv.quotientBot (Source R 0))
+        (RingEquiv.quotientBot (Source R 0)).injective
+    | succ n =>
+      let e := quotientEquivRange R (n + 1) (Nat.succ_le_succ (Nat.zero_le n))
+      exact isReduced_of_injective ((rncMap R (n + 1)).range.subtype.comp e.toRingHom)
+        ((rncMap R (n + 1)).range.subtype_injective.comp e.injective)
+
+/-- For every degree, the Hankel-minor ideal is radical exactly when its
+coefficient ring is reduced. This is the ideal-quotient reformulation of
+`quotient_isReduced_iff` via Mathlib's `Ideal.isRadical_iff_quotient_reduced`.
+Radicality imposes neither properness nor primality, so zero rings and reduced
+coefficient rings with zero divisors are included. -/
+theorem hankelIdeal_isRadical_iff (R : Type u) [CommRing R] (n : ℕ) :
+    (hankelIdeal R n).IsRadical ↔ IsReduced R := by
+  exact (Ideal.isRadical_iff_quotient_reduced (hankelIdeal R n)).trans
+    (quotient_isReduced_iff R n)
 
 /-- The prime spectrum of the rational-normal-curve coordinate ring is
 irreducible over a domain. -/

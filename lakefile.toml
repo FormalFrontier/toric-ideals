@@ -18,4 +18,8 @@ name = "ToricIdeals"
 
 [[lean_lib]]
 name = "ToricIdealsTest"
-roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest.ReadmeKernel"]
+roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest.ReadmeKernel",
+  "ToricIdealsTest.FiberNormalizationExamples", "ToricIdealsTest.FiberNormalizationClient",
+  "ToricIdealsTest.RationalNormalCurveDomainModels",
+  "ToricIdealsTest.RationalNormalCurveReducedModels",
+  "ToricIdealsTest.SplitQuadricModels"]
