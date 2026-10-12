@@ -10,7 +10,9 @@ project:
     rings, with low-degree boundaries, a quotient-to-image equivalence,
     domain-dependent consequences, all-degree standard-graded homogeneity of
     the original Hankel ideal, all-degree coefficient criteria for domain,
-    reduced and Noetherian Hankel quotient rings, and an arithmetic
+    reduced and Noetherian Hankel quotient rings, the all-degree criterion
+    that the Hankel quotient is Artinian over itself exactly for zero
+    coefficient rings, and an arithmetic
     characterization of the natural exponent image in every degree.
   authors:
     - "Formal Frontier Agents"
@@ -48,7 +50,11 @@ status:
     presentation, degree-zero and degree-one boundaries, quotient-to-image
     equivalence, domain-dependent prime/spectrum results, and coefficient
     criteria for primality, reducedness, radicality and Noetherianity in every
-    degree. The original Hankel ideal is homogeneous for Mathlib's canonical
+    degree. For every (R : Type u) [CommRing R] and n : ℕ,
+    quotient_isArtinianRing_iff states that the Hankel quotient is Artinian
+    as a module over itself if and only if Subsingleton R. Finite nonzero
+    Artinian coefficients alone do not imply an Artinian quotient.
+    The original Hankel ideal is homogeneous for Mathlib's canonical
     natural-number grading of the source polynomial ring for every
     (R : Type u) [CommRing R] and n : ℕ, including zero rings and n = 0, 1.
     ToricIdeals.RationalNormalCurve.ExponentImage provides
@@ -88,7 +94,11 @@ fidelity:
     rings. The all-degree coefficient criteria concern the quotient by the
     Hankel ideal itself; at degree zero this is the full one-variable
     polynomial quotient by the zero ideal, not the parametrization kernel or
-    image. Standard-graded homogeneity also concerns the original Hankel ideal
+    image. The Artinian criterion concerns the quotient as a module over
+    itself, not over its coefficient ring; it is equivalent to the coefficient
+    ring being a zero ring, not merely Artinian. It includes nilpotent and
+    product coefficients and the full degree-zero and degree-one polynomial
+    quotients. Standard-graded homogeneity also concerns the original Hankel ideal
     in every degree: n = 0 has one source variable and ideal zero, while n = 1
     has two source variables and ideal zero. It requires no nontriviality,
     domain, field, reducedness or positive-degree assumption, and a minor's

@@ -28,4 +28,5 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.RationalNormalCurveHomogeneityClient",
   "ToricIdealsTest.RationalNormalCurveNoetherianModels",
   "ToricIdealsTest.RationalNormalCurveNoetherianNegativeModels",
+  "ToricIdealsTest.RationalNormalCurveArtinianModels",
   "ToricIdealsTest.SplitQuadricModels"]

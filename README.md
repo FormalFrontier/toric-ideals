@@ -80,6 +80,13 @@ the split quadric.
   says that the quotient by the Hankel minors is Noetherian **if and only if
   `R` is Noetherian**. No field, domain, nontriviality or positive-degree
   assumption is needed.
+- **Artinian quotient in every degree:** For any `(R : Type u) [CommRing R]`
+  and every `n : ℕ`,
+  [`quotient_isArtinianRing_iff`](ToricIdeals/RationalNormalCurve/Artinian.lean)
+  says that the quotient by the Hankel minors is Artinian over itself **if and
+  only if `R` is a zero ring**, expressed by `Subsingleton R`. This includes
+  degrees zero and one, with their full polynomial quotients. In particular,
+  finite Artinian nonzero coefficients such as `ZMod 4` do not suffice.
 - **Split-quadric exponent normal forms:** For the substitution
   `(w, x, y, z) ↦ (W, WT, Y, YT)`, the additive exponent map is
   `E(a, b, c, d) = (a+b, c+d, b+d)`. Its image is exactly the cone
@@ -107,6 +114,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
 | [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree coefficient criterion for quotient Noetherianity |
+| [`ToricIdeals.RationalNormalCurve.Artinian`](ToricIdeals/RationalNormalCurve/Artinian.lean) | All-degree zero-coefficient criterion for quotient Artinianity |
 | [`ToricIdeals.SplitQuadric.Exponents`](ToricIdeals/SplitQuadric/Exponents.lean) | Exponent reduction, image cone and unique reduced representatives |
 
 ## Mathematical API
@@ -220,6 +228,13 @@ by `ToricIdeals`.
   At degree zero this is the full one-variable polynomial quotient by `⊥`,
   not the parametrization kernel or image. The zero coefficient ring is
   included, as are Noetherian rings with zero divisors or nilpotents.
+- **Artinianity:** For `(R : Type u) [CommRing R]` and every `n : ℕ`,
+  `quotient_isArtinianRing_iff R n` states
+  `IsArtinianRing (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R`.
+  Artinianity means the quotient is Artinian as a module over itself, not
+  over `R`. At degrees zero and one the quotients are the full one-variable
+  and two-variable polynomial presentations. Every nonzero coefficient ring
+  gives a non-Artinian quotient, even when it is finite, Artinian or nonreduced.
 - **Split-quadric reduction:** `exponentMap` maps `Fin 4 →₀ ℕ` additively to
   `Fin 3 →₀ ℕ` with the coordinates displayed above. `reduce` replaces
   `k = min(a, d)` copies of `wz` by `xy`, giving
@@ -350,6 +365,15 @@ criterion to `ZMod 4`, `ZMod 1` and `ℤ × ℤ`. The
 show that `ℕ → ZMod 2` is not Noetherian using a strictly ascending chain of
 coordinate-unit ideals, and hence that its Hankel quotient is non-Noetherian
 in every degree, including zero.
+
+For Artinianity, import `ToricIdeals.RationalNormalCurve.Artinian` or the
+root module. The forward direction `.mp` recovers `Subsingleton R`; `.mpr`
+gives Artinianity for zero coefficients. The stored root-import clients in
+[`ToricIdealsTest.Audit`](ToricIdealsTest/Audit.lean) apply the criterion to
+`ZMod 1` and `ZMod 4` in every degree. The independent
+[Artinian models](ToricIdealsTest/RationalNormalCurveArtinianModels.lean)
+cover integers, nilpotent and product coefficients, full small-degree
+polynomial quotients and the conic relation using the Hankel presentation.
 
 For homogeneity, import `ToricIdeals.RationalNormalCurve.Homogeneous` or the
 root module and select Mathlib's canonical source grading locally:
