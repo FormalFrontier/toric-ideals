@@ -9,8 +9,9 @@ project:
     normal curve's monomial-map kernel for positive n over arbitrary commutative
     rings, with low-degree boundaries, a quotient-to-image equivalence,
     domain-dependent consequences, all-degree standard-graded homogeneity of
-    the original Hankel ideal, and all-degree coefficient criteria for domain,
-    reduced and Noetherian Hankel quotient rings.
+    the original Hankel ideal, all-degree coefficient criteria for domain,
+    reduced and Noetherian Hankel quotient rings, and an arithmetic
+    characterization of the natural exponent image in every degree.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -30,13 +31,14 @@ sources:
       The project adapts its own earlier source-research definitions and descent
       argument; no book material is reproduced, and no author participation or
       endorsement is claimed. This library does not formalize the book as a whole.
-  - title: "Fiberwise kernel normalization and terminal-exponent uniqueness"
+  - title: "Fiberwise kernel normalization, terminal-exponent uniqueness and exponent images"
     type: "original-proof"
     relationship: "independently-proves"
     note: >-
       Later original Formal Frontier proof work establishes coefficientwise
-      normalization, terminal-exponent uniqueness and the reverse Hankel-ideal
-      inclusion, distinct from the adapted source-research descent argument.
+      normalization, terminal-exponent uniqueness, the reverse Hankel-ideal
+      inclusion and the arithmetic exponent-image criterion, distinct from
+      the adapted source-research descent argument.
 
 status:
   scope: >-
@@ -49,6 +51,16 @@ status:
     degree. The original Hankel ideal is homogeneous for Mathlib's canonical
     natural-number grading of the source polynomial ring for every
     (R : Type u) [CommRing R] and n : ℕ, including zero rings and n = 0, 1.
+    ToricIdeals.RationalNormalCurve.ExponentImage provides
+    mem_mrange_rncExponent_iff: for every n : ℕ and t : Fin 2 →₀ ℕ,
+    membership in AddMonoidHom.mrange (rncExponent n) is equivalent to
+    n dividing t 0 + t 1. The degree-zero image is the zero exponent.
+    ToricIdealsTest.RationalNormalCurveExponentImageModels gives independent
+    small-degree image and exclusion examples.
+    ToricIdealsTest.RationalNormalCurveExponentImageClient provides
+    fiberNormalExponent_normal_and_image_of_dvd: for 1 ≤ n and any target
+    satisfying divisibility, fiberNormalExponent ℤ n t is Normal and maps
+    back to t, with the mixed cubic family (4m+2, 2m+1) as an example.
     No quotient grading, rank or Hilbert-function formula, general
     classification of toric ideals or whole-source coverage is asserted.
 
@@ -81,7 +93,12 @@ fidelity:
     has two source variables and ideal zero. It requires no nontriviality,
     domain, field, reducedness or positive-degree assumption, and a minor's
     homogeneous degree label two does not imply total degree two for a zero
-    polynomial. The positive-degree image equivalence is an equivalence of rings,
+    polynomial. The exponent-image criterion has no coefficient-ring or
+    positive-degree premise. The selector client requires 1 ≤ n because it
+    uses the existing fiber-selection law, and specializes its inherited
+    commutative coefficient-ring parameter to ℤ; it requires no supplied
+    source preimage, domain or field hypothesis.
+    The positive-degree image equivalence is an equivalence of rings,
     not a scheme isomorphism or a classification of toric ideals.
 
 review:

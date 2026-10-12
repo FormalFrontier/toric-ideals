@@ -30,6 +30,18 @@ the split quadric.
   without a field or domain hypothesis. The [curve module](ToricIdeals/RationalNormalCurve.lean)
   develops the decreasing-energy reduction and uniqueness *among terminal
   exponents*; its choices are classical, not executable canonical algorithms.
+- **Arithmetic exponent image:** For every `n : ℕ` and natural-valued target
+  `t : Fin 2 →₀ ℕ`,
+  [`mem_mrange_rncExponent_iff`](ToricIdeals/RationalNormalCurve/ExponentImage.lean)
+  says that `t` lies in the additive image exactly when `n ∣ (t 0 + t 1)`.
+  At degree zero only the zero target occurs. The
+  [independent small-degree examples](ToricIdealsTest/RationalNormalCurveExponentImageModels.lean)
+  include mixed conic and cubic images and excluded targets. For `1 ≤ n`, the
+  [selector client](ToricIdealsTest/RationalNormalCurveExponentImageClient.lean)
+  derives terminality and the preimage law for `fiberNormalExponent ℤ n t`
+  from divisibility alone, including the cubic family `(4m+2, 2m+1)`.
+  Here `ℤ` only instantiates the existing selector's coefficient-ring parameter;
+  the image criterion itself is coefficient-free.
 - **Primality and quotient domains in every degree:** For any commutative
   coefficient ring `R` and every `n : ℕ`, including zero,
   [`hankelIdeal_isPrime_iff`](ToricIdeals/RationalNormalCurve.lean) and
@@ -92,6 +104,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
+| [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
 | [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree coefficient criterion for quotient Noetherianity |
 | [`ToricIdeals.SplitQuadric.Exponents`](ToricIdeals/SplitQuadric/Exponents.lean) | Exponent reduction, image cone and unique reduced representatives |
