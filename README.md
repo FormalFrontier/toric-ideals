@@ -52,6 +52,16 @@ the split quadric.
   [`hankelIdeal_isRadical_iff`](ToricIdeals/RationalNormalCurve.lean) gives the
   same characterization of ideal radicality. No nontriviality, domain, field,
   cancellation or positive-degree assumption is needed.
+- **Homogeneous Hankel ideal in every degree:** For every
+  `(R : Type u) [CommRing R]` and `n : ℕ`,
+  [`hankelIdeal_isHomogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean)
+  says that the original Hankel-minor ideal is `Ideal.IsHomogeneous` for
+  Mathlib's standard natural-number grading of the source polynomial ring.
+  Thus every homogeneous component of a member again belongs to the ideal,
+  and membership is equivalent to membership of all components. Zero rings
+  and `n = 0, 1` are included, with no nontriviality or positive-degree premise.
+  This result constructs no quotient grading and asserts no rank or
+  Hilbert-function formula.
 - **Noetherian quotient in every degree:** For any `[CommRing R]` and every
   `n : ℕ`, including zero,
   [`quotient_isNoetherianRing_iff`](ToricIdeals/RationalNormalCurve/Noetherian.lean)
@@ -72,6 +82,19 @@ This library does not classify general toric ideals or prove rational-normal-cur
 results outside the stated parametrization and hypotheses. It is organized for
 reuse independently of its source motivation; source-passage correspondence and
 coverage are tracked separately and not claimed by this README.
+
+## Modules
+
+Every leaf below is re-exported by the root import `ToricIdeals`.
+
+| Module | Contents |
+| --- | --- |
+| [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
+| [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
+| [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
+| [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
+| [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree coefficient criterion for quotient Noetherianity |
+| [`ToricIdeals.SplitQuadric.Exponents`](ToricIdeals/SplitQuadric/Exponents.lean) | Exponent reduction, image cone and unique reduced representatives |
 
 ## Mathematical API
 
@@ -167,6 +190,17 @@ by `ToricIdeals`.
   though it equals `⊤` and is neither proper nor prime; its quotient is not a
   domain. These are characterizations, not assertions of a nonempty or
   irreducible spectrum.
+- **Homogeneity:** For `(R : Type u) [CommRing R]` and all `n : ℕ`,
+  `hankelIdeal_isHomogeneous R n` states
+  `Ideal.IsHomogeneous (MvPolynomial.homogeneousSubmodule (Fin (n + 1)) R)
+  (hankelIdeal R n)`. The canonical grading is selected with
+  `attribute [local instance] MvPolynomial.gradedAlgebra`; no new global
+  instance is introduced. At `n = 0` the source is the full one-variable
+  polynomial ring with ideal `⊥`, not the parametrization kernel or image;
+  at `n = 1` it is a two-variable polynomial ring with ideal `⊥`.
+  The theorem includes the zero coefficient ring and rings with zero divisors
+  or nilpotents. A minor's homogeneous degree label `2` does not assert total
+  degree `2` when the polynomial is zero.
 - **Noetherianity:** For `(R : Type u) [CommRing R]` and every `n : ℕ`,
   `quotient_isNoetherianRing_iff R n` states
   `IsNoetherianRing (Source R n ⧸ hankelIdeal R n) ↔ IsNoetherianRing R`.
@@ -303,6 +337,27 @@ criterion to `ZMod 4`, `ZMod 1` and `ℤ × ℤ`. The
 show that `ℕ → ZMod 2` is not Noetherian using a strictly ascending chain of
 coordinate-unit ideals, and hence that its Hankel quotient is non-Noetherian
 in every degree, including zero.
+
+For homogeneity, import `ToricIdeals.RationalNormalCurve.Homogeneous` or the
+root module and select Mathlib's canonical source grading locally:
+
+```lean
+attribute [local instance] MvPolynomial.gradedAlgebra
+```
+
+Given `hf : f ∈ hankelIdeal R n`, use
+`MvPolynomial.homogeneousComponent_mem_of_mem (hankelIdeal_isHomogeneous R n) hf d`
+to obtain membership of the degree-`d` component. The theorem
+`MvPolynomial.mem_iff_homogeneousComponent_mem (hankelIdeal_isHomogeneous R n) f`
+gives the componentwise membership criterion. The stored
+[homogeneity clients](ToricIdealsTest/RationalNormalCurveHomogeneityClient.lean)
+apply both primitives to `g + X₀*g`, where `g = X₀X₂ - X₁²`, over arbitrary
+commutative rings. Over `ℤ` its quadratic component is the nonzero minor `g`
+and belongs to the ideal. The independent
+[coefficient models](ToricIdealsTest/RationalNormalCurveHomogeneityModels.lean)
+also cover the small-degree boundaries, characteristic two, nilpotent and
+product coefficients, and the zero coefficient ring. These concern the
+standard source grading, not a constructed quotient grading.
 
 ## Build
 

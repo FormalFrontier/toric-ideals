@@ -8,8 +8,9 @@ project:
     algebras, and the Hankel-minor presentation of the degree-n rational
     normal curve's monomial-map kernel for positive n over arbitrary commutative
     rings, with low-degree boundaries, a quotient-to-image equivalence,
-    domain-dependent consequences, and all-degree coefficient criteria for
-    domain, reduced and Noetherian Hankel quotient rings.
+    domain-dependent consequences, all-degree standard-graded homogeneity of
+    the original Hankel ideal, and all-degree coefficient criteria for domain,
+    reduced and Noetherian Hankel quotient rings.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -45,8 +46,11 @@ status:
     presentation, degree-zero and degree-one boundaries, quotient-to-image
     equivalence, domain-dependent prime/spectrum results, and coefficient
     criteria for primality, reducedness, radicality and Noetherianity in every
-    degree. No general classification of toric ideals or whole-source coverage
-    is asserted.
+    degree. The original Hankel ideal is homogeneous for Mathlib's canonical
+    natural-number grading of the source polynomial ring for every
+    (R : Type u) [CommRing R] and n : ℕ, including zero rings and n = 0, 1.
+    No quotient grading, rank or Hilbert-function formula, general
+    classification of toric ideals or whole-source coverage is asserted.
 
 automation:
   methods:
@@ -72,7 +76,12 @@ fidelity:
     rings. The all-degree coefficient criteria concern the quotient by the
     Hankel ideal itself; at degree zero this is the full one-variable
     polynomial quotient by the zero ideal, not the parametrization kernel or
-    image. The positive-degree image equivalence is an equivalence of rings,
+    image. Standard-graded homogeneity also concerns the original Hankel ideal
+    in every degree: n = 0 has one source variable and ideal zero, while n = 1
+    has two source variables and ideal zero. It requires no nontriviality,
+    domain, field, reducedness or positive-degree assumption, and a minor's
+    homogeneous degree label two does not imply total degree two for a zero
+    polynomial. The positive-degree image equivalence is an equivalence of rings,
     not a scheme isomorphism or a classification of toric ideals.
 
 review:
