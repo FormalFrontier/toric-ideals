@@ -94,6 +94,15 @@ the split quadric.
   only if `R` is a zero ring**, expressed by `Subsingleton R`. This includes
   degrees zero and one, with their full polynomial quotients. In particular,
   finite Artinian nonzero coefficients such as `ZMod 4` do not suffice.
+- **Regular coordinates in every degree:** For any `[CommRing R]`, every
+  `n : ℕ` and `i : Fin (n + 1)`,
+  [`isRegular_quotient_X`](ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean)
+  says that multiplication by the class of `X i` in the Hankel quotient is
+  injective on both sides, including over nilpotent coefficients and zero rings.
+  At degree zero this is the full one-variable quotient by `⊥`, not the
+  parametrization image. The [coordinate guide](docs/README.md#regular-coordinates-and-localization)
+  explains cancellation, independent boundary models and the stored client
+  proving injectivity of localization away from each coordinate class.
 - **Split-quadric exponent normal forms:** For the substitution
   `(w, x, y, z) ↦ (W, WT, Y, YT)`, the additive exponent map is
   `E(a, b, c, d) = (a+b, c+d, b+d)`. Its image is exactly the cone
@@ -123,6 +132,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree coefficient criterion for quotient Noetherianity |
 | [`ToricIdeals.RationalNormalCurve.Jacobson`](ToricIdeals/RationalNormalCurve/Jacobson.lean) | All-degree coefficient criterion for quotient Jacobsonness |
 | [`ToricIdeals.RationalNormalCurve.Artinian`](ToricIdeals/RationalNormalCurve/Artinian.lean) | All-degree zero-coefficient criterion for quotient Artinianity |
+| [`ToricIdeals.RationalNormalCurve.CoordinateRegularity`](ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean) | Regularity of every coordinate class over arbitrary commutative rings in every degree |
 | [`ToricIdeals.SplitQuadric.Exponents`](ToricIdeals/SplitQuadric/Exponents.lean) | Exponent reduction, image cone and unique reduced representatives |
 
 ## Use
@@ -172,6 +182,8 @@ The [API guide](docs/README.md) describes theorem usage and stored examples,
 including the [Jacobson criterion and its root-import clients](docs/README.md#jacobson-hankel-quotients).
 Those clients use both directions of the criterion; coefficient models include
 nilpotents, zero divisors, zero rings, and a Noetherian non-Jacobson boundary.
+For coordinate cancellation and the canonical localization map, see
+[regular coordinates and localization](docs/README.md#regular-coordinates-and-localization).
 
 ## Build
 

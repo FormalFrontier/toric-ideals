@@ -47,6 +47,77 @@ are Jacobson without being Artinian over themselves. The
 show that `PowerSeries ℚ` and all its Hankel quotients are Noetherian but not
 Jacobson. Thus Noetherianity alone does not imply the Jacobson property.
 
+## Regular coordinates and localization
+
+Import `ToricIdeals.RationalNormalCurve.CoordinateRegularity`, or the root
+`ToricIdeals`. The public theorem is in `ToricIdeals.RationalNormalCurve`:
+
+```lean
+theorem isRegular_quotient_X (R : Type u) [CommRing R] (n : ℕ)
+    (i : Fin (n + 1)) :
+    _root_.IsRegular
+      (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X i : Source R n))
+```
+
+This is the signature from the
+[coordinate-regularity module](../ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean#L59).
+It applies in every degree to every coordinate over any commutative coefficient
+ring, including rings with zero divisors or nilpotents and the zero ring.
+The root `IsRegular` means that multiplication by this class is injective
+on both sides; it is element regularity, not a regular-sequence assertion.
+No domain, reducedness, Noetherianity, nontriviality or positive-degree
+hypothesis is needed. At degree zero the quotient is the full one-variable
+polynomial ring by `⊥`, not the parametrization kernel or image; at degree
+one it is the full two-variable polynomial ring.
+
+A standalone root-import use of the public theorem is:
+
+```lean
+module
+
+import ToricIdeals
+
+open ToricIdeals.RationalNormalCurve
+
+universe u
+
+example (R : Type u) [CommRing R] (n : ℕ) (i : Fin (n + 1)) :
+    _root_.IsRegular
+      (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X i : Source R n)) :=
+  isRegular_quotient_X R n i
+```
+
+Use `(isRegular_quotient_X R n i).left` to cancel the coordinate class on the
+left and `.right` to cancel it on the right. The first and last coordinates
+are `i = 0` and `i = Fin.last n`; they coincide at degree zero. The independent
+[coefficient and boundary models](../ToricIdealsTest/RationalNormalCurveCoordinateRegularityModels.lean)
+use only the existing Hankel presentation and generic polynomial and quotient
+APIs. They cover the zero ring in every degree, full degree-zero and degree-one
+quotients, nonreduced `ZMod 4` coefficients, a nonzero square-zero constant,
+orthogonal product constants, and nonzero integer coordinate classes,
+including the interior coordinate in degree two.
+
+The stored [coordinate-localization client](../ToricIdealsTest/RationalNormalCurveCoordinateLocalization.lean#L45)
+imports the producer directly and provides this public theorem in the same
+namespace:
+
+```lean
+theorem injective_algebraMap_away_quotient_X (R : Type u) [CommRing R] (n : ℕ)
+    (i : Fin (n + 1)) :
+    Function.Injective
+      (algebraMap (Source R n ⧸ hankelIdeal R n)
+        (Localization.Away
+          (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X i : Source R n))))
+```
+
+This is the canonical map from the same Hankel quotient to its localization
+away from the same coordinate class, with the same hypotheses. Inverting the
+coordinate does not identify distinct quotient elements. To use this client
+by name, import `ToricIdealsTest.RationalNormalCurveCoordinateLocalization`;
+it is a test-root theorem, not re-exported by the library root `ToricIdeals`.
+These results assert injectivity, not a Laurent-chart formula, rank, flatness
+or dimension calculation.
+
 ## Mathematical API
 
 The declarations listed in this section are public. The generic theorem is in
@@ -168,6 +239,11 @@ by `ToricIdeals`.
   over `R`. At degrees zero and one the quotients are the full one-variable
   and two-variable polynomial presentations. Every nonzero coefficient ring
   gives a non-Artinian quotient, even when it is finite, Artinian or nonreduced.
+- **Coordinate cancellation:** `isRegular_quotient_X R n i` is root
+  `IsRegular` of `Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X i)`.
+  Its `.left` and `.right` fields provide the two multiplication injections
+  for every coordinate, with no extra ring or degree hypothesis; see
+  [regular coordinates and localization](#regular-coordinates-and-localization).
 - **Split-quadric reduction:** `exponentMap` maps `Fin 4 →₀ ℕ` additively to
   `Fin 3 →₀ ℕ` with coordinates `E(a, b, c, d) = (a+b, c+d, b+d)`.
   `reduce` replaces

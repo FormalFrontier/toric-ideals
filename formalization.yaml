@@ -13,7 +13,9 @@ project:
     reduced, Noetherian and Jacobson Hankel quotient rings, the all-degree criterion
     that the Hankel quotient is Artinian over itself exactly for zero
     coefficient rings, and an arithmetic
-    characterization of the natural exponent image in every degree.
+    characterization of the natural exponent image and regularity of every
+    coordinate class in every degree, with an injective coordinate-localization
+    client over arbitrary commutative rings.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -74,6 +76,14 @@ status:
     fiberNormalExponent_normal_and_image_of_dvd: for 1 ≤ n and any target
     satisfying divisibility, fiberNormalExponent ℤ n t is Normal and maps
     back to t, with the mixed cubic family (4m+2, 2m+1) as an example.
+    ToricIdeals.RationalNormalCurve.CoordinateRegularity provides
+    isRegular_quotient_X: every coordinate class in the Hankel quotient is
+    regular for every (R : Type u) [CommRing R], n : ℕ and i : Fin (n + 1).
+    Its independent coefficient models include the zero ring, full small-degree
+    polynomial quotients, nilpotent coefficients and orthogonal product constants.
+    ToricIdealsTest.RationalNormalCurveCoordinateLocalization provides
+    injective_algebraMap_away_quotient_X for the canonical map to the localization
+    away from each coordinate class, with the same hypotheses.
     No quotient grading, rank or Hilbert-function formula, general
     classification of toric ideals or whole-source coverage is asserted.
 
@@ -116,6 +126,12 @@ fidelity:
     uses the existing fiber-selection law, and specializes its inherited
     commutative coefficient-ring parameter to ℤ; it requires no supplied
     source preimage, domain or field hypothesis.
+    Coordinate regularity and coordinate-localization injectivity concern the
+    original Hankel quotient in every degree over any commutative ring, including
+    the zero ring. They require no domain, reducedness, Noetherianity,
+    nontriviality or positive-degree assumption. Degree zero again uses the full
+    one-variable quotient by the bottom ideal, not the parametrization image.
+    No regular-sequence, Laurent-chart or dimension formula is asserted.
     The positive-degree image equivalence is an equivalence of rings,
     not a scheme isomorphism or a classification of toric ideals.
 
