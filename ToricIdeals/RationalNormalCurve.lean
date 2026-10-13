@@ -17,6 +17,8 @@ public import ToricIdeals.MonoidAlgebra.FiberNormalization
 For `n ≥ 1`, this file identifies the ideal of `2 × 2` minors of the
 Hankel matrix with rows `x₀, …, xₙ₋₁` and `x₁, …, xₙ` with the
 kernel of `xᵢ ↦ a^(n-i) b^i`, over an arbitrary commutative ring.
+The underlying polynomial carriers and monomial parametrization are defined
+over arbitrary commutative semirings.
 
 The easy inclusion follows by evaluating each generator. For the reverse
 inclusion, a Hankel relation moves an occupied separated pair inward, preserves
@@ -41,12 +43,14 @@ noncomputable section
 
 universe u
 
-variable (k : Type u) [CommRing k]
+section
 
-/-- The polynomial ring in `x₀, …, xₙ`. -/
+variable (k : Type u) [CommSemiring k]
+
+/-- The polynomial semiring in `x₀, …, xₙ`. -/
 abbrev Source (n : ℕ) := MvPolynomial (Fin (n + 1)) k
 
-/-- The polynomial ring in the two target variables `a` and `b`. -/
+/-- The polynomial semiring in the two target variables `a` and `b`. -/
 abbrev Target := MvPolynomial (Fin 2) k
 
 /-- The exponent pair `(n-i, i)` of the image of `xᵢ`. -/
@@ -58,9 +62,59 @@ def coordinateExponent (n : ℕ) (i : Fin (n + 1)) : Fin 2 →₀ ℕ :=
 def rncExponent (n : ℕ) : (Fin (n + 1) →₀ ℕ) →+ (Fin 2 →₀ ℕ) :=
   Finsupp.weight (coordinateExponent n)
 
-/-- The monomial parametrization `xᵢ ↦ a^(n-i) b^i`. -/
+/-- The monomial parametrization `xᵢ ↦ a^(n-i) b^i` over a commutative semiring. -/
 def rncMap (n : ℕ) : Source k n →+* Target k :=
   AddMonoidAlgebra.mapDomainRingHom k (rncExponent n)
+
+/-- A source variable has exactly its designated target exponent. -/
+@[simp] theorem rncExponent_single (n : ℕ) (i : Fin (n + 1)) :
+    rncExponent n (Finsupp.single i 1) = coordinateExponent n i := by
+  rw [rncExponent, Finsupp.weight_single]
+  exact one_nsmul (coordinateExponent n i)
+
+/-- The monomial parametrization preserves coefficients. -/
+@[simp] theorem rncMap_C (n : ℕ) (r : k) :
+    rncMap k n (MvPolynomial.C r) = MvPolynomial.C r := by
+  rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
+  change AddMonoidAlgebra.mapDomain (rncExponent n)
+      (AddMonoidAlgebra.single 0 r) = AddMonoidAlgebra.single 0 r
+  rw [AddMonoidAlgebra.mapDomain_single, map_zero]
+
+/-- The parametrization takes `X i` to the monomial of exponent `(n-i,i)`. -/
+@[simp] theorem rncMap_X (n : ℕ) (i : Fin (n + 1)) :
+    rncMap k n (X i) = monomial (coordinateExponent n i) 1 := by
+  rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
+  change AddMonoidAlgebra.mapDomain (rncExponent n)
+      (AddMonoidAlgebra.single (Finsupp.single i 1) 1) = _
+  rw [AddMonoidAlgebra.mapDomain_single, rncExponent_single]
+  rfl
+
+/-- The parametrization sends a source monomial to its image exponent with the
+same coefficient. -/
+@[simp] theorem rncMap_monomial (n : ℕ) (d : Fin (n + 1) →₀ ℕ) (r : k) :
+    rncMap k n (MvPolynomial.monomial d r) =
+      MvPolynomial.monomial (rncExponent n d) r := by
+  rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
+  change AddMonoidAlgebra.mapDomain (rncExponent n)
+      (AddMonoidAlgebra.single d r) =
+    AddMonoidAlgebra.single (rncExponent n d) r
+  rw [AddMonoidAlgebra.mapDomain_single]
+
+/-- At degree one the exponent map on the two source variables is the identity. -/
+theorem rncExponent_one (d : Fin (1 + 1) →₀ ℕ) : rncExponent 1 d = d := by
+  ext i
+  fin_cases i <;>
+    simp [rncExponent, Finsupp.weight_eq_sum, coordinateExponent, Fin.sum_univ_two]
+
+/-- The degree-one monomial parametrization is injective. -/
+theorem rncMap_one_injective : Function.Injective (rncMap k 1) := by
+  apply AddMonoidAlgebra.mapDomain_injective
+  intro d e h
+  simpa only [rncExponent_one] using h
+
+end
+
+variable (k : Type u) [CommRing k]
 
 /-- Ordered pairs of distinct columns of the `2 × n` Hankel matrix. -/
 abbrev MinorIndex (n : ℕ) := {p : Fin n × Fin n // p.1 < p.2}
@@ -91,29 +145,6 @@ theorem map_hankelIdeal (f : A →+* B) (n : ℕ) :
   simp only [hankelIdeal, Ideal.map_span, ← Set.range_comp', map_hankelMinor]
 
 end CoefficientMaps
-
-/-- A source variable has exactly its designated target exponent. -/
-@[simp] theorem rncExponent_single (n : ℕ) (i : Fin (n + 1)) :
-    rncExponent n (Finsupp.single i 1) = coordinateExponent n i := by
-  rw [rncExponent, Finsupp.weight_single]
-  exact one_nsmul (coordinateExponent n i)
-
-/-- The monomial parametrization preserves coefficients. -/
-@[simp] theorem rncMap_C (n : ℕ) (r : k) :
-    rncMap k n (MvPolynomial.C r) = MvPolynomial.C r := by
-  rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
-  change AddMonoidAlgebra.mapDomain (rncExponent n)
-      (AddMonoidAlgebra.single 0 r) = AddMonoidAlgebra.single 0 r
-  rw [AddMonoidAlgebra.mapDomain_single, map_zero]
-
-/-- The parametrization takes `X i` to the monomial of exponent `(n-i,i)`. -/
-@[simp] theorem rncMap_X (n : ℕ) (i : Fin (n + 1)) :
-    rncMap k n (X i) = monomial (coordinateExponent n i) 1 := by
-  rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
-  change AddMonoidAlgebra.mapDomain (rncExponent n)
-      (AddMonoidAlgebra.single (Finsupp.single i 1) 1) = _
-  rw [AddMonoidAlgebra.mapDomain_single, rncExponent_single]
-  rfl
 
 /-- The two products in an ordered Hankel minor have equal target exponents. -/
 theorem minor_exponents_agree (n : ℕ) (p : MinorIndex n) :
@@ -178,18 +209,6 @@ theorem hankelIdeal_zero_lt_ker [Nontrivial k] :
     exact hfker
   rw [hankelIdeal_zero] at hfideal
   exact hfne hfideal
-
-/-- At degree one the exponent map on the two source variables is the identity. -/
-theorem rncExponent_one (d : Fin (1 + 1) →₀ ℕ) : rncExponent 1 d = d := by
-  ext i
-  fin_cases i <;>
-    simp [rncExponent, Finsupp.weight_eq_sum, coordinateExponent, Fin.sum_univ_two]
-
-/-- The degree-one monomial parametrization is injective. -/
-theorem rncMap_one_injective : Function.Injective (rncMap k 1) := by
-  apply AddMonoidAlgebra.mapDomain_injective
-  intro d e h
-  simpa only [rncExponent_one] using h
 
 /-- Degree one is valid but trivial: there are no minors and the
 parametrization is injective. -/

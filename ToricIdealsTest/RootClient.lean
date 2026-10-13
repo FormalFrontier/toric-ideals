@@ -278,3 +278,10 @@ private theorem matrix_degree_two_axis_evaluation :
       Polynomial.aeval_X, map_one, hnil, zero_add]
   · intro g hg
     exact huniq g ⟨hg.1, hg.2.1⟩
+
+private theorem natural_conic_no_left_inverse :
+    ¬ ∃ recover : Target ℕ → Source ℕ 2, Function.LeftInverse recover (rncMap ℕ 2) := by
+  rintro ⟨recover, hrecover⟩
+  rcases (rncMap_injective_iff ℕ 2).mp hrecover.injective with hdegree | hcoeff
+  · exact (by decide : (2 : ℕ) ≠ 1) hdegree
+  · exact Nat.zero_ne_one (@Subsingleton.elim ℕ hcoeff 0 1)

@@ -1,5 +1,27 @@
 # Mathematical API and guides
 
+## Raw parametrization injectivity
+
+For every `(R : Type u) [CommSemiring R]` and `n : ℕ`,
+[`rncMap_injective_iff`](../ToricIdeals/RationalNormalCurve/Injectivity.lean) says
+`Function.Injective (rncMap R n) ↔ n = 1 ∨ Subsingleton R`. The source is the
+full `MvPolynomial (Fin (n + 1)) R`, and the target is `MvPolynomial (Fin 2) R`.
+The carriers, `rncMap_C`, `rncMap_X`, `rncMap_monomial` and
+`rncMap_one_injective` are available over commutative semirings in the
+[curve module](../ToricIdeals/RationalNormalCurve.lean); the root re-exports both modules.
+
+At degree zero the sole variable maps to `1`, so raw injectivity fails for
+nontrivial coefficients. Subsingleton coefficients give injectivity in every
+degree. This is distinct from the Hankel quotient's domain criterion over
+`[CommRing R]`: its degree-zero ideal is `⊥`, and the quotient remains the full
+one-variable polynomial ring, not the parametrization image.
+
+The private [`natural_conic_no_left_inverse` root-import client](../ToricIdealsTest/RootClient.lean)
+uses the nonring semiring `ℕ` in degree two: no function `Target ℕ → Source ℕ 2`
+can recover every source polynomial. A left inverse would give injectivity by
+`Function.LeftInverse.injective`, contradicting the classifier. This rules out
+arbitrary recovery functions, not just homomorphisms.
+
 ## Scalar base change of Hankel quotients
 
 Import `ToricIdeals.RationalNormalCurve.BaseChange`, or the root `ToricIdeals`.

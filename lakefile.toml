@@ -21,6 +21,8 @@ name = "ToricIdealsTest"
 roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest.ReadmeKernel",
   "ToricIdealsTest.FiberNormalizationExamples", "ToricIdealsTest.FiberNormalizationClient",
   "ToricIdealsTest.RationalNormalCurveDomainModels",
+  "ToricIdealsTest.RationalNormalCurveInjectivityModels",
+  "ToricIdealsTest.RationalNormalCurveSemiringInjectivityModels",
   "ToricIdealsTest.RationalNormalCurveAugmentationModels",
   "ToricIdealsTest.RationalNormalCurveAugmentationNilpotentModels",
   "ToricIdealsTest.RationalNormalCurveCoordinateRegularityModels",
