@@ -73,11 +73,38 @@ def hankelMinor (n : ℕ) (p : MinorIndex n) : Source k n :=
 def hankelIdeal (n : ℕ) : Ideal (Source k n) :=
   Ideal.span (Set.range (hankelMinor k n))
 
+section CoefficientMaps
+
+variable {A : Type*} {B : Type*} [CommRing A] [CommRing B]
+
+/-- Changing coefficients sends each Hankel minor to the same indexed minor.
+This specializes `MvPolynomial.map_X` and the ring-homomorphism laws. -/
+@[simp] theorem map_hankelMinor (f : A →+* B) (n : ℕ) (p : MinorIndex n) :
+    MvPolynomial.map f (hankelMinor A n p) = hankelMinor B n p := by
+  simp only [hankelMinor, map_sub, map_mul, MvPolynomial.map_X]
+
+/-- Extending coefficients sends the Hankel ideal to the Hankel ideal over the
+new coefficient ring. This uses Mathlib's `Ideal.map_span` and `Set.range_comp'`;
+no injectivity or flatness hypothesis is needed. -/
+theorem map_hankelIdeal (f : A →+* B) (n : ℕ) :
+    Ideal.map (MvPolynomial.map f) (hankelIdeal A n) = hankelIdeal B n := by
+  simp only [hankelIdeal, Ideal.map_span, ← Set.range_comp', map_hankelMinor]
+
+end CoefficientMaps
+
 /-- A source variable has exactly its designated target exponent. -/
 @[simp] theorem rncExponent_single (n : ℕ) (i : Fin (n + 1)) :
     rncExponent n (Finsupp.single i 1) = coordinateExponent n i := by
   rw [rncExponent, Finsupp.weight_single]
   exact one_nsmul (coordinateExponent n i)
+
+/-- The monomial parametrization preserves coefficients. -/
+@[simp] theorem rncMap_C (n : ℕ) (r : k) :
+    rncMap k n (MvPolynomial.C r) = MvPolynomial.C r := by
+  rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
+  change AddMonoidAlgebra.mapDomain (rncExponent n)
+      (AddMonoidAlgebra.single 0 r) = AddMonoidAlgebra.single 0 r
+  rw [AddMonoidAlgebra.mapDomain_single, map_zero]
 
 /-- The parametrization takes `X i` to the monomial of exponent `(n-i,i)`. -/
 @[simp] theorem rncMap_X (n : ℕ) (i : Fin (n + 1)) :
@@ -602,8 +629,9 @@ theorem rncExponent_total (n : ℕ) (d : Fin (n + 1) →₀ ℕ) :
           (c • coordinateExponent n i) 0 +
               (c • coordinateExponent n i) 1 = n * c := by
         have hi_le : i.val ≤ n := Nat.le_of_lt_succ i.isLt
-        simp [coordinateExponent]
-        rw [← Nat.mul_add, Nat.sub_add_cancel hi_le, Nat.mul_comm]
+        simp only [Fin.isValue, Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul]
+        rw [← Nat.mul_add]
+        simpa [coordinateExponent, Nat.sub_add_cancel hi_le] using Nat.mul_comm c n
       rw [Nat.mul_add, ← ih]
       omega
 
