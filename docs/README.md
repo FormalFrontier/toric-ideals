@@ -1,5 +1,58 @@
 # Mathematical API and guides
 
+## Scalar base change of Hankel quotients
+
+Import `ToricIdeals.RationalNormalCurve.BaseChange`, or the root `ToricIdeals`.
+The public names are in `ToricIdeals.RationalNormalCurve`. For commutative rings
+`R : Type u` and `S : Type v` with `[Algebra R S]`, write
+$Q_{R,n}:=R[X_0,\ldots,X_n]/I_{R,n}$, where $I_{R,n}$ is
+[`hankelIdeal R n`](../ToricIdeals/RationalNormalCurve.lean).
+The equivalence
+[`quotientBaseChangeAlgEquiv R S n`](../ToricIdeals/RationalNormalCurve/BaseChange.lean)
+expresses scalar base change as
+
+$$
+S\otimes_R Q_{R,n}\simeq_S Q_{S,n}.
+$$
+
+This is an `S`-algebra equivalence for every `n : ℕ`, with independent universes
+`u` and `v`. No flatness, injectivity, domain, Noetherianity, nontriviality or
+positive-degree assumption is needed. Both sides use the full quotient by the
+Hankel minors, not a replacement by the parametrization image. Since
+`hankelIdeal R 0 = ⊥` and `hankelIdeal R 1 = ⊥`, degrees zero and one are the
+usual base-change equivalences for the full polynomial rings `R[X₀]` and
+`R[X₀, X₁]`.
+
+For `s : S` and `p : Source R n`, the simp lemma
+[`quotientBaseChangeAlgEquiv_tmul_mk`](../ToricIdeals/RationalNormalCurve/BaseChange.lean)
+gives the representative formula
+
+$$
+s\otimes[p]\longmapsto
+  [s\mathbin{\bullet}\operatorname{map}(\operatorname{algebraMap}_{R,S})(p)].
+$$
+
+Here `[p]` denotes the quotient class, `map` is
+`MvPolynomial.map (algebraMap R S)`, and `s • q` is the canonical `S`-action
+on polynomial coefficients, equivalently `MvPolynomial.C s * q`.
+When starting from a ring homomorphism `f : R →+* S`, use the algebra
+structure `f.toAlgebra`, so `algebraMap R S` is `f`, with its corresponding
+canonical scalar actions throughout.
+
+The private [root-import client](../ToricIdealsTest/RootClient.lean) over
+`ℤ → ZMod 4` in degree one sends `2 ⊗ [X₀ + X₁]` to the nonzero class
+`[C 2 * (X₀ + X₁)]`, detected by evaluation at `(1, 0)`. Thus a nonzero
+nilpotent scalar is included. The independent
+[nonflat coefficient models](../ToricIdealsTest/RationalNormalCurveBaseChangeNonflatModels.lean)
+show that this coefficient map is neither injective nor flat, and that its
+conic quotient map kills the nonzero class `[C 4]` and sends `[C 2]` to a
+nonzero square-zero class. The
+[small-degree, product and zero-ring models](../ToricIdealsTest/RationalNormalCurveBaseChangeSmallModels.lean)
+use polynomial and quotient APIs independently of the base-change equivalence;
+the [tensor models](../ToricIdealsTest/RationalNormalCurveBaseChangeTensorModels.lean)
+compute the polynomial and tensor-quotient equivalences separately.
+These clients and models are private examples, not additional public API.
+
 ## Jacobson Hankel quotients
 
 Import `ToricIdeals.RationalNormalCurve.Jacobson`, or the root `ToricIdeals`.
@@ -272,7 +325,7 @@ by `ToricIdeals`.
 
 `ToricIdealsTest.RootClient` stores further independent-universe generic,
 low-degree, quotient/range and domain/spectrum examples using just the root import;
-`ToricIdealsTest.Audit` stores named boundary clients and selected axiom prints.
+`ToricIdealsTest.Audit` stores named boundary clients.
 The coefficient-ring examples in
 [`ToricIdealsTest.RationalNormalCurveDomainModels`](../ToricIdealsTest/RationalNormalCurveDomainModels.lean)
 use namespace `ToricIdeals.RationalNormalCurve.DomainModels`. Their integer

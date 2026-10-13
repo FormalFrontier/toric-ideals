@@ -47,7 +47,5 @@ private theorem radical_eq_jacobson_of_quotient_isJacobsonRing
   let : IsJacobsonRing R := (quotient_isJacobsonRing_iff R n).mp inferInstance
   exact Ideal.radical_eq_jacobson I
 
-#print axioms rational_quotient_isJacobsonRing
-#print axioms radical_eq_jacobson_of_quotient_isJacobsonRing
 
 end ToricIdeals.RationalNormalCurve

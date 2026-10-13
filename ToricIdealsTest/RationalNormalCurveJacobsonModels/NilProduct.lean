@@ -52,7 +52,6 @@ namespace ToricIdeals.RationalNormalCurve.JacobsonModels
 private theorem mod_four_coefficients_artinian : IsArtinianRing (ZMod 4) := by
   apply isArtinian_of_finite
 
-#print axioms mod_four_coefficients_artinian
 
 /-- The Jacobson coefficient ring `ZMod 4` has a nonzero square-zero element. -/
 private theorem mod_four_coefficients_jacobson_nonreduced :
@@ -67,7 +66,6 @@ private theorem mod_four_coefficients_jacobson_nonreduced :
   have hn : IsNilpotent (2 : ZMod 4) := ⟨2, hsq⟩
   exact hne hn.eq_zero
 
-#print axioms mod_four_coefficients_jacobson_nonreduced
 
 /-- Every Hankel quotient over `ZMod 4` is Jacobson and retains the nonzero
 square-zero constant `2`, so it is nonreduced and non-Artinian. -/
@@ -123,14 +121,12 @@ private theorem mod_four_quotients_jacobson_nonreduced (n : ℕ) :
     exact hne hn.eq_zero
   exact ⟨hJac, hnotArt, hne, hsq, hnotReduced⟩
 
-#print axioms mod_four_quotients_jacobson_nonreduced
 
 /-- The product of the two rational fields is Artinian over itself. -/
 private theorem rat_product_coefficients_artinian : IsArtinianRing (ℚ × ℚ) := by
   let : IsArtinianRing ℚ := DivisionRing.instIsArtinianRing
   infer_instance
 
-#print axioms rat_product_coefficients_artinian
 
 /-- The Jacobson ring `ℚ × ℚ` is not a domain, with nonzero orthogonal constants. -/
 private theorem rat_product_coefficients_jacobson_nondomain :
@@ -156,7 +152,6 @@ private theorem rat_product_coefficients_jacobson_nondomain :
     · exact hright hzero
   exact ⟨inferInstance, hnotDomain, hleft, hright, hmul⟩
 
-#print axioms rat_product_coefficients_jacobson_nondomain
 
 /-- Every Hankel quotient over `ℚ × ℚ` is Jacobson and non-Artinian, with
 surviving nonzero orthogonal constant classes witnessing failure of the domain property. -/
@@ -225,6 +220,5 @@ private theorem rat_product_quotients_jacobson_nondomain (n : ℕ) :
     · exact hright hzero
   exact ⟨hJac, hnotArt, hleft, hright, hmul, hnotDomain⟩
 
-#print axioms rat_product_quotients_jacobson_nondomain
 
 end ToricIdeals.RationalNormalCurve.JacobsonModels

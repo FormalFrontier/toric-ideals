@@ -168,24 +168,6 @@ private theorem cubic_total_two_target_excluded :
     ⟨sourceDegree 3 d, by simpa [targetPair] using htotal⟩
   exact (by decide : ¬ (3 : ℕ) ∣ 2) hdvd
 
-#print axioms targetPair
-#print axioms conicInteriorSource
-#print axioms conicMixedSource
-#print axioms cubicColumnSource
-#print axioms cubicAdjacentSource
-#print axioms cubicSeparatedSource
-#print axioms zero_source_image_and_membership
-#print axioms degree_zero_all_source_images
-#print axioms degree_zero_nonzero_target_excluded
-#print axioms degree_one_identity
-#print axioms degree_one_mixed_target
-#print axioms conic_interior_image_and_membership
-#print axioms conic_mixed_image_and_membership
-#print axioms conic_odd_total_target_excluded
-#print axioms cubic_column_image_and_membership
-#print axioms cubic_adjacent_image_and_membership
-#print axioms cubic_separated_image_and_membership
-#print axioms cubic_total_two_target_excluded
 
 end
 

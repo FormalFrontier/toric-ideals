@@ -89,7 +89,6 @@ private theorem zero_coefficients_quotients_artinian (n : ℕ) :
     Subsingleton.elim _ _
   exact ⟨hsub, htop, hunit, Ring.isArtinian_of_zero_eq_one hunit.symm⟩
 
-#print axioms zero_coefficients_quotients_artinian
 
 /-- The degree-zero integer quotient is the full one-variable presentation:
 its Hankel ideal is bottom and strictly smaller than the parametrization kernel,
@@ -101,7 +100,6 @@ private theorem integer_degree_zero_not_artinian :
   exact ⟨hankelIdeal_zero ℤ, hankelIdeal_zero_lt_ker ℤ,
     integer_hankel_quotient_not_artinian 0⟩
 
-#print axioms integer_degree_zero_not_artinian
 
 /-- The degree-one integer quotient retains its two-variable presentation and
 bottom Hankel ideal, and is not Artinian. -/
@@ -110,14 +108,12 @@ private theorem integer_degree_one_not_artinian :
       ¬ IsArtinianRing (Source ℤ 1 ⧸ hankelIdeal ℤ 1) := by
   exact ⟨hankelIdeal_one ℤ, integer_hankel_quotient_not_artinian 1⟩
 
-#print axioms integer_degree_one_not_artinian
 
 /-- Every Hankel quotient with integer coefficients is not Artinian. -/
 private theorem integer_quotients_not_artinian (n : ℕ) :
     ¬ IsArtinianRing (Source ℤ n ⧸ hankelIdeal ℤ n) := by
   exact integer_hankel_quotient_not_artinian n
 
-#print axioms integer_quotients_not_artinian
 
 end
 

@@ -56,6 +56,5 @@ theorem injective_algebraMap_away_quotient_X (R : Type u) [CommRing R] (n : ℕ)
   rw [← hk]
   exact _root_.IsRegular.pow k (isRegular_quotient_X R n i)
 
-#print axioms ToricIdeals.RationalNormalCurve.injective_algebraMap_away_quotient_X
 
 end ToricIdeals.RationalNormalCurve

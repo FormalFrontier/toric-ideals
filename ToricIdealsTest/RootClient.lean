@@ -6,6 +6,7 @@ module
 
 import ToricIdeals
 import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Matrix.Basis
 
 /-!
 # Root-import clients
@@ -154,3 +155,126 @@ private theorem product_degree_two_constant :
     rncMap (ℤ × ℤ) 2 (MvPolynomial.C ((1, 0) : ℤ × ℤ)) =
       MvPolynomial.C ((1, 0) : ℤ × ℤ) :=
   rncMap_C (ℤ × ℤ) 2 (1, 0)
+
+section
+
+open scoped TensorProduct
+
+/-- In degree one, base change to `ℤ/4ℤ` sends `2 ⊗ [X₀ + X₁]` to the
+nonzero class `[2(X₀ + X₁)]`, detected by evaluation at `(1, 0)`. -/
+private theorem mod_four_degree_one_base_change :
+    quotientBaseChangeAlgEquiv ℤ (ZMod 4) 1
+        ((2 : ZMod 4) ⊗ₜ[ℤ] Ideal.Quotient.mk (hankelIdeal ℤ 1)
+          (MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2))) =
+      Ideal.Quotient.mk (hankelIdeal (ZMod 4) 1)
+        (MvPolynomial.C (2 : ZMod 4) *
+          (MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2))) ∧
+    Ideal.Quotient.mk (hankelIdeal (ZMod 4) 1)
+        (MvPolynomial.C (2 : ZMod 4) *
+          (MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2))) ≠ 0 := by
+  constructor
+  · have hmap :
+        MvPolynomial.map (algebraMap ℤ (ZMod 4))
+            (MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2)) =
+          MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2) :=
+      ((MvPolynomial.map (algebraMap ℤ (ZMod 4))).map_add
+        (MvPolynomial.X (0 : Fin 2)) (MvPolynomial.X (1 : Fin 2))).trans
+          (congrArg₂ (fun p q : Source (ZMod 4) 1 ↦ p + q)
+            (MvPolynomial.map_X (algebraMap ℤ (ZMod 4)) (0 : Fin 2))
+            (MvPolynomial.map_X (algebraMap ℤ (ZMod 4)) (1 : Fin 2)))
+    calc
+      _ = Ideal.Quotient.mk (hankelIdeal (ZMod 4) 1)
+          ((2 : ZMod 4) • MvPolynomial.map (algebraMap ℤ (ZMod 4))
+            (MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2))) :=
+        quotientBaseChangeAlgEquiv_tmul_mk ℤ (ZMod 4) 1 2
+          (MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2))
+      _ = _ := congrArg (Ideal.Quotient.mk (hankelIdeal (ZMod 4) 1))
+        ((congrArg (fun p : Source (ZMod 4) 1 ↦ (2 : ZMod 4) • p) hmap).trans
+          (MvPolynomial.smul_eq_C_mul
+            (MvPolynomial.X (0 : Fin 2) + MvPolynomial.X (1 : Fin 2)) (2 : ZMod 4)))
+  · rw [hankelIdeal_one]
+    intro hzero
+    have heval := congrArg
+      ((MvPolynomial.eval
+          (fun i : Fin 2 ↦ if i = 0 then (1 : ZMod 4) else 0)).comp
+        (RingEquiv.quotientBot (Source (ZMod 4) 1)).toRingHom) hzero
+    have htwo : (2 : ZMod 4) = 0 := by
+      simpa only [RingHom.comp_apply, RingEquiv.toRingHom_eq_coe,
+        RingEquiv.coe_toRingHom, RingEquiv.quotientBot_mk, map_zero, map_mul,
+        map_add, MvPolynomial.eval_C, MvPolynomial.eval_X,
+        ite_eq_left (rfl : (0 : Fin 2) = 0),
+        ite_eq_right (by decide : (1 : Fin 2) ≠ 0), ite_true, add_zero, mul_one] using heval
+    exact (by decide : (2 : ZMod 4) ≠ 0) htwo
+
+end
+
+private theorem integer_degree_zero_augmentation :
+    quotientAugmentation ℤ 0
+        (Ideal.Quotient.mk (hankelIdeal ℤ 0)
+          (MvPolynomial.C (3 : ℤ) + MvPolynomial.X (0 : Fin 1))) = 3 := by
+  simp only [quotientAugmentation_mk, map_add, MvPolynomial.constantCoeff_C,
+    MvPolynomial.constantCoeff_X, add_zero]
+
+/-! Coordinate-axis clients retain the indeterminate in degree zero, kill a
+nonzero degree-one coordinate, and preserve a nilpotent coefficient. Polynomial
+evaluation also gives maps to a noncommutative matrix algebra. -/
+
+private theorem integer_degree_zero_axis_polynomial :
+    axisProjection ℤ 0
+        (Ideal.Quotient.mk (hankelIdeal ℤ 0)
+          (MvPolynomial.C (3 : ℤ) + MvPolynomial.X (0 : Fin 1))) =
+      Polynomial.C (3 : ℤ) + Polynomial.X ∧
+    axisSection ℤ 0 (Polynomial.C (3 : ℤ) + Polynomial.X) =
+      Ideal.Quotient.mk (hankelIdeal ℤ 0)
+        (MvPolynomial.C (3 : ℤ) + MvPolynomial.X (0 : Fin 1)) := by
+  constructor
+  · rw [map_add, map_add, axisProjection_C, axisProjection_X_zero]
+  · rw [map_add, axisSection_C, axisSection_X, map_add]
+
+private theorem integer_degree_one_axis_kernel :
+    Ideal.Quotient.mk (hankelIdeal ℤ 1) (MvPolynomial.X (1 : Fin 2)) ≠ 0 ∧
+    axisProjection ℤ 1
+      (Ideal.Quotient.mk (hankelIdeal ℤ 1) (MvPolynomial.X (1 : Fin 2))) = 0 := by
+  constructor
+  · intro hzero
+    have hmem := Ideal.Quotient.eq_zero_iff_mem.mp hzero
+    rw [hankelIdeal_one, Submodule.mem_bot] at hmem
+    exact MvPolynomial.X_ne_zero (1 : Fin 2) hmem
+  · exact axisProjection_X_of_ne_zero ℤ 1 (1 : Fin 2) (by decide)
+
+private theorem mod_four_degree_two_axis_nilpotent :
+    Ideal.Quotient.mk (hankelIdeal (ZMod 4) 2) (MvPolynomial.C (2 : ZMod 4)) ≠ 0 ∧
+    Ideal.Quotient.mk (hankelIdeal (ZMod 4) 2) (MvPolynomial.C (2 : ZMod 4)) ^ 2 = 0 ∧
+    axisProjection (ZMod 4) 2
+        (Ideal.Quotient.mk (hankelIdeal (ZMod 4) 2) (MvPolynomial.C (2 : ZMod 4))) =
+      Polynomial.C (2 : ZMod 4) := by
+  have htwo : (2 : ZMod 4) ^ 2 = 0 := by decide
+  refine ⟨?_, ?_, axisProjection_C (ZMod 4) 2 2⟩
+  · intro hzero
+    have hconstant : Polynomial.C (2 : ZMod 4) = 0 := by
+      rw [← axisProjection_C (ZMod 4) 2 2, hzero, map_zero]
+    exact (by decide : (2 : ZMod 4) ≠ 0) (Polynomial.C_eq_zero.mp hconstant)
+  · rw [← map_pow, ← MvPolynomial.C_pow, htwo]
+    simp
+
+private theorem matrix_degree_two_axis_evaluation :
+    ∃! f : (Source (ZMod 2) 2 ⧸ hankelIdeal (ZMod 2) 2) →ₐ[ZMod 2]
+        Matrix (Fin 2) (Fin 2) (ZMod 2),
+      f (Ideal.Quotient.mk (hankelIdeal (ZMod 2) 2)
+          (MvPolynomial.X (0 : Fin 3))) = Matrix.single 0 1 1 ∧
+      (∀ i : Fin 3, i ≠ 0 →
+        f (Ideal.Quotient.mk (hankelIdeal (ZMod 2) 2) (MvPolynomial.X i)) = 0) ∧
+      f (Ideal.Quotient.mk (hankelIdeal (ZMod 2) 2)
+          (MvPolynomial.X (0 : Fin 3) ^ 2 + MvPolynomial.C (1 : ZMod 2))) = 1 := by
+  have hnil : (Matrix.single 0 1 1 : Matrix (Fin 2) (Fin 2) (ZMod 2)) ^ 2 = 0 := by
+    rw [pow_two]
+    exact Matrix.single_mul_single_of_ne 1 0 1 0 (by decide) 1
+  obtain ⟨f, ⟨hzero, hpos⟩, huniq⟩ :=
+    existsUnique_axisHom (ZMod 2) 2
+      (Matrix.single 0 1 1 : Matrix (Fin 2) (Fin 2) (ZMod 2))
+  refine ⟨f, ⟨hzero, hpos, ?_⟩, ?_⟩
+  · rw [eq_aeval_comp_axisProjection (ZMod 2) 2 f hpos, hzero]
+    simp only [AlgHom.comp_apply, map_add, map_pow, axisProjection_X_zero,
+      Polynomial.aeval_X, map_one, hnil, zero_add]
+  · intro g hg
+    exact huniq g ⟨hg.1, hg.2.1⟩

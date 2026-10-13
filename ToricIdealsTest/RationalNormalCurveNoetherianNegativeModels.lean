@@ -92,12 +92,5 @@ private theorem binary_function_hankel_quotient_not_noetherian (n : ℕ) :
   exact binary_function_ring_not_noetherian
     ((quotient_isNoetherianRing_iff (ℕ → ZMod 2) n).mp hQ)
 
-#print axioms finiteCoordinateIdeal
-#print axioms finiteCoordinateIdeal_monotone
-#print axioms finiteCoordinateIdeal_le_eval_ker
-#print axioms coordinateUnit_not_mem_finiteCoordinateIdeal
-#print axioms finiteCoordinateIdeal_lt_succ
-#print axioms binary_function_ring_not_noetherian
-#print axioms binary_function_hankel_quotient_not_noetherian
 
 end ToricIdealsTest.RationalNormalCurve

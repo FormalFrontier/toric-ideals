@@ -211,18 +211,6 @@ private theorem integer_degree_two_coordinate_class_nonzero (i : Fin 3) :
     (fun p : Target ℤ => p.coeff (coordinateExponent 2 i)) hker
   simp at hcoeff
 
-#print axioms zero_coefficients_all_degrees_subsingleton
-#print axioms zero_coefficients_all_degrees_multiplication_injective
-#print axioms integer_degree_zero_full_polynomial
-#print axioms integer_degree_zero_nonzero_variable_and_kernel_element
-#print axioms integer_degree_zero_variable_cancellation
-#print axioms mod_four_degree_one_full_polynomial
-#print axioms mod_four_degree_one_endpoints_distinct
-#print axioms mod_four_degree_one_variable_cancellation
-#print axioms mod_four_degree_two_nonzero_square_zero
-#print axioms integer_product_degree_two_orthogonal_constants
-#print axioms integer_degree_two_zero_ne_one
-#print axioms integer_degree_two_coordinate_class_nonzero
 
 end
 

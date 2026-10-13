@@ -7,6 +7,9 @@ module
 public import ToricIdeals.MonoidAlgebra.FiberNormalization
 public import ToricIdeals.RationalNormalCurve
 public import ToricIdeals.RationalNormalCurve.Artinian
+public import ToricIdeals.RationalNormalCurve.Augmentation
+public import ToricIdeals.RationalNormalCurve.AxisProjection
+public import ToricIdeals.RationalNormalCurve.BaseChange
 public import ToricIdeals.RationalNormalCurve.CoordinateRegularity
 public import ToricIdeals.RationalNormalCurve.ExponentImage
 public import ToricIdeals.RationalNormalCurve.Homogeneous

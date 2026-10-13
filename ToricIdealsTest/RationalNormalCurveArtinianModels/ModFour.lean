@@ -100,7 +100,6 @@ private theorem mod_four_coefficients_artinian_nonreduced :
   have hn : IsNilpotent (2 : ZMod 4) := ⟨2, hsq⟩
   exact hne hn.eq_zero
 
-#print axioms mod_four_coefficients_artinian_nonreduced
 
 /-- The full polynomial quotients in degrees zero and one are non-Artinian. -/
 private theorem mod_four_small_degree_quotients_not_artinian :
@@ -113,7 +112,6 @@ private theorem mod_four_small_degree_quotients_not_artinian :
     hankelIdeal_zero_lt_ker (ZMod 4), mod_four_quotient_not_artinian 0,
     mod_four_quotient_not_artinian 1⟩
 
-#print axioms mod_four_small_degree_quotients_not_artinian
 
 /-- Every quotient is non-Artinian and retains the nonzero square-zero constant. -/
 private theorem mod_four_quotients_not_artinian (n : ℕ) :
@@ -128,7 +126,6 @@ private theorem mod_four_quotients_not_artinian (n : ℕ) :
       simp only [map_pow]
     _ = 0 := by rw [hsq, map_zero, map_zero]
 
-#print axioms mod_four_quotients_not_artinian
 
 /-- The conic quotient is non-Artinian and satisfies its defining Hankel relation. -/
 private theorem mod_four_conic_not_artinian :
@@ -145,6 +142,5 @@ private theorem mod_four_conic_not_artinian :
   simpa only [hankelMinor, hcast0, hsucc1, hsucc0, hcast1, pow_two] using
     (minor_mem (ZMod 4) 2 (⟨((0 : Fin 2), (1 : Fin 2)), by decide⟩ : MinorIndex 2))
 
-#print axioms mod_four_conic_not_artinian
 
 end ToricIdeals.RationalNormalCurve.ArtinianModels

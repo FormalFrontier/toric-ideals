@@ -66,8 +66,6 @@ private theorem cubic_mixed_family_normal_and_image (m : ℕ) :
   simp
   ring
 
-#print axioms fiberNormalExponent_normal_and_image_of_dvd
-#print axioms cubic_mixed_family_normal_and_image
 
 end
 

@@ -95,11 +95,6 @@ private theorem integer_conic_quadratic_component_nonzero_member :
   · exact homogeneousComponent_mem_of_mem (hankelIdeal_isHomogeneous ℤ 2)
       (conic_mixed_componentwise_member ℤ) 2
 
-#print axioms conicColumns
-#print axioms hankel_member_components
-#print axioms conic_mixed_components_mem
-#print axioms conic_mixed_componentwise_member
-#print axioms integer_conic_quadratic_component_nonzero_member
 
 end
 

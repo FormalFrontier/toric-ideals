@@ -335,37 +335,6 @@ private theorem integer_degree_zero_parametrization_kernel_not_homogeneous :
   exact (neg_ne_zero.mpr (one_ne_zero : (1 : Target ℤ) ≠ 0))
     (by simpa only [map_neg, map_one] using hmem)
 
-#print axioms conicColumns
-#print axioms cubicFirstColumns
-#print axioms cubicOuterColumns
-#print axioms cubicLastColumns
-#print axioms degree_zero_one_variable_bottom_homogeneous
-#print axioms degree_one_two_variable_bottom_homogeneous
-#print axioms conic_columns_exhaustive
-#print axioms cubic_columns_exhaustive
-#print axioms conic_minor_eq
-#print axioms cubic_minors_eq
-#print axioms conic_ideal_eq_span
-#print axioms conic_minor_isHomogeneous
-#print axioms conic_ideal_isHomogeneous
-#print axioms cubic_minors_isHomogeneous
-#print axioms cubic_ideal_isHomogeneous
-#print axioms conic_exponents_distinct
-#print axioms conic_minor_coefficients
-#print axioms conic_minor_ne_zero
-#print axioms conic_scaled_outer_coefficient
-#print axioms integer_conic_and_cubic_homogeneous_nonzero
-#print axioms binary_conic_two_supported_terms
-#print axioms mod_four_nilpotent_quadratic
-#print axioms integer_product_quadratic_zero_divisor
-#print axioms zero_coefficients_ideal_homogeneous
-#print axioms zero_coefficients_polynomial_all_degrees
-#print axioms zero_coefficients_minor_label_two
-#print axioms conic_mixed_components_mem
-#print axioms conic_mixed_componentwise_member
-#print axioms integer_conic_quadratic_component_nonzero
-#print axioms integer_degree_zero_mixed_not_homogeneous
-#print axioms integer_degree_zero_parametrization_kernel_not_homogeneous
 
 end
 

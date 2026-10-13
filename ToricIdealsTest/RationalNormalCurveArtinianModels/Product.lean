@@ -96,6 +96,5 @@ private theorem integer_product_quotients_not_artinian (n : ℕ) :
     have hsurj : Function.Surjective ((RingHom.fst ℤ ℤ).comp g) := hfst.comp hg
     exact integer_coefficients_not_artinian hsurj.isArtinianRing
 
-#print axioms ToricIdeals.RationalNormalCurve.ArtinianModels.integer_product_quotients_not_artinian
 
 end ToricIdeals.RationalNormalCurve.ArtinianModels

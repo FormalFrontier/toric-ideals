@@ -109,7 +109,8 @@ private theorem reduce_xy : reduce (x + y) = x + y := by
   ext i
   fin_cases i <;> norm_num [reduce, sourceTuple, x, y]
 
-private theorem wz_xy_equal_image_distinct_equal_reduction : exponentMap (w + z) = exponentMap (x + y) ∧
+private theorem wz_xy_equal_image_distinct_equal_reduction :
+    exponentMap (w + z) = exponentMap (x + y) ∧
     w + z ≠ x + y ∧ reduce (w + z) = reduce (x + y) :=
   ⟨image_wz.trans image_xy.symm, wz_ne_xy, reduce_wz.trans reduce_xy.symm⟩
 
@@ -147,7 +148,8 @@ private theorem mixed_right :
   · ext i
     fin_cases i <;> norm_num [normal, sourceTuple, targetTuple]
 
-private theorem normalization_mixed_right_eq_reduction : normal (exponentMap (sourceTuple 7 2 3 5)) =
+private theorem normalization_mixed_right_eq_reduction :
+    normal (exponentMap (sourceTuple 7 2 3 5)) =
     reduce (sourceTuple 7 2 3 5) := by
   rw [mixed_right.1, mixed_right.2.1, mixed_right.2.2]
 
@@ -174,7 +176,8 @@ private theorem selector_boundary_tAlone_not_preimage : exponentMap (normal tAlo
   norm_num [targetTuple, tAlone] at h₁
 
 -- Each summand is reduced; their sum is not.
-private theorem reduced_coordinates_w_z_sum_not_reduced : (w 0 = 0 ∨ w 3 = 0) ∧ (z 0 = 0 ∨ z 3 = 0) ∧
+private theorem reduced_coordinates_w_z_sum_not_reduced :
+    (w 0 = 0 ∨ w 3 = 0) ∧ (z 0 = 0 ∨ z 3 = 0) ∧
     ¬ ((w + z) 0 = 0 ∨ (w + z) 3 = 0) := by
   norm_num [w, z]
 
@@ -195,7 +198,8 @@ private theorem normal_image_sum : normal (exponentMap w + exponentMap z) = x + 
   ext i
   fin_cases i <;> norm_num [normal, sourceTuple, targetTuple, x, y]
 
-private theorem exponentMap_w_z_eq_x_y : exponentMap w + exponentMap z = exponentMap x + exponentMap y := by
+private theorem exponentMap_w_z_eq_x_y :
+    exponentMap w + exponentMap z = exponentMap x + exponentMap y := by
   rw [← map_add, ← map_add, image_wz, image_xy]
 
 private theorem normalization_w_z_not_additive : normal (exponentMap w + exponentMap z) ≠
@@ -214,15 +218,18 @@ private theorem normal_zero_eq_zero : normal 0 = 0 := by
   ext i
   fin_cases i <;> simp [normal, sourceTuple]
 
-private theorem normalization_boundary_t_zero : normal (targetTuple 3 4 0) = sourceTuple 3 0 4 0 := by
+private theorem normalization_boundary_t_zero :
+    normal (targetTuple 3 4 0) = sourceTuple 3 0 4 0 := by
   ext i
   fin_cases i <;> norm_num [normal, sourceTuple, targetTuple]
 
-private theorem normalization_boundary_t_eq_u : normal (targetTuple 3 4 3) = sourceTuple 0 3 4 0 := by
+private theorem normalization_boundary_t_eq_u :
+    normal (targetTuple 3 4 3) = sourceTuple 0 3 4 0 := by
   ext i
   fin_cases i <;> norm_num [normal, sourceTuple, targetTuple]
 
-private theorem normalization_boundary_t_eq_u_add_v : normal (targetTuple 3 4 7) = sourceTuple 0 3 0 4 := by
+private theorem normalization_boundary_t_eq_u_add_v :
+    normal (targetTuple 3 4 7) = sourceTuple 0 3 0 4 := by
   ext i
   fin_cases i <;> norm_num [normal, sourceTuple, targetTuple]
 
@@ -290,7 +297,8 @@ public theorem exponentMap_wz_eq_xy :
 end ToricIdealsTest.SplitQuadric
 
 -- The same nonzero image has two distinct nonzero preimages.
-private theorem exponentMap_wz_xy_distinct_nonzero_preimages : ToricIdeals.SplitQuadric.exponentMap (w + z) =
+private theorem exponentMap_wz_xy_distinct_nonzero_preimages :
+    ToricIdeals.SplitQuadric.exponentMap (w + z) =
       ToricIdeals.SplitQuadric.exponentMap (x + y) ∧
     w + z ≠ x + y ∧ w + z ≠ 0 ∧ x + y ≠ 0 ∧
     ToricIdeals.SplitQuadric.exponentMap (w + z) ≠ 0 := by
@@ -345,7 +353,8 @@ private theorem reduce_wz_eq_reduce_xy : ToricIdeals.SplitQuadric.reduce (w + z)
     ToricIdeals.SplitQuadric.reduce (x + y) :=
   replacement_wz.trans replacement_xy.symm
 
-private theorem reduce_wz_xy_reduced : ToricIdeals.SplitQuadric.Reduced (ToricIdeals.SplitQuadric.reduce (w + z)) ∧
+private theorem reduce_wz_xy_reduced :
+    ToricIdeals.SplitQuadric.Reduced (ToricIdeals.SplitQuadric.reduce (w + z)) ∧
     ToricIdeals.SplitQuadric.Reduced (ToricIdeals.SplitQuadric.reduce (x + y)) := by
   rw [replacement_wz, replacement_xy]
   constructor <;>
@@ -426,7 +435,8 @@ private theorem reduce_normal_mixed_tuples_reduced :
     (ToricIdeals.SplitQuadric.reduced_iff _).2 (Or.inr rfl)⟩
 
 -- Reduced summands can have a sum divisible by wz.
-private theorem reduced_w_z_sum_not_reduced : ToricIdeals.SplitQuadric.Reduced w ∧ ToricIdeals.SplitQuadric.Reduced z ∧
+private theorem reduced_w_z_sum_not_reduced :
+    ToricIdeals.SplitQuadric.Reduced w ∧ ToricIdeals.SplitQuadric.Reduced z ∧
     ¬ ToricIdeals.SplitQuadric.Reduced (w + z) := by
   refine ⟨(ToricIdeals.SplitQuadric.reduced_iff w).2 (Or.inr ?_),
     (ToricIdeals.SplitQuadric.reduced_iff z).2 (Or.inl ?_), ?_⟩
@@ -562,7 +572,8 @@ private theorem reduced_zero_exponent : ToricIdeals.SplitQuadric.Reduced 0 := by
   rw [ToricIdeals.SplitQuadric.reduced_iff]
   exact Or.inl rfl
 
-private theorem selector_boundary_t_zero : ToricIdeals.SplitQuadric.normal (targetTuple 3 4 0) = sourceTuple 3 0 4 0 := by
+private theorem selector_boundary_t_zero :
+    ToricIdeals.SplitQuadric.normal (targetTuple 3 4 0) = sourceTuple 3 0 4 0 := by
   ext i
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.normal_apply_zero (targetTuple 3 4 0)).trans (by rfl)
@@ -570,7 +581,8 @@ private theorem selector_boundary_t_zero : ToricIdeals.SplitQuadric.normal (targ
   · exact (ToricIdeals.SplitQuadric.normal_apply_two (targetTuple 3 4 0)).trans (by rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_three (targetTuple 3 4 0)).trans (by rfl)
 
-private theorem selector_boundary_t_eq_u : ToricIdeals.SplitQuadric.normal (targetTuple 3 4 3) = sourceTuple 0 3 4 0 := by
+private theorem selector_boundary_t_eq_u :
+    ToricIdeals.SplitQuadric.normal (targetTuple 3 4 3) = sourceTuple 0 3 4 0 := by
   ext i
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.normal_apply_zero (targetTuple 3 4 3)).trans (by rfl)
@@ -578,7 +590,8 @@ private theorem selector_boundary_t_eq_u : ToricIdeals.SplitQuadric.normal (targ
   · exact (ToricIdeals.SplitQuadric.normal_apply_two (targetTuple 3 4 3)).trans (by rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_three (targetTuple 3 4 3)).trans (by rfl)
 
-private theorem selector_boundary_t_eq_u_add_v : ToricIdeals.SplitQuadric.normal (targetTuple 3 4 7) = sourceTuple 0 3 0 4 := by
+private theorem selector_boundary_t_eq_u_add_v :
+    ToricIdeals.SplitQuadric.normal (targetTuple 3 4 7) = sourceTuple 0 3 0 4 := by
   ext i
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.normal_apply_zero (targetTuple 3 4 7)).trans (by rfl)

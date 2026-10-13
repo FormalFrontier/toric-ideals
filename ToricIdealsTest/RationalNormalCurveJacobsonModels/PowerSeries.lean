@@ -57,7 +57,6 @@ private theorem power_series_coefficients_not_jacobson :
     IsLocalRing.jacobson_eq_maximalIdeal _ hprime.ne_top
   exact IsDiscreteValuationRing.not_a_field (PowerSeries ℚ) (hmax.symm.trans hbot)
 
-#print axioms power_series_coefficients_not_jacobson
 
 /-- Rational power series form a Noetherian local domain and a nonfield DVR,
 but not a Jacobson ring. -/
@@ -72,7 +71,6 @@ private theorem power_series_coefficients :
     IsDiscreteValuationRing.not_isField (PowerSeries ℚ),
     power_series_coefficients_not_jacobson⟩
 
-#print axioms power_series_coefficients
 
 /-- Every full Hankel quotient with rational power-series coefficients is
 Noetherian but not Jacobson, including degrees zero and one. -/
@@ -100,7 +98,6 @@ private theorem power_series_quotients_noetherian_not_jacobson (n : ℕ) :
       simp only [g, Ideal.Quotient.lift_mk, e, MvPolynomial.constantCoeff_C]
     exact power_series_coefficients_not_jacobson (isJacobsonRing_of_surjective ⟨g, hg⟩)
 
-#print axioms power_series_quotients_noetherian_not_jacobson
 
 /-- The degree-zero quotient is the full one-variable polynomial ring modulo
 bottom, rather than the parametrization kernel quotient; it is Noetherian and
@@ -117,7 +114,6 @@ private theorem power_series_degree_zero_shape :
   rw [hankelIdeal_zero]
   exact ⟨RingEquiv.quotientBot (Source (PowerSeries ℚ) 0)⟩
 
-#print axioms power_series_degree_zero_shape
 
 /-- The degree-one quotient is the full two-variable polynomial ring modulo
 bottom, and is Noetherian but not Jacobson. -/
@@ -132,7 +128,6 @@ private theorem power_series_degree_one_shape :
   rw [hankelIdeal_one]
   exact ⟨RingEquiv.quotientBot (Source (PowerSeries ℚ) 1)⟩
 
-#print axioms power_series_degree_one_shape
 
 end
 

@@ -21,6 +21,8 @@ name = "ToricIdealsTest"
 roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest.ReadmeKernel",
   "ToricIdealsTest.FiberNormalizationExamples", "ToricIdealsTest.FiberNormalizationClient",
   "ToricIdealsTest.RationalNormalCurveDomainModels",
+  "ToricIdealsTest.RationalNormalCurveAugmentationModels",
+  "ToricIdealsTest.RationalNormalCurveAugmentationNilpotentModels",
   "ToricIdealsTest.RationalNormalCurveCoordinateRegularityModels",
   "ToricIdealsTest.RationalNormalCurveCoordinateLocalization",
   "ToricIdealsTest.RationalNormalCurveExponentImageModels",
@@ -33,4 +35,7 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.RationalNormalCurveNoetherianModels",
   "ToricIdealsTest.RationalNormalCurveNoetherianNegativeModels",
   "ToricIdealsTest.RationalNormalCurveArtinianModels",
-  "ToricIdealsTest.SplitQuadricModels"]
+  "ToricIdealsTest.SplitQuadricModels",
+  "ToricIdealsTest.RationalNormalCurveBaseChangeSmallModels",
+  "ToricIdealsTest.RationalNormalCurveBaseChangeNonflatModels",
+  "ToricIdealsTest.RationalNormalCurveBaseChangeTensorModels"]

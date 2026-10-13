@@ -30,6 +30,17 @@ the split quadric.
   without a field or domain hypothesis. The [curve module](ToricIdeals/RationalNormalCurve.lean)
   develops the decreasing-energy reduction and uniqueness *among terminal
   exponents*; its choices are classical, not executable canonical algorithms.
+- **Scalar base change in every degree:** For arbitrary commutative rings
+  `R : Type u` and `S : Type v` with `[Algebra R S]`, write
+  $Q_{R,n}=R[X_0,\ldots,X_n]/I_{R,n}$, where $I_{R,n}$ is the Hankel-minor ideal.
+  For every `n : ℕ`,
+  [`quotientBaseChangeAlgEquiv`](ToricIdeals/RationalNormalCurve/BaseChange.lean)
+  gives $S\otimes_R Q_{R,n}\simeq_S Q_{S,n}$ as an `S`-algebra equivalence.
+  No flatness, injectivity, domain, Noetherianity, nontriviality or
+  positive-degree hypothesis is needed, and `u` and `v` are independent.
+  This is the full Hankel quotient, including the polynomial cases `n = 0, 1`,
+  not a replacement by the parametrization image; see
+  [base change and its representative formula](docs/README.md#scalar-base-change-of-hankel-quotients).
 - **Arithmetic exponent image:** For every `n : ℕ` and natural-valued target
   `t : Fin 2 →₀ ℕ`,
   [`mem_mrange_rncExponent_iff`](ToricIdeals/RationalNormalCurve/ExponentImage.lean)
@@ -94,6 +105,17 @@ the split quadric.
   only if `R` is a zero ring**, expressed by `Subsingleton R`. This includes
   degrees zero and one, with their full polynomial quotients. In particular,
   finite Artinian nonzero coefficients such as `ZMod 4` do not suffice.
+- **Coordinate-axis quotient in every degree:** For any `(R : Type u) [CommRing R]`
+  and every `n : ℕ`,
+  [`axisProjection`](ToricIdeals/RationalNormalCurve/AxisProjection.lean) maps
+  `Source R n ⧸ hankelIdeal R n` to `Polynomial R`, preserving coefficients,
+  retaining `X₀` as `Polynomial.X` and killing every other coordinate.
+  Its polynomial section makes it a split surjection in every degree;
+  the section is injective. At `n = 0` the projection is bijective, retaining
+  the full one-variable polynomial quotient, not the parametrization image.
+  For any semiring `R`-algebra in an independent universe and any element `x`,
+  there is a unique algebra map killing the other coordinates and sending
+  the first coordinate to `x`; the target need not be commutative.
 - **Regular coordinates in every degree:** For any `[CommRing R]`, every
   `n : ℕ` and `i : Fin (n + 1)`,
   [`isRegular_quotient_X`](ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean)
@@ -132,6 +154,8 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree coefficient criterion for quotient Noetherianity |
 | [`ToricIdeals.RationalNormalCurve.Jacobson`](ToricIdeals/RationalNormalCurve/Jacobson.lean) | All-degree coefficient criterion for quotient Jacobsonness |
 | [`ToricIdeals.RationalNormalCurve.Artinian`](ToricIdeals/RationalNormalCurve/Artinian.lean) | All-degree zero-coefficient criterion for quotient Artinianity |
+| [`ToricIdeals.RationalNormalCurve.AxisProjection`](ToricIdeals/RationalNormalCurve/AxisProjection.lean) | Coordinate-axis algebra map, split surjection and characteristic universal property |
+| [`ToricIdeals.RationalNormalCurve.BaseChange`](ToricIdeals/RationalNormalCurve/BaseChange.lean) | Scalar base change of the full Hankel quotient over arbitrary commutative rings in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoordinateRegularity`](ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean) | Regularity of every coordinate class over arbitrary commutative rings in every degree |
 | [`ToricIdeals.SplitQuadric.Exponents`](ToricIdeals/SplitQuadric/Exponents.lean) | Exponent reduction, image cone and unique reduced representatives |
 

@@ -122,16 +122,6 @@ private theorem nonreduced_zero_and_product_hankel_quotients_noetherian (n : ℕ
       (isNoetherian_of_finite (ZMod 1) (ZMod 1)),
     (quotient_isNoetherianRing_iff (ℤ × ℤ) n).mpr inferInstance⟩
 
-#print axioms integer_source_and_quotient_noetherian
-#print axioms binary_field_source_and_quotient_noetherian
-#print axioms integer_product_source_and_quotient_noetherian
-#print axioms mod_four_source_and_quotient_noetherian
-#print axioms zero_coefficients_source_and_quotient_noetherian
-#print axioms degree_zero_one_variable_quotient_noetherian
-#print axioms degree_one_two_variable_quotient_noetherian
-#print axioms hankel_quotient_noetherian_of_noetherian_coefficients
-#print axioms coefficients_noetherian_of_noetherian_hankel_quotient
-#print axioms nonreduced_zero_and_product_hankel_quotients_noetherian
 
 end
 

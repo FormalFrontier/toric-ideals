@@ -50,7 +50,8 @@ private theorem collapse_mem_ideal_iff_zero_image (R : Type u) [Ring R] (f : Add
   ToricIdeals.AddMonoidAlgebra.mem_ideal_iff_mapDomain_eq_zero _ _ (fun _ ↦ 0)
     (collapse_basis_congruence R) (collapse_relation_le_kernel R)
 
-private theorem collapse_mem_ideal_of_function_image_zero (R : Type u) [Ring R] {N : Type w} (exponentMap : ℕ → N)
+private theorem collapse_mem_ideal_of_function_image_zero (R : Type u) [Ring R] {N : Type w}
+    (exponentMap : ℕ → N)
     (normal : N → ℕ) {f : AddMonoidAlgebra R ℕ}
     (hf : mapDomain exponentMap f = 0) :
     f ∈ Ideal.span ({single 1 1 - single 0 1} : Set (AddMonoidAlgebra R ℕ)) :=

@@ -10,7 +10,7 @@ import ToricIdeals
 /-!
 # Audit examples
 
-Named, stored clients of the toric-ideal boundary results and selected axiom prints.
+Named, stored clients of the toric-ideal boundary results.
 -/
 
 open ToricIdeals.RationalNormalCurve
@@ -33,16 +33,6 @@ private theorem zero_subsingleton [Subsingleton k] :
     hankelIdeal k 0 = RingHom.ker (rncMap k 0) :=
   Subsingleton.elim _ _
 
-#print axioms ToricIdeals.AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
-#print axioms ToricIdeals.RationalNormalCurve.hankelIdeal_zero_lt_ker
-#print axioms ToricIdeals.RationalNormalCurve.hankelIdeal_one_eq_ker
-#print axioms ToricIdeals.RationalNormalCurve.exists_normal
-#print axioms ToricIdeals.RationalNormalCurve.rncExponent_injective_on_normal
-#print axioms ToricIdeals.RationalNormalCurve.hankelIdeal_eq_ker
-#print axioms ToricIdeals.RationalNormalCurve.quotientEquivRange
-#print axioms ToricIdeals.RationalNormalCurve.hankelIdeal_isPrime
-#print axioms ToricIdeals.RationalNormalCurve.quotient_isDomain
-#print axioms ToricIdeals.RationalNormalCurve.spectrum_irreducible
 
 /-- The criterion gives Artinian quotients over the zero coefficient ring. -/
 private theorem zero_coefficients_quotient_artinian (n : ℕ) :
@@ -56,7 +46,3 @@ private theorem mod_four_quotient_not_artinian (n : ℕ) :
   intro hArt
   have hR := (quotient_isArtinianRing_iff (ZMod 4) n).mp hArt
   exact htwo (@Subsingleton.elim (ZMod 4) hR 2 0)
-
-#print axioms ToricIdeals.RationalNormalCurve.quotient_isArtinianRing_iff
-#print axioms zero_coefficients_quotient_artinian
-#print axioms mod_four_quotient_not_artinian
