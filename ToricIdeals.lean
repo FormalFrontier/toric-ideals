@@ -18,6 +18,7 @@ public import ToricIdeals.RationalNormalCurve.Injectivity
 public import ToricIdeals.RationalNormalCurve.Jacobson
 public import ToricIdeals.RationalNormalCurve.Noetherian
 public import ToricIdeals.SplitQuadric.Exponents
+public import ToricIdeals.SplitQuadric
 
 /-!
 # Toric ideals
@@ -42,4 +43,10 @@ primality.
 `(w, x, y, z) ↦ (W, WT, Y, YT)`, its image cone `t ≤ u + v`, and a unique
 reduced representative in each fiber over that cone. It also supplies reduction
 and the total selector, with its right-inverse law restricted to the image cone.
+
+`ToricIdeals.SplitQuadric` re-exports the coordinate algebra of `wz - xy = 0`
+for every commutative coefficient ring. Its `SplitQuadric` namespace provides
+the kernel equality, injective quotient parametrization, equivalence with the
+range, domain and primality criteria, coefficient retraction, and the comparison
+of independently chosen localization models of the `w`- and `W`-charts.
 -/

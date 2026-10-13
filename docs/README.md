@@ -61,6 +61,32 @@ When starting from a ring homomorphism `f : R →+* S`, use the algebra
 structure `f.toAlgebra`, so `algebraMap R S` is `f`, with its corresponding
 canonical scalar actions throughout.
 
+For a tower of commutative coefficient algebras `R → S → T` with
+`[Algebra R S] [Algebra S T] [Algebra R T] [IsScalarTower R S T]`,
+[`quotientBaseChangeAlgEquiv_tower`](../ToricIdeals/RationalNormalCurve/BaseChange.lean)
+states that the square
+
+$$
+\begin{array}{ccc}
+T\otimes_S(S\otimes_R Q_{R,n}) & \xrightarrow{\;1\otimes B_{R,S}\;} &
+T\otimes_S Q_{S,n} \\
+\downarrow\scriptstyle{\operatorname{cancelBaseChange}} &&
+\downarrow\scriptstyle{B_{S,T}} \\
+T\otimes_R Q_{R,n} & \xrightarrow{\;B_{R,T}\;} & Q_{T,n}
+\end{array}
+$$
+
+commutes, where `B` is `quotientBaseChangeAlgEquiv`. The left arrow is
+Mathlib's `Algebra.TensorProduct.cancelBaseChange`, which combines the tensor
+associator with scalar-unit cancellation. The top arrow is
+`Algebra.TensorProduct.congr (AlgEquiv.refl : T ≃ₐ[T] T)
+  (quotientBaseChangeAlgEquiv R S n)`.
+On `t ⊗ (s ⊗ [p])`, both routes give
+`[(algebraMap S T s * t) • MvPolynomial.map (algebraMap R T) p]`.
+The coefficient universes `u`, `v`, `w` are independent, and the statement
+includes every degree and zero rings without any flatness hypothesis.
+No new quotient carrier or base-change map is needed.
+
 The private [root-import client](../ToricIdealsTest/RootClient.lean) over
 `ℤ → ZMod 4` in degree one sends `2 ⊗ [X₀ + X₁]` to the nonzero class
 `[C 2 * (X₀ + X₁)]`, detected by evaluation at `(1, 0)`. Thus a nonzero
@@ -68,7 +94,15 @@ nilpotent scalar is included. The independent
 [nonflat coefficient models](../ToricIdealsTest/RationalNormalCurveBaseChangeNonflatModels.lean)
 show that this coefficient map is neither injective nor flat, and that its
 conic quotient map kills the nonzero class `[C 4]` and sends `[C 2]` to a
-nonzero square-zero class. The
+nonzero square-zero class. Their tensor-tower client for
+`ℤ → ZMod 4 → ZMod 2` uses the coherence theorem to compute both routes on
+`1 ⊗ (3 ⊗ [1 + X₀])`, giving the nonzero class `[1 + X₀]` in every degree.
+The surviving square-zero conic class `[C 2]` over `ZMod 4` becomes zero after
+further tensor base change to `ZMod 2`. Nonflatness of `ℤ → ZMod 4` is proved
+using Mathlib's regular-scalar criterion, not inferred merely from
+noninjectivity. A zero-target tower also specializes a nonzero integer
+constant to zero. These clients use the pure-tensor and augmentation lemmas,
+without unfolding either construction. The
 [small-degree, product and zero-ring models](../ToricIdealsTest/RationalNormalCurveBaseChangeSmallModels.lean)
 use polynomial and quotient APIs independently of the base-change equivalence;
 the [tensor models](../ToricIdealsTest/RationalNormalCurveBaseChangeTensorModels.lean)

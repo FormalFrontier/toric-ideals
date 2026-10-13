@@ -7,7 +7,7 @@ uses AI-assisted formalization and review.
 Reusable Lean 4 theory of coefficientwise normalization over rings, monomial-map
 kernels, the Hankel ideal of the rational normal curve over arbitrary
 commutative coefficient rings, and natural-number exponent normal forms for
-the split quadric.
+the split quadric, together with its coordinate algebra and localization charts.
 
 ## Headline results
 
@@ -159,6 +159,14 @@ the split quadric.
   Reduction preserves the image; the total selector `normal` is reduced
   everywhere but selects a preimage only on the cone. These are coefficient-free
   exponent results, not a polynomial-kernel or quotient-ring theorem.
+- **Split-quadric coordinate algebra:** For every `[CommRing A]`, the kernel of
+  `(w, x, y, z) ↦ (W, WT, Y, YT)` is `(wz - xy)`. The induced quotient map is
+  injective and identifies the coordinate algebra with the range, not the whole
+  target. The coordinate algebra is a domain, and the relation ideal is prime,
+  exactly when `A` is a domain. The [split-quadric guide](docs/SplitQuadric.md)
+  also describes the coefficient retraction and the equivalence of the `w`- and
+  `W`-charts for independently chosen localization models, without domain or
+  nontriviality assumptions.
 
 This library does not classify general toric ideals or prove rational-normal-curve
 results outside the stated parametrization and hypotheses. It is organized for
@@ -185,6 +193,13 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.BaseChange`](ToricIdeals/RationalNormalCurve/BaseChange.lean) | Scalar base change of the full Hankel quotient over arbitrary commutative rings in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoordinateRegularity`](ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean) | Regularity of every coordinate class over arbitrary commutative rings in every degree |
 | [`ToricIdeals.SplitQuadric.Exponents`](ToricIdeals/SplitQuadric/Exponents.lean) | Exponent reduction, image cone and unique reduced representatives |
+
+The split-quadric interface is re-exported by
+[`ToricIdeals.SplitQuadric`](ToricIdeals/SplitQuadric.lean). Its independent leaves
+are `Basic`, `Exponents`, `MonomialReduction`, `ExponentParametrization`,
+`CoefficientRetraction`, `Kernel`, `Consequences`, and `Examples`, under
+`ToricIdeals.SplitQuadric`. Coordinate-algebra declarations retain the namespace
+`SplitQuadric`; exponent declarations use `ToricIdeals.SplitQuadric`.
 
 ## Use
 

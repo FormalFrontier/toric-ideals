@@ -15,7 +15,10 @@ project:
     coefficient rings, and an arithmetic
     characterization of the natural exponent image and regularity of every
     coordinate class in every degree, with an injective coordinate-localization
-    client over arbitrary commutative rings.
+    client over arbitrary commutative rings. The split-quadric coordinate algebra
+    has an all-coefficient determinant kernel, an injective quotient parametrization,
+    a range equivalence, coefficient domain and primality criteria, and localization
+    chart comparisons over arbitrary commutative rings.
   authors:
     - "Formal Frontier Agents"
   responsible_maintainers:
@@ -46,6 +49,19 @@ sources:
       follows the library's Noetherian constant-coefficient augmentation
       argument and uses Mathlib's Jacobson polynomial, quotient and surjective
       descent results.
+
+  - title: "The Rising Sea: Foundations of Algebraic Geometry"
+    authors:
+      - "Ravi Vakil"
+    type: "book"
+    location: "Section 4.4"
+    relationship: "adapts"
+    note: >-
+      Motivation for the determinant model wz - xy. The coordinate-algebra results
+      use arbitrary commutative coefficient rings, rather than only fields.
+      Polynomial evaluation, quotient, localization and domain-transport APIs
+      come from Mathlib. The normal-form proof uses this library's coefficientwise
+      fiber-normalization theorem; no source text is reproduced.
 
 status:
   scope: >-
@@ -84,6 +100,13 @@ status:
     ToricIdealsTest.RationalNormalCurveCoordinateLocalization provides
     injective_algebraMap_away_quotient_X for the canonical map to the localization
     away from each coordinate class, with the same hypotheses.
+    ToricIdeals.SplitQuadric provides the coordinate algebra of wz - xy = 0.
+    For every (A : Type u) [CommRing A], kernel_theta and phi_injective identify
+    the determinant kernel and the injective quotient parametrization.
+    rangeEquiv identifies the quotient with theta.range; coordinateRing_isDomain_iff
+    and relationIdeal_isPrime_iff characterize domains and prime ideals by IsDomain A.
+    Coefficients have a point-evaluation retraction. The chart comparison allows
+    independently chosen localization models and independent universes.
     No quotient grading, rank or Hilbert-function formula, general
     classification of toric ideals or whole-source coverage is asserted.
 
@@ -134,6 +157,13 @@ fidelity:
     No regular-sequence, Laurent-chart or dimension formula is asserted.
     The positive-degree image equivalence is an equivalence of rings,
     not a scheme isomorphism or a classification of toric ideals.
+    The split-quadric results concern wz - xy, not the degree-three rational
+    normal curve. The parameter range is not identified with the entire target.
+    Its exponent selector is a section only on the cone t ≤ u + v and need not
+    be additive. The chart equivalence uses the scalar towers through both
+    polynomial and quotient bases, whereas the backward chart morphism needs
+    no scalar-tower law through the quotient. No scheme classification,
+    missing-plane quotient or arbitrary-base-change naturality is asserted.
 
 review:
   status: "agent-reviewed mathematical development"
