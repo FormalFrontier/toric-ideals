@@ -9,17 +9,19 @@ import Mathlib.Algebra.Polynomial.Eval.Defs
 import Mathlib.Algebra.Polynomial.Monomial
 import Mathlib.RingTheory.Artinian.Module
 public import Mathlib.RingTheory.Artinian.Defs
+import MultivariatePolynomials.Artinian
 public import ToricIdeals.RationalNormalCurve
+import ToricIdeals.RationalNormalCurve.AxisProjection
 
 /-!
 # Artinian rational-normal-curve coordinate rings
 
 The quotient of `Source R n` by `hankelIdeal R n` is Artinian exactly when
 its commutative coefficient ring `R` is a zero ring, expressed by
-`Subsingleton R`. Artinianity is taken over the quotient ring itself, not
-as a module over the coefficient ring. The criterion concerns every degree
-and includes zero coefficient rings, rings with nilpotent elements and
-product rings.
+`Subsingleton R`. The ring criterion takes scalars in the quotient ring
+itself. For the canonical coefficient `R`-module action, Artinianity has the
+same zero-ring condition. Both criteria concern every degree and include
+zero coefficient rings, rings with nilpotent elements and product rings.
 
 At degree zero the Hankel ideal is `⊥`, so the quotient is the full
 one-variable polynomial ring, not the parametrization kernel quotient or
@@ -33,6 +35,8 @@ its noninvertibility.
 
 ## References
 
+* Mathlib contributors, `Mathlib.RingTheory.Artinian.Module`, for
+  coefficient-module descent along surjective linear maps.
 * Formal Frontier Agents, `ToricIdeals.RationalNormalCurve`, for the Hankel
   presentation and its small-degree boundary results.
 * Mathlib contributors, `Mathlib.RingTheory.Artinian.Defs` and
@@ -45,6 +49,8 @@ its noninvertibility.
 * Mathlib contributors, `Mathlib.Algebra.Polynomial.Coeff` and
   `Mathlib.Algebra.Polynomial.Degree.Operations`, for regularity and
   noninvertibility of the polynomial variable.
+* Formal Frontier Agents, `MultivariatePolynomials.Artinian`, for the
+  coefficient-module criterion for univariate polynomials.
 -/
 
 @[expose] public section
@@ -66,35 +72,10 @@ theorem quotient_isArtinianRing_iff (R : Type u) [CommRing R] (n : ℕ) :
     rcases subsingleton_or_nontrivial R with hR | hR
     · exact hR
     · let : Nontrivial R := hR
-      -- Retain the first variable; every term of a minor has a successor variable.
-      let e : Source R n →+* Polynomial R :=
-        MvPolynomial.eval₂Hom Polynomial.C
-          (fun i => if i = 0 then Polynomial.X else 0)
-      have he : hankelIdeal R n ≤ RingHom.ker e := by
-        apply Ideal.span_le.2
-        rintro _ ⟨p, rfl⟩
-        apply RingHom.mem_ker.mpr
-        simp only [hankelMinor, map_sub, map_mul, e, MvPolynomial.eval₂Hom_X',
-          Fin.succ_ne_zero, ↓reduceIte, mul_zero, zero_mul, sub_self]
-      -- The one-variable polynomial ring supplies a section of the evaluation.
-      let s : Polynomial R →+* Source R n :=
-        Polynomial.eval₂RingHom MvPolynomial.C (MvPolynomial.X (0 : Fin (n + 1)))
-      have hes : e.comp s = RingHom.id (Polynomial R) := by
-        apply Polynomial.ringHom_ext
-        · intro r
-          simp [e, s]
-        · simp [e, s]
-      have heSurj : Function.Surjective e := by
-        intro f
-        exact ⟨s f, RingHom.congr_fun hes f⟩
-      have hkill : ∀ f : Source R n, f ∈ hankelIdeal R n → e f = 0 :=
-        fun _ hf => he hf
-      let q : Source R n ⧸ hankelIdeal R n →+* Polynomial R :=
-        Ideal.Quotient.lift (hankelIdeal R n) e hkill
-      have hqSurj : Function.Surjective q :=
-        Ideal.Quotient.lift_surjective_of_surjective (hankelIdeal R n) hkill heSurj
+      have hqSurj : Function.Surjective (axisProjection R n).toRingHom :=
+        axisProjection_surjective R n
       let : IsArtinianRing (Source R n ⧸ hankelIdeal R n) := hArt
-      have : IsArtinianRing (Polynomial R) := hqSurj.isArtinianRing
+      let : IsArtinianRing (Polynomial R) := hqSurj.isArtinianRing
       exact (Polynomial.not_isUnit_X (R := R)
         (IsArtinianRing.isUnit_iff_isRegular.mpr Polynomial.isRegular_X)).elim
   · intro hR
@@ -103,5 +84,24 @@ theorem quotient_isArtinianRing_iff (R : Type u) [CommRing R] (n : ℕ) :
     apply Ring.isArtinian_of_zero_eq_one
     simpa only [map_zero, map_one] using
       congrArg (Ideal.Quotient.mk (hankelIdeal R n)) h01
+
+/-- In every degree, the full Hankel quotient is Artinian as a module over
+its coefficient ring `R` exactly when `R` is a zero ring. The scalar action is
+the canonical coefficient action, not multiplication as a quotient self-module;
+no nontriviality or positive-degree assumption is needed. -/
+theorem quotient_isArtinian_iff (R : Type u) [CommRing R] (n : ℕ) :
+    IsArtinian R (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R := by
+  constructor
+  · intro hArt
+    let : IsArtinian R (Source R n ⧸ hankelIdeal R n) := hArt
+    have hPoly : IsArtinian R (Polynomial R) :=
+      isArtinian_of_surjective (Source R n ⧸ hankelIdeal R n)
+        (axisProjection R n).toLinearMap (axisProjection_surjective R n)
+    exact (Polynomial.isArtinian_iff R).mp hPoly
+  · intro hR
+    let : Subsingleton R := hR
+    let : Subsingleton (Source R n ⧸ hankelIdeal R n) :=
+      Algebra.subsingleton R (Source R n ⧸ hankelIdeal R n)
+    exact isArtinian_of_finite (R := R) (M := Source R n ⧸ hankelIdeal R n)
 
 end ToricIdeals.RationalNormalCurve

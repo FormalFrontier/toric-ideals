@@ -102,12 +102,16 @@ the split quadric.
   and `n = 0, 1` are included, with no nontriviality or positive-degree premise.
   This result constructs no quotient grading and asserts no rank or
   Hilbert-function formula.
-- **Noetherian quotient in every degree:** For any `[CommRing R]` and every
+- **Noetherian quotient in every degree:** For any `(R : Type u) [CommRing R]` and every
   `n : ℕ`, including zero,
   [`quotient_isNoetherianRing_iff`](ToricIdeals/RationalNormalCurve/Noetherian.lean)
   says that the quotient by the Hankel minors is Noetherian **if and only if
   `R` is Noetherian**. No field, domain, nontriviality or positive-degree
-  assumption is needed.
+  assumption is needed. For the canonical left coefficient action,
+  [`quotient_isNoetherian_iff`](ToricIdeals/RationalNormalCurve/Noetherian.lean)
+  instead says `IsNoetherian R (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R`.
+  Thus a nonzero Noetherian coefficient ring gives a Noetherian quotient ring,
+  but not a Noetherian coefficient module, in any degree.
 - **Jacobson quotient in every degree:** For every `(R : Type u) [CommRing R]`
   and `n : ℕ`,
   [`quotient_isJacobsonRing_iff`](ToricIdeals/RationalNormalCurve/Jacobson.lean)
@@ -120,8 +124,12 @@ the split quadric.
   [`quotient_isArtinianRing_iff`](ToricIdeals/RationalNormalCurve/Artinian.lean)
   says that the quotient by the Hankel minors is Artinian over itself **if and
   only if `R` is a zero ring**, expressed by `Subsingleton R`. This includes
-  degrees zero and one, with their full polynomial quotients. In particular,
-  finite Artinian nonzero coefficients such as `ZMod 4` do not suffice.
+  degrees zero and one, with their full polynomial quotients. For the canonical
+  left coefficient action,
+  [`quotient_isArtinian_iff`](ToricIdeals/RationalNormalCurve/Artinian.lean)
+  says `IsArtinian R (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R` as well.
+  In particular, finite Artinian nonzero coefficients such as `ZMod 4` do not
+  suffice for either Artinian criterion.
 - **Coordinate-axis quotient in every degree:** For any `(R : Type u) [CommRing R]`
   and every `n : ℕ`,
   [`axisProjection`](ToricIdeals/RationalNormalCurve/AxisProjection.lean) maps
@@ -170,9 +178,9 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |
-| [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree coefficient criterion for quotient Noetherianity |
+| [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree Noetherian ring and left coefficient-module criteria |
 | [`ToricIdeals.RationalNormalCurve.Jacobson`](ToricIdeals/RationalNormalCurve/Jacobson.lean) | All-degree coefficient criterion for quotient Jacobsonness |
-| [`ToricIdeals.RationalNormalCurve.Artinian`](ToricIdeals/RationalNormalCurve/Artinian.lean) | All-degree zero-coefficient criterion for quotient Artinianity |
+| [`ToricIdeals.RationalNormalCurve.Artinian`](ToricIdeals/RationalNormalCurve/Artinian.lean) | All-degree Artinian ring and left coefficient-module criteria |
 | [`ToricIdeals.RationalNormalCurve.AxisProjection`](ToricIdeals/RationalNormalCurve/AxisProjection.lean) | Coordinate-axis algebra map, split surjection and characteristic universal property |
 | [`ToricIdeals.RationalNormalCurve.BaseChange`](ToricIdeals/RationalNormalCurve/BaseChange.lean) | Scalar base change of the full Hankel quotient over arbitrary commutative rings in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoordinateRegularity`](ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean) | Regularity of every coordinate class over arbitrary commutative rings in every degree |
@@ -257,9 +265,13 @@ and one its ideal is `⊥`, giving the full polynomial rings on `Fin 1` and
 `Fin 2`. Only positive-degree results identify this quotient with the
 parametrization image. Jacobsonness and Noetherianity each have their own
 coefficient criterion; neither property is substituted for the other.
-Artinianity is over the quotient itself and is equivalent to `Subsingleton R`,
-not merely to Artinian coefficients. See the [guide](docs/README.md) for theorem
-usage and boundary examples.
+The ring criteria take scalars in the quotient itself: Noetherianity detects
+`IsNoetherianRing R`, while Artinianity detects `Subsingleton R`. For the
+canonical left coefficient action, both Noetherianity and Artinianity detect
+`Subsingleton R`, without a finite-rank or positive-degree premise. The
+[root-import clients](ToricIdealsTest/RootClient.lean) contrast zero coefficients
+with finite nonreduced `ZMod 4` coefficients in every degree. See the
+[guide](docs/README.md) for theorem usage and boundary examples.
 
 ## References and credits
 
@@ -270,9 +282,13 @@ neither participation nor endorsement. The curve definitions, descent,
 terminal-exponent uniqueness and normalization proofs are Formal Frontier
 work. The Jacobson proof follows the constant-coefficient augmentation argument
 of this library's Noetherian module and uses the Jacobson providers in
-`Mathlib.RingTheory.Jacobson.Ring`. The code depends on mathlib (Apache-2.0);
-Lean and doc-gen4 are separately credited tools, not bundled sources. The
-Markdown adapter follows earlier Formal Frontier documentation tooling.
+`Mathlib.RingTheory.Jacobson.Ring`. The left coefficient-module criteria use
+this library's coordinate-axis surjection, the polynomial coefficient-module
+criteria in [multivariate-polynomials](https://github.com/FormalFrontier/multivariate-polynomials),
+and Mathlib's Noetherian and Artinian module theory. The code depends on mathlib
+and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
+credited tools, not bundled sources. The Markdown adapter follows earlier
+Formal Frontier documentation tooling.
 Contributions use AI-assisted development and independent agent review;
 `Authors: Formal Frontier Agents` is collective author credit, not a
 copyright-ownership claim.

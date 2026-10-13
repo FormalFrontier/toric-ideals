@@ -286,3 +286,41 @@ private theorem natural_conic_no_left_inverse :
   rcases (rncMap_injective_iff ℕ 2).mp hrecover.injective with hdegree | hcoeff
   · exact (by decide : (2 : ℕ) ≠ 1) hdegree
   · exact Nat.zero_ne_one (@Subsingleton.elim ℕ hcoeff 0 1)
+
+/-! Coefficient-module chain conditions use the full Hankel quotient with its
+canonical coefficient action. The finite ring `ZMod 4` has a nonzero nilpotent
+and a Noetherian quotient ring, but neither coefficient-module chain condition.
+The coefficient finiteness checks use Mathlib's `ZMod.card`,
+`isNoetherian_of_finite` and `isArtinian_of_finite`; the quotient conclusions
+use the public rational-normal-curve criteria. -/
+
+private theorem zero_coefficient_chain_conditions (n : ℕ) :
+    IsNoetherian (ZMod 1) (Source (ZMod 1) n ⧸ hankelIdeal (ZMod 1) n) ∧
+      IsArtinian (ZMod 1) (Source (ZMod 1) n ⧸ hankelIdeal (ZMod 1) n) := by
+  exact ⟨(quotient_isNoetherian_iff (ZMod 1) n).mpr inferInstance,
+    (quotient_isArtinian_iff (ZMod 1) n).mpr inferInstance⟩
+
+private theorem mod_four_coefficient_chain_boundaries (n : ℕ) :
+    Fintype.card (ZMod 4) = 4 ∧
+      IsNoetherianRing (ZMod 4) ∧
+      IsArtinianRing (ZMod 4) ∧
+      (2 : ZMod 4) ≠ 0 ∧
+      (2 : ZMod 4) ^ 2 = 0 ∧
+      IsNoetherianRing (Source (ZMod 4) n ⧸ hankelIdeal (ZMod 4) n) ∧
+      ¬ IsNoetherian (ZMod 4) (Source (ZMod 4) n ⧸ hankelIdeal (ZMod 4) n) ∧
+      ¬ IsArtinian (ZMod 4) (Source (ZMod 4) n ⧸ hankelIdeal (ZMod 4) n) := by
+  have hcoeffNoe : IsNoetherianRing (ZMod 4) := inferInstance
+  refine ⟨ZMod.card 4, hcoeffNoe,
+    isArtinian_of_finite (R := ZMod 4) (M := ZMod 4),
+    (by decide : (2 : ZMod 4) ≠ 0), (by decide : (2 : ZMod 4) ^ 2 = 0),
+    (quotient_isNoetherianRing_iff (ZMod 4) n).mpr hcoeffNoe, ?_, ?_⟩
+  · intro hNoe
+    have hcoeff : Subsingleton (ZMod 4) :=
+      (quotient_isNoetherian_iff (ZMod 4) n).mp hNoe
+    exact (by decide : (0 : ZMod 4) ≠ 1)
+      (@Subsingleton.elim (ZMod 4) hcoeff 0 1)
+  · intro hArt
+    have hcoeff : Subsingleton (ZMod 4) :=
+      (quotient_isArtinian_iff (ZMod 4) n).mp hArt
+    exact (by decide : (0 : ZMod 4) ≠ 1)
+      (@Subsingleton.elim (ZMod 4) hcoeff 0 1)
