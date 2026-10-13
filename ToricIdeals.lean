@@ -9,6 +9,7 @@ public import ToricIdeals.RationalNormalCurve
 public import ToricIdeals.RationalNormalCurve.Artinian
 public import ToricIdeals.RationalNormalCurve.ExponentImage
 public import ToricIdeals.RationalNormalCurve.Homogeneous
+public import ToricIdeals.RationalNormalCurve.Jacobson
 public import ToricIdeals.RationalNormalCurve.Noetherian
 public import ToricIdeals.SplitQuadric.Exponents
 

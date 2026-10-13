@@ -26,6 +26,8 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.RationalNormalCurveReducedModels",
   "ToricIdealsTest.RationalNormalCurveHomogeneityModels",
   "ToricIdealsTest.RationalNormalCurveHomogeneityClient",
+  "ToricIdealsTest.RationalNormalCurveJacobsonModels",
+  "ToricIdealsTest.RationalNormalCurveJacobsonClient",
   "ToricIdealsTest.RationalNormalCurveNoetherianModels",
   "ToricIdealsTest.RationalNormalCurveNoetherianNegativeModels",
   "ToricIdealsTest.RationalNormalCurveArtinianModels",

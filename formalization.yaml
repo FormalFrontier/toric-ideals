@@ -10,7 +10,7 @@ project:
     rings, with low-degree boundaries, a quotient-to-image equivalence,
     domain-dependent consequences, all-degree standard-graded homogeneity of
     the original Hankel ideal, all-degree coefficient criteria for domain,
-    reduced and Noetherian Hankel quotient rings, the all-degree criterion
+    reduced, Noetherian and Jacobson Hankel quotient rings, the all-degree criterion
     that the Hankel quotient is Artinian over itself exactly for zero
     coefficient rings, and an arithmetic
     characterization of the natural exponent image in every degree.
@@ -30,17 +30,20 @@ sources:
     note: >-
       October 21, 2025 draft. Motivation for the Hankel-minor and
       rational-normal-curve parametrization.
-      The project adapts its own earlier source-research definitions and descent
-      argument; no book material is reproduced, and no author participation or
-      endorsement is claimed. This library does not formalize the book as a whole.
-  - title: "Fiberwise kernel normalization, terminal-exponent uniqueness and exponent images"
+      The project uses its own polynomial definitions and descent argument;
+      no book material is reproduced, and no author participation or endorsement
+      is claimed. The exercise motivates the presentation, not the Jacobson
+      quotient criterion. This library does not formalize the book as a whole.
+  - title: "Fiberwise normalization, terminal exponents, exponent images and Hankel quotient criteria"
     type: "original-proof"
     relationship: "independently-proves"
     note: >-
-      Later original Formal Frontier proof work establishes coefficientwise
-      normalization, terminal-exponent uniqueness, the reverse Hankel-ideal
-      inclusion and the arithmetic exponent-image criterion, distinct from
-      the adapted source-research descent argument.
+      Original Formal Frontier proofs establish coefficientwise normalization,
+      terminal-exponent uniqueness, the reverse Hankel-ideal inclusion and the
+      arithmetic exponent-image criterion. The Jacobson quotient criterion
+      follows the library's Noetherian constant-coefficient augmentation
+      argument and uses Mathlib's Jacobson polynomial, quotient and surjective
+      descent results.
 
 status:
   scope: >-
@@ -50,7 +53,11 @@ status:
     presentation, degree-zero and degree-one boundaries, quotient-to-image
     equivalence, domain-dependent prime/spectrum results, and coefficient
     criteria for primality, reducedness, radicality and Noetherianity in every
-    degree. For every (R : Type u) [CommRing R] and n : ℕ,
+    degree. ToricIdeals.RationalNormalCurve.Jacobson provides
+    quotient_isJacobsonRing_iff: for every (R : Type u) [CommRing R] and n : ℕ,
+    the full quotient Source R n ⧸ hankelIdeal R n is Jacobson if and only if R
+    is Jacobson, without Noetherian, domain, field, reducedness, nontriviality
+    or positive-degree hypotheses. For every (R : Type u) [CommRing R] and n : ℕ,
     quotient_isArtinianRing_iff states that the Hankel quotient is Artinian
     as a module over itself if and only if Subsingleton R. Finite nonzero
     Artinian coefficients alone do not imply an Artinian quotient.
@@ -77,10 +84,7 @@ automation:
         AI-assisted Lean development in a pinned Lean 4 and mathlib Lake project.
   notes: >-
     AI agents developed the mathematical code and documentation, with independent
-    agent review of the mathematics. Atlas assembled the named README example and
-    native Markdown reference using a recipe adapted from Anchor's original
-    ideal-completion tooling through integral-closure and minimal-primes.
-    No model, cost, benchmark comparison or human-review claim is made here.
+    agent review of the mathematics. No human-review claim is made here.
 
 fidelity:
   divergences: >-
@@ -94,7 +98,11 @@ fidelity:
     rings. The all-degree coefficient criteria concern the quotient by the
     Hankel ideal itself; at degree zero this is the full one-variable
     polynomial quotient by the zero ideal, not the parametrization kernel or
-    image. The Artinian criterion concerns the quotient as a module over
+    image. The Jacobson criterion includes zero rings and the full degree-zero
+    and degree-one polynomial quotients; it is not a claim that Noetherian
+    rings are Jacobson. Rational power-series coefficients give Noetherian but
+    non-Jacobson Hankel quotients in every degree. The Artinian criterion concerns
+    the quotient as a module over
     itself, not over its coefficient ring; it is equivalent to the coefficient
     ring being a zero ring, not merely Artinian. It includes nilpotent and
     product coefficients and the full degree-zero and degree-one polynomial
@@ -120,6 +128,7 @@ review:
 acknowledgements: >-
   The project depends on mathlib without bundling it. Ravi Vakil's exercise is
   mathematical motivation and does not imply participation or endorsement.
-  Atlas added the native example and Markdown reference using a recipe adapted
-  from Anchor's original project documentation work. Lean and doc-gen4 are
-  separately credited tools, not bundled documentation or source material.
+  The Jacobson proof follows the library's Noetherian augmentation argument
+  and Mathlib's Jacobson ring theory. The Markdown adapter follows earlier
+  Formal Frontier documentation tooling. Lean and doc-gen4 are separately
+  credited tools, not bundled documentation or source material.
