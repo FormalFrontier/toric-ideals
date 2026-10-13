@@ -46,6 +46,18 @@ the split quadric.
   This is the full Hankel quotient, including the polynomial cases `n = 0, 1`,
   not a replacement by the parametrization image; see
   [base change and its representative formula](docs/README.md#scalar-base-change-of-hankel-quotients).
+- **Endpoint coordinates and finite Hankel quotient:** For every
+  `(R : Type u) [CommRing R]` and `n : ℕ`, the Hankel quotient
+  `Source R n ⧸ hankelIdeal R n` is integral and a finite module over
+  `MvPolynomial (Fin 2) R` through
+  [`endpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean)
+  ([`endpointMap_isIntegral`](ToricIdeals/RationalNormalCurve/EndpointMap.lean),
+  [`endpointMap_finite`](ToricIdeals/RationalNormalCurve/EndpointMap.lean)).
+  For `1 ≤ n`, the endpoint map is injective
+  ([`endpointMap_injective`](ToricIdeals/RationalNormalCurve/EndpointMap.lean)).
+  At `n = 0`, the Hankel ideal is `⊥`: the target is the full one-variable
+  polynomial quotient and both endpoints map to its single variable class,
+  rather than using the raw parametrization `X₀ ↦ 1`.
 - **Arithmetic exponent image:** For every `n : ℕ` and natural-valued target
   `t : Fin 2 →₀ ℕ`,
   [`mem_mrange_rncExponent_iff`](ToricIdeals/RationalNormalCurve/ExponentImage.lean)
@@ -154,6 +166,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
+| [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |

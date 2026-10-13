@@ -40,4 +40,5 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.SplitQuadricModels",
   "ToricIdealsTest.RationalNormalCurveBaseChangeSmallModels",
   "ToricIdealsTest.RationalNormalCurveBaseChangeNonflatModels",
-  "ToricIdealsTest.RationalNormalCurveBaseChangeTensorModels"]
+  "ToricIdealsTest.RationalNormalCurveBaseChangeTensorModels",
+  "ToricIdealsTest.RationalNormalCurve.EndpointMap"]

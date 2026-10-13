@@ -11,6 +11,7 @@ public import ToricIdeals.RationalNormalCurve.Augmentation
 public import ToricIdeals.RationalNormalCurve.AxisProjection
 public import ToricIdeals.RationalNormalCurve.BaseChange
 public import ToricIdeals.RationalNormalCurve.CoordinateRegularity
+public import ToricIdeals.RationalNormalCurve.EndpointMap
 public import ToricIdeals.RationalNormalCurve.ExponentImage
 public import ToricIdeals.RationalNormalCurve.Homogeneous
 public import ToricIdeals.RationalNormalCurve.Injectivity

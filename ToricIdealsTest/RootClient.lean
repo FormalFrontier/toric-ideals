@@ -5,6 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 import ToricIdeals
+import ToricIdealsTest.RationalNormalCurve.EndpointMap
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Data.Matrix.Basis
 
