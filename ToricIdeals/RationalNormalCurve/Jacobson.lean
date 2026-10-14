@@ -5,7 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import Mathlib.RingTheory.Jacobson.Ring
-public import ToricIdeals.RationalNormalCurve
+public import ToricIdeals.RationalNormalCurve.Augmentation
 
 /-!
 # Jacobson rational-normal-curve coordinate rings
@@ -25,6 +25,8 @@ quotient or image.
 
 * Formal Frontier Agents, `ToricIdeals.RationalNormalCurve`, for the Hankel
   presentation and its small-degree boundary results.
+* Formal Frontier Agents, `ToricIdeals.RationalNormalCurve.Augmentation`,
+  supplies the reusable surjective coefficient augmentation of the quotient.
 * Mathlib contributors, `Mathlib.RingTheory.Jacobson.Ring`, for
   `IsJacobsonRing`, finite-variable polynomial closure, quotient-ring closure
   and descent along surjective ring homomorphisms.
@@ -45,20 +47,9 @@ theorem quotient_isJacobsonRing_iff (R : Type u) [CommRing R] (n : ℕ) :
   constructor
   · intro hQ
     let : IsJacobsonRing (Source R n ⧸ hankelIdeal R n) := hQ
-    let e : Source R n →+* R := MvPolynomial.constantCoeff
-    have hI : hankelIdeal R n ≤ RingHom.ker e := by
-      apply Ideal.span_le.mpr
-      rintro _ ⟨p, rfl⟩
-      apply RingHom.mem_ker.mpr
-      simp only [e, hankelMinor, map_sub, map_mul, MvPolynomial.constantCoeff_X,
-        mul_zero, sub_self]
     let g : (Source R n ⧸ hankelIdeal R n) →+* R :=
-      Ideal.Quotient.lift (hankelIdeal R n) e
-        (fun _ hf => RingHom.mem_ker.mp (hI hf))
-    have hg : Function.Surjective g := by
-      intro r
-      refine ⟨Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.C r), ?_⟩
-      simp only [g, Ideal.Quotient.lift_mk, e, MvPolynomial.constantCoeff_C]
+      (quotientAugmentation R n).toRingHom
+    have hg : Function.Surjective g := quotientAugmentation_surjective R n
     exact isJacobsonRing_of_surjective ⟨g, hg⟩
   · intro hR
     let : IsJacobsonRing R := hR

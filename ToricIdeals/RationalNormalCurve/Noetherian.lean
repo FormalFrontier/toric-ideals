@@ -7,7 +7,7 @@ module
 public import Mathlib.RingTheory.Ideal.Quotient.Noetherian
 public import Mathlib.RingTheory.Polynomial.Basic
 import MultivariatePolynomials.Noetherian
-public import ToricIdeals.RationalNormalCurve
+public import ToricIdeals.RationalNormalCurve.Augmentation
 public import ToricIdeals.RationalNormalCurve.AxisProjection
 
 /-!
@@ -35,6 +35,8 @@ quotient or image.
   2025 draft, Exercise 3.6.F, motivates the Hankel presentation used here.
 * Formal Frontier Agents, `ToricIdeals.RationalNormalCurve`, supplies the
   polynomial presentation, Hankel ideal and small-degree boundary results.
+* Formal Frontier Agents, `ToricIdeals.RationalNormalCurve.Augmentation`,
+  supplies the reusable surjective coefficient augmentation of the quotient.
 * Mathlib contributors, `Mathlib.RingTheory.Polynomial.Basic` and
   `Mathlib.RingTheory.Ideal.Quotient.Noetherian`, supply the finite-variable
   Hilbert basis theorem and Noetherian quotient-ring theory.
@@ -57,20 +59,9 @@ theorem quotient_isNoetherianRing_iff (R : Type u) [CommRing R] (n : ℕ) :
   constructor
   · intro hQ
     let : IsNoetherianRing (Source R n ⧸ hankelIdeal R n) := hQ
-    let e : Source R n →+* R := MvPolynomial.constantCoeff
-    have hI : hankelIdeal R n ≤ RingHom.ker e := by
-      apply Ideal.span_le.mpr
-      rintro _ ⟨p, rfl⟩
-      apply RingHom.mem_ker.mpr
-      simp only [e, hankelMinor, map_sub, map_mul, MvPolynomial.constantCoeff_X,
-        mul_zero, sub_self]
     let g : (Source R n ⧸ hankelIdeal R n) →+* R :=
-      Ideal.Quotient.lift (hankelIdeal R n) e
-        (fun _ hf => RingHom.mem_ker.mp (hI hf))
-    have hg : Function.Surjective g := by
-      intro r
-      refine ⟨Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.C r), ?_⟩
-      simp only [g, Ideal.Quotient.lift_mk, e, MvPolynomial.constantCoeff_C]
+      (quotientAugmentation R n).toRingHom
+    have hg : Function.Surjective g := quotientAugmentation_surjective R n
     exact isNoetherianRing_of_surjective (Source R n ⧸ hankelIdeal R n) R g hg
   · intro hR
     let : IsNoetherianRing R := hR
