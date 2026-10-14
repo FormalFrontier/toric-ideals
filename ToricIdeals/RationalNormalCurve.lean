@@ -31,6 +31,12 @@ These representatives use classical choice, not a computable reduction API.
 
 The degree-zero exception, degree-one equality, quotient-to-*range* equivalence,
 and domain-dependent consequences are stated separately below.
+
+## References
+
+* Mathlib contributors, `Mathlib.Data.Finsupp.Basic` and
+  `Mathlib.Algebra.MonoidAlgebra.MapDomain`, for coefficient transport and the
+  vanishing of coefficients outside the exponent-map image.
 -/
 
 open MvPolynomial
@@ -99,6 +105,15 @@ same coefficient. -/
       (AddMonoidAlgebra.single d r) =
     AddMonoidAlgebra.single (rncExponent n d) r
   rw [AddMonoidAlgebra.mapDomain_single]
+
+/-- A target exponent outside the exponent-map image has zero coefficient in
+every parametrized polynomial. This specializes Mathlib's
+`Finsupp.mapDomain_of_notMem_range`, without an injectivity or positivity assumption. -/
+theorem coeff_rncMap_of_not_mem_range (n : ℕ) (p : Source k n) (t : Fin 2 →₀ ℕ)
+    (ht : t ∉ Set.range (rncExponent n)) : (rncMap k n p).coeff t = 0 := by
+  rw [rncMap, AddMonoidAlgebra.mapDomainRingHom_apply]
+  simpa only [AddMonoidAlgebra.mapDomain, AddMonoidAlgebra.coeff_ofCoeff] using
+    Finsupp.mapDomain_of_notMem_range p.coeff t ht
 
 /-- At degree one the exponent map on the two source variables is the identity. -/
 theorem rncExponent_one (d : Fin (1 + 1) →₀ ℕ) : rncExponent 1 d = d := by

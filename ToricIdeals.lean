@@ -18,6 +18,7 @@ public import ToricIdeals.RationalNormalCurve.ExponentImage
 public import ToricIdeals.RationalNormalCurve.Homogeneous
 public import ToricIdeals.RationalNormalCurve.Injectivity
 public import ToricIdeals.RationalNormalCurve.Jacobson
+public import ToricIdeals.RationalNormalCurve.MapSurjectivity
 public import ToricIdeals.RationalNormalCurve.Noetherian
 public import ToricIdeals.SplitQuadric.Exponents
 public import ToricIdeals.SplitQuadric
@@ -40,6 +41,12 @@ At degree zero they concern the one-variable polynomial quotient by `⊥`, not
 the parametrization kernel or image. They include zero rings and reduced
 coefficient rings with zero divisors; radicality asserts neither properness nor
 primality.
+
+`ToricIdeals.RationalNormalCurve.MapSurjectivity` provides
+`rncMap_surjective_iff`: over every commutative semiring and in every degree,
+the raw map reaches the full bivariate polynomial target exactly when the
+degree is one or the coefficients are subsingleton. This is not a statement
+about the Hankel quotient or a map onto the parametrization image.
 
 `ToricIdeals.RationalNormalCurve.CoefficientFiniteness` provides
 `quotient_moduleFinite_iff`: in every degree over every commutative ring `R`,

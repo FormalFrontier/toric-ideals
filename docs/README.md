@@ -22,6 +22,50 @@ can recover every source polynomial. A left inverse would give injectivity by
 `Function.LeftInverse.injective`, contradicting the classifier. This rules out
 arbitrary recovery functions, not just homomorphisms.
 
+## Raw parametrization surjectivity
+
+Import `ToricIdeals.RationalNormalCurve.MapSurjectivity`, or the root
+`ToricIdeals`. The public theorem is in `ToricIdeals.RationalNormalCurve`:
+
+```lean
+theorem rncMap_surjective_iff (R : Type u) [CommSemiring R] (n : ℕ) :
+    Function.Surjective (rncMap R n) ↔ n = 1 ∨ Subsingleton R
+```
+
+The source is the full `MvPolynomial (Fin (n + 1)) R`; the target is the full
+`MvPolynomial (Fin 2) R`, not the image subsemiring or a finite collection of
+monomials. The theorem includes degree zero and zero coefficients, in every
+coefficient universe. It needs no ring, domain, Noetherianity, nontriviality or
+positive-degree premise.
+
+Use `(rncMap_surjective_iff R n).mpr` with a proof of `n = 1` or
+`Subsingleton R` to obtain a preimage of any target polynomial. Use `.mp` to
+recover that alternative from surjectivity. The private
+[root-import clients](../ToricIdealsTest/Audit/RationalNormalCurveSurjectivityClient.lean)
+apply `.mpr` to arbitrary full target polynomials over `ZMod 1` in every degree,
+and `.mp` to exclude surjectivity over `ℕ` in degrees zero and two. The separate
+[boundary models](../ToricIdealsTest/Audit/RationalNormalCurveSurjectivityModels.lean)
+compute the constant image in degree zero, an interior conic monomial and a
+missed target variable, including nonreduced coefficients and a lifted
+coefficient universe. They use the polynomial and exponent APIs independently
+of the classifier.
+
+The degree-one proof composes `rncExponent_one` with Mathlib's
+`Finsupp.mapDomain_surjective` and the monoid-algebra coefficient equivalence.
+For the converse over nontrivial coefficients, the first target variable has
+coefficient one at `Finsupp.single (0 : Fin 2) 1`. The characteristic API
+`coeff_rncMap_of_not_mem_range R n p t ht` says that `(rncMap R n p).coeff t = 0`
+when `t` is outside the exponent-map image. The coefficient-free,
+all-degree `mem_mrange_rncExponent_iff` then forces `n ∣ 1`, hence `n = 1`.
+For subsingleton coefficients, Mathlib's subsingleton-target surjectivity
+applies directly.
+
+At degree zero the raw map sends `X₀` to `1` and has constant image; this is
+not the full degree-zero Hankel quotient `R[X₀]`. The injectivity classifier
+has the same numerical criterion, but it is not used to prove surjectivity.
+The quotient-to-image equivalence is likewise not an identification with the
+full bivariate target.
+
 ## Scalar base change of Hankel quotients
 
 Import `ToricIdeals.RationalNormalCurve.BaseChange`, or the root `ToricIdeals`.

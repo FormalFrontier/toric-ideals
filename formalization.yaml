@@ -16,7 +16,9 @@ project:
     that the Hankel quotient is Artinian over itself exactly for zero
     coefficient rings, finiteness of its canonical coefficient module exactly
     for zero coefficient rings in every degree, and an arithmetic
-    characterization of the natural exponent image and regularity of every
+    characterization of the natural exponent image, full-target raw-map
+    surjectivity exactly in degree one or over subsingleton coefficients for
+    arbitrary commutative semirings in every degree, and regularity of every
     coordinate class in every degree, with an injective coordinate-localization
     client over arbitrary commutative rings. The split-quadric coordinate algebra
     has an all-coefficient determinant kernel, an injective quotient parametrization,
@@ -48,7 +50,10 @@ sources:
     note: >-
       Original Formal Frontier proofs establish coefficientwise normalization,
       terminal-exponent uniqueness, the reverse Hankel-ideal inclusion and the
-      arithmetic exponent-image criterion. The Jacobson quotient criterion
+      arithmetic exponent-image criterion. The raw-map surjectivity criterion
+      combines that exponent criterion and the coefficient-vanishing API with
+      Mathlib's Finsupp coefficient-transport surjectivity and subsingleton-target
+      surjectivity. The Jacobson quotient criterion
       follows the library's Noetherian constant-coefficient augmentation
       argument and uses Mathlib's Jacobson polynomial, quotient and surjective
       descent results. The coefficient-module finiteness criterion uses the
@@ -97,6 +102,13 @@ status:
     mem_mrange_rncExponent_iff: for every n : ℕ and t : Fin 2 →₀ ℕ,
     membership in AddMonoidHom.mrange (rncExponent n) is equivalent to
     n dividing t 0 + t 1. The degree-zero image is the zero exponent.
+    ToricIdeals.RationalNormalCurve.MapSurjectivity provides
+    rncMap_surjective_iff: for every (R : Type u) [CommSemiring R] and n : ℕ,
+    Function.Surjective (rncMap R n) is equivalent to n = 1 or Subsingleton R.
+    This is the raw RingHom from the full MvPolynomial (Fin (n + 1)) R to
+    the full MvPolynomial (Fin 2) R, including degree zero and zero coefficients.
+    Its private root-import clients reach arbitrary target polynomials over
+    ZMod 1 in every degree and exclude surjectivity over ℕ in degrees zero and two.
     ToricIdealsTest.RationalNormalCurveExponentImageModels gives independent
     small-degree image and exclusion examples.
     ToricIdealsTest.RationalNormalCurveExponentImageClient provides
@@ -127,8 +139,9 @@ automation:
       tool_setup: >-
         AI-assisted Lean development in a pinned Lean 4 and mathlib Lake project.
   notes: >-
-    AI agents developed the mathematical code and documentation, with independent
-    agent review of the mathematics. No human-review claim is made here.
+    AI agents developed the mathematical code and documentation. Independent
+    agent review covers the Hankel presentation, exponent-image criterion and
+    quotient criteria. No human-review claim is made here.
 
 fidelity:
   divergences: >-
@@ -160,7 +173,11 @@ fidelity:
     domain, field, reducedness or positive-degree assumption, and a minor's
     homogeneous degree label two does not imply total degree two for a zero
     polynomial. The exponent-image criterion has no coefficient-ring or
-    positive-degree premise. The selector client requires 1 ≤ n because it
+    positive-degree premise. The raw-map surjectivity classifier also has no
+    ring, domain, Noetherianity, nontriviality or positive-degree premise.
+    Degree zero sends the sole source variable to one and has constant image;
+    it does not replace the full degree-zero Hankel quotient by that image.
+    The selector client requires 1 ≤ n because it
     uses the existing fiber-selection law, and specializes its inherited
     commutative coefficient-ring parameter to ℤ; it requires no supplied
     source preimage, domain or field hypothesis.
@@ -183,8 +200,8 @@ fidelity:
 review:
   status: "agent-reviewed mathematical development"
   notes: >-
-    The mathematical code and module/test interfaces received independent agent
-    review.
+    Independent agent review covers the Hankel presentation, exponent-image
+    criterion and quotient criteria, including their module and test interfaces.
 
 acknowledgements: >-
   The project depends on mathlib without bundling it. Ravi Vakil's exercise is
@@ -192,6 +209,9 @@ acknowledgements: >-
   The Jacobson proof follows the library's Noetherian augmentation argument
   and Mathlib's Jacobson ring theory. The coefficient-module finiteness proof
   uses the library's coordinate-axis surjection and Mathlib's polynomial and
-  module finiteness results. The Markdown adapter follows earlier
+  module finiteness results. Raw-map surjectivity uses the library's exponent-image
+  and coefficient-vanishing APIs together with Mathlib's Finsupp transport,
+  monoid-algebra coefficient equivalence and subsingleton-target surjectivity.
+  The Markdown adapter follows earlier
   Formal Frontier documentation tooling. Lean and doc-gen4 are separately
   credited tools, not bundled documentation or source material.

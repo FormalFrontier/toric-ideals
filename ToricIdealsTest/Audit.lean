@@ -9,6 +9,8 @@ import ToricIdeals
 import ToricIdealsTest.Audit.PolynomialCoefficientFinitenessModels
 import ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessClient
 import ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessModels
+import ToricIdealsTest.Audit.RationalNormalCurveSurjectivityClient
+import ToricIdealsTest.Audit.RationalNormalCurveSurjectivityModels
 
 /-!
 # Audit examples
