@@ -12,7 +12,9 @@ project:
     flatness of the full Hankel quotient for its canonical coefficient action
     over arbitrary commutative rings in all coefficient universes, including
     zero rings and degree zero, all-degree
-    standard-graded homogeneity of the original Hankel ideal, all-degree
+    standard-graded homogeneity of the original Hankel ideal, explicit bases
+    indexed by Fin (n*d+1) and finite coordinates for every degree-d component
+    of the full Hankel quotient over arbitrary commutative rings, all-degree
     coefficient criteria for domain, reduced, Noetherian and Jacobson Hankel
     quotient rings, the all-degree criterion
     that the Hankel quotient is Artinian over itself exactly for zero
@@ -80,7 +82,11 @@ sources:
       and freeness with Mathlib's nontrivial free-module result, and transport
       from nonempty-index finitely supported functions for zero coefficients.
       Its tensor clients directly reuse Mathlib's faithfully flat injectivity
-      reflection and canonical tensor-unit injection.
+      reflection and canonical tensor-unit injection. Homogeneous-component
+      bases restrict the coefficient parametrization using the original
+      exponent-total identity and terminal normalizer, then transport Mathlib's
+      supported monomial basis and finite antidiagonal enumeration. The
+      one-variable case instead uses the bottom-ideal polynomial quotient.
 
   - title: "The Rising Sea: Foundations of Algebraic Geometry"
     authors:
@@ -131,6 +137,21 @@ status:
     The original Hankel ideal is homogeneous for Mathlib's canonical
     natural-number grading of the source polynomial ring for every
     (R : Type u) [CommRing R] and n : ℕ, including zero rings and n = 0, 1.
+    ToricIdeals.RationalNormalCurve.HomogeneousBasis provides
+    quotientHomogeneousBasis: for every (R : Type u) [CommRing R] and n d : ℕ,
+    a Module.Basis (Fin (n*d+1)) R of the submodule
+    (MvPolynomial.homogeneousSubmodule (Fin (n+1)) R d).map
+    (Ideal.Quotient.mkₐ R (hankelIdeal R n)).toLinearMap.
+    quotientHomogeneousCoordinates gives a finite-coordinate linear equivalence
+    with inverse and reconstruction formulas. Positive-n representative
+    coordinates are parametrization coefficients at (n*d-i,i), and the
+    vectors are the original terminal source monomials. At n = 0 the basis
+    vector is the class of X₀^d in the full polynomial quotient.
+    All coefficient universes, zero rings, degree zero and nilpotent coefficients
+    are included, without field, domain, Noetherianity or nontriviality premises.
+    Root-import clients reconstruct a bivariate quadratic, verify a conic
+    relation in finite coordinates and retain a nonzero square-zero coefficient
+    in the five-coordinate ZMod 4 conic component.
     ToricIdeals.RationalNormalCurve.ExponentImage provides
     mem_mrange_rncExponent_iff: for every n : ℕ and t : Fin 2 →₀ ℕ,
     membership in AddMonoidHom.mrange (rncExponent n) is equivalent to
@@ -193,8 +214,10 @@ status:
     and relationIdeal_isPrime_iff characterize domains and prime ideals by IsDomain A.
     Coefficients have a point-evaluation retraction. The chart comparison allows
     independently chosen localization models and independent universes.
-    No quotient grading, rank or Hilbert-function formula, general
-    classification of toric ideals or whole-source coverage is asserted.
+    No additional quotient grading, numerical rank over arbitrary coefficient
+    rings, general classification of toric ideals or whole-source coverage
+    is asserted. In particular, indexed basis data over a zero ring does not
+    assert distinct basis vectors.
 
 automation:
   methods:
@@ -235,7 +258,12 @@ fidelity:
     has two source variables and ideal zero. It requires no nontriviality,
     domain, field, reducedness or positive-degree assumption, and a minor's
     homogeneous degree label two does not imply total degree two for a zero
-    polynomial. The exponent-image criterion has no coefficient-ring or
+    polynomial. Homogeneous-component bases concern the stock image submodule
+    in the full quotient and its canonical coefficient action, not a raw-map
+    image or quotient self-action. The positive-n coordinate computation
+    rescales source degree d to target degree n*d; the separate n = 0
+    computation retains X₀^d. Fin (n*d+1) is the index of explicit basis data,
+    not a dimension assertion over a zero ring. The exponent-image criterion has no coefficient-ring or
     positive-degree premise. The raw-map surjectivity classifier also has no
     ring, domain, Noetherianity, nontriviality or positive-degree premise.
     Degree zero sends the sole source variable to one and has constant image;
@@ -299,7 +327,11 @@ acknowledgements: >-
   freeness with Mathlib's nontrivial free-module result and transport from
   nonempty-index finitely supported functions over zero coefficients; its
   tensor clients directly reuse Mathlib's injectivity reflection and canonical
-  unit injection for faithfully flat modules.
+  unit injection for faithfully flat modules. Homogeneous-component bases use
+  the original Hankel exponent-total identity and terminal monomial selector
+  with Mathlib's coefficient algebra maps, supported monomial bases and
+  finite antidiagonal equivalence; degree zero of the curve uses the full
+  one-variable polynomial quotient instead of its parametrization image.
   The Markdown adapter follows earlier
   Formal Frontier documentation tooling. Lean and doc-gen4 are separately
   credited tools, not bundled documentation or source material.

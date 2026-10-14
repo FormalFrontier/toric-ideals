@@ -17,6 +17,7 @@ public import ToricIdeals.RationalNormalCurve.EndpointMap
 public import ToricIdeals.RationalNormalCurve.ExponentImage
 public import ToricIdeals.RationalNormalCurve.Freeness
 public import ToricIdeals.RationalNormalCurve.Homogeneous
+public import ToricIdeals.RationalNormalCurve.HomogeneousBasis
 public import ToricIdeals.RationalNormalCurve.Injectivity
 public import ToricIdeals.RationalNormalCurve.Jacobson
 public import ToricIdeals.RationalNormalCurve.MapFlatness
@@ -74,6 +75,15 @@ flatness permits direct use of Mathlib's tensor injectivity reflection and
 canonical tensor-unit injection for arbitrary coefficient modules, without
 a flatness hypothesis or quotient action on those modules. This coefficient
 action is distinct from the raw-source actions classified above.
+
+`ToricIdeals.RationalNormalCurve.HomogeneousBasis` provides
+`quotientHomogeneousBasis`: the degree-`d` submodule of the full Hankel
+quotient has an explicit coefficient basis indexed by `Fin (n * d + 1)`
+over every commutative ring, including zero rings and `n = 0`.
+`quotientHomogeneousCoordinates` gives finite coordinates and reconstruction.
+For positive `n` these are target coefficients of degree `n*d`; for `n = 0`
+the basis is the class of `X 0 ^ d` in the full polynomial quotient.
+No field hypothesis or claim of distinct vectors over a zero ring is needed.
 
 `ToricIdeals.RationalNormalCurve.CoefficientFiniteness` provides
 `quotient_moduleFinite_iff`: in every degree over every commutative ring `R`,

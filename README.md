@@ -182,8 +182,25 @@ the split quadric, together with its coordinate algebra and localization charts.
   Thus every homogeneous component of a member again belongs to the ideal,
   and membership is equivalent to membership of all components. Zero rings
   and `n = 0, 1` are included, with no nontriviality or positive-degree premise.
-  This result constructs no quotient grading and asserts no rank or
-  Hilbert-function formula.
+  This result constructs no quotient grading; finite homogeneous components
+  are described by the coefficient bases below.
+- **Explicit homogeneous-component bases:** For every
+  `(R : Type u) [CommRing R]` and all `n d : ℕ`,
+  [`quotientHomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean)
+  is a `Module.Basis (Fin (n * d + 1)) R` of the image of the standard
+  degree-`d` polynomial submodule in the **full Hankel quotient**. The action
+  is the canonical coefficient action through `Ideal.Quotient.mkₐ`.
+  `quotientHomogeneousCoordinates` supplies finite coordinates, an inverse
+  finite-sum formula and reconstruction. For positive `n`, the `i`th coordinate
+  of a representative is its parametrization coefficient at `(n*d-i, i)`,
+  and the vectors are the existing terminal monomials. At `n = 0` the single
+  vector is the surviving class of `X 0 ^ d`, not its parametrization image.
+  Degree zero, zero rings and nilpotent coefficients are included, without
+  field, domain, nontriviality or Noetherian assumptions. A basis indexed by
+  `Fin (n*d+1)` over a zero ring does not assert distinct vectors or a numerical
+  rank. The [coordinate clients](ToricIdealsTest/Audit/RationalNormalCurveHomogeneousBasisClients.lean)
+  reconstruct a bivariate quadratic and retain a nonzero square-zero
+  coefficient in the five-coordinate conic component over `ZMod 4`.
 - **Noetherian quotient in every degree:** For any `(R : Type u) [CommRing R]` and every
   `n : ℕ`, including zero,
   [`quotient_isNoetherianRing_iff`](ToricIdeals/RationalNormalCurve/Noetherian.lean)
@@ -269,6 +286,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
+| [`ToricIdeals.RationalNormalCurve.HomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean) | Explicit finite coefficient bases and coordinates of all homogeneous components of the full Hankel quotient |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.MapFlatness`](ToricIdeals/RationalNormalCurve/MapFlatness.lean) | All-degree full-source ring-map flatness criterion over commutative rings |
 | [`ToricIdeals.RationalNormalCurve.MapSurjectivity`](ToricIdeals/RationalNormalCurve/MapSurjectivity.lean) | All-degree full-target raw parametrization surjectivity over commutative semirings |
