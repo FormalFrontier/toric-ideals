@@ -8,9 +8,11 @@ project:
     algebras, and the Hankel-minor presentation of the degree-n rational
     normal curve's monomial-map kernel for positive n over arbitrary commutative
     rings, with low-degree boundaries, a quotient-to-image equivalence,
-    domain-dependent consequences, all-degree standard-graded homogeneity of
-    the original Hankel ideal, all-degree coefficient criteria for domain,
-    reduced, Noetherian and Jacobson Hankel quotient rings, the all-degree criterion
+    domain-dependent consequences, all-degree freeness and flatness of the
+    full Hankel quotient for its canonical coefficient action, all-degree
+    standard-graded homogeneity of the original Hankel ideal, all-degree
+    coefficient criteria for domain, reduced, Noetherian and Jacobson Hankel
+    quotient rings, the all-degree criterion
     that the Hankel quotient is Artinian over itself exactly for zero
     coefficient rings, finiteness of its canonical coefficient module exactly
     for zero coefficient rings in every degree, and an arithmetic

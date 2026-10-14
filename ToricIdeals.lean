@@ -10,6 +10,7 @@ public import ToricIdeals.RationalNormalCurve.Artinian
 public import ToricIdeals.RationalNormalCurve.Augmentation
 public import ToricIdeals.RationalNormalCurve.AxisProjection
 public import ToricIdeals.RationalNormalCurve.BaseChange
+public import ToricIdeals.RationalNormalCurve.CoefficientAlgebra
 public import ToricIdeals.RationalNormalCurve.CoefficientFiniteness
 public import ToricIdeals.RationalNormalCurve.CoordinateRegularity
 public import ToricIdeals.RationalNormalCurve.EndpointMap

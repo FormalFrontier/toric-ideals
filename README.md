@@ -35,6 +35,20 @@ the split quadric, together with its coordinate algebra and localization charts.
   without a field or domain hypothesis. The [curve module](ToricIdeals/RationalNormalCurve.lean)
   develops the decreasing-energy reduction and uniqueness *among terminal
   exponents*; its choices are classical, not executable canonical algorithms.
+- **Free and flat coefficient modules in every degree:** For every
+  `(R : Type u) [CommRing R]` and `n : ℕ`,
+  [`quotient_free`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean)
+  says that the full Hankel quotient `Source R n ⧸ hankelIdeal R n` is free
+  for its canonical coefficient action, and
+  [`quotient_flat`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean)
+  gives flatness as a consequence. No domain, Noetherianity, nontriviality or
+  positive-degree assumption is needed. At `n = 0` this is the full
+  one-variable polynomial quotient by `⊥`: the variable survives, unlike
+  the raw parametrization `X₀ ↦ 1`; the quotient is not replaced by the
+  parametrization image.
+  The [coefficient-module clients](ToricIdealsTest/CoefficientAlgebraUses.lean)
+  use freeness to cancel integer doubling and flatness to preserve
+  injectivity under tensoring.
 - **Scalar base change in every degree:** For arbitrary commutative rings
   `R : Type u` and `S : Type v` with `[Algebra R S]`, write
   $Q_{R,n}=R[X_0,\ldots,X_n]/I_{R,n}$, where $I_{R,n}$ is the Hankel-minor ideal.
@@ -192,6 +206,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
+| [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness and flatness of the full Hankel quotient for its canonical coefficient action in every degree |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
