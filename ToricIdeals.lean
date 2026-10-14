@@ -15,6 +15,7 @@ public import ToricIdeals.RationalNormalCurve.CoefficientFiniteness
 public import ToricIdeals.RationalNormalCurve.CoordinateRegularity
 public import ToricIdeals.RationalNormalCurve.EndpointMap
 public import ToricIdeals.RationalNormalCurve.ExponentImage
+public import ToricIdeals.RationalNormalCurve.Freeness
 public import ToricIdeals.RationalNormalCurve.Homogeneous
 public import ToricIdeals.RationalNormalCurve.Injectivity
 public import ToricIdeals.RationalNormalCurve.Jacobson
@@ -49,6 +50,13 @@ primality.
 the raw map reaches the full bivariate polynomial target exactly when the
 degree is one or the coefficients are subsingleton. This is not a statement
 about the Hankel quotient or a map onto the parametrization image.
+
+`ToricIdeals.RationalNormalCurve.Freeness` provides `rncMap_moduleFree_iff`:
+over every commutative semiring and in every degree, the full bivariate target
+is free over the full source through the raw map exactly when the degree is one
+or the coefficients are subsingleton. Its explicit module argument fixes the
+action `p • q = rncMap R n p * q`. This is arbitrary-basis freeness, not finite
+rank or coefficient-module freeness of the target or Hankel quotient.
 
 `ToricIdeals.RationalNormalCurve.MapFlatness` provides `rncMap_flat_iff`:
 over every commutative ring and in every degree, the full bivariate target is

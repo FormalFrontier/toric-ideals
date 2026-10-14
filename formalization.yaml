@@ -21,7 +21,10 @@ project:
     arbitrary commutative semirings in every degree, finite type of the raw
     parametrization over its full source in every degree, module finiteness
     of its full target over that source exactly when n is nonzero or the
-    coefficient semiring is subsingleton, and full-source ring-map
+    coefficient semiring is subsingleton, freeness of the full target over
+    the full raw-map source exactly in degree one or over subsingleton
+    coefficients for arbitrary commutative semirings in every degree, and
+    full-source ring-map
     flatness exactly in degree one or over subsingleton coefficients for
     arbitrary commutative rings in every degree, and regularity of every
     coordinate class in every degree, with an injective coordinate-localization
@@ -67,7 +70,10 @@ sources:
       finiteness results. The raw-map flatness classification composes the
       degree-one exponent identity and Hankel-minor vanishing with Mathlib's
       selected-variable polynomial equivalences, monic regularity and
-      preservation of regular scalar actions on flat modules.
+      preservation of regular scalar actions on flat modules. The raw-source
+      freeness classification composes the semiring injectivity criterion and
+      degree-one map identity with Mathlib's free-module faithfulness, faithful
+      algebra-map injectivity, singleton basis and empty basis APIs.
 
   - title: "The Rising Sea: Foundations of Algebraic Geometry"
     authors:
@@ -117,6 +123,16 @@ status:
     the full MvPolynomial (Fin 2) R, including degree zero and zero coefficients.
     Its private root-import clients reach arbitrary target polynomials over
     ZMod 1 in every degree and exclude surjectivity over ℕ in degrees zero and two.
+    ToricIdeals.RationalNormalCurve.Freeness provides rncMap_moduleFree_iff:
+    for every (R : Type u) [CommSemiring R] and n : ℕ, the full Target R is
+    free over the full Source R n through the raw monomial parametrization
+    exactly when n = 1 or Subsingleton R. Its Module argument is explicitly
+    Algebra.toModule for (rncMap R n).toAlgebra, with
+    p • q = rncMap R n p * q. This is arbitrary-basis freeness, not finite
+    rank, coefficient-module freeness or a quotient/image statement. Degree
+    zero retains the full one-variable source and sends its variable to one.
+    Independent basis and collision models and separate root-import clients
+    cover ℕ, ZMod 4, ZMod 1, ULift ℕ and WithTop ℕ.
     ToricIdeals.RationalNormalCurve.MapFlatness provides rncMap_flat_iff:
     for every (R : Type u) [CommRing R] and n : ℕ, (rncMap R n).Flat is
     equivalent to n = 1 or Subsingleton R. This is genuine ring-map flatness
@@ -205,6 +221,11 @@ fidelity:
     ring, domain, Noetherianity, nontriviality or positive-degree premise.
     Degree zero sends the sole source variable to one and has constant image;
     it does not replace the full degree-zero Hankel quotient by that image.
+    Raw-source freeness concerns the full bivariate target with its explicit
+    module action through the raw map, over all commutative semirings and all
+    degrees. It does not substitute coefficient scalars, a quotient, an image,
+    endpoint coordinates or a finite-basis property. In degree one the action,
+    not merely the carrier equality, is identified with self multiplication.
     Raw-map flatness concerns the full bivariate target over the full source
     through the parametrization, not coefficient-flatness of the target or
     of the Hankel quotient. The latter quotient is free and flat as a
@@ -251,6 +272,9 @@ acknowledgements: >-
   Raw-map flatness uses the library's degree-one exponent identity and
   Hankel-minor vanishing together with Mathlib's variable-selection
   equivalences, monic regularity and regular-scalar flatness theorem.
+  Raw-source freeness uses the library's semiring injectivity criterion and
+  degree-one map identity together with Mathlib's free-module faithfulness,
+  faithful algebra-map injectivity and singleton/empty basis constructions.
   The Markdown adapter follows earlier
   Formal Frontier documentation tooling. Lean and doc-gen4 are separately
   credited tools, not bundled documentation or source material.

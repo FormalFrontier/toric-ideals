@@ -34,6 +34,22 @@ the split quadric, together with its coordinate algebra and localization charts.
   image and sends its sole source variable to `1`; it is onto only for zero
   coefficients. This concerns the raw map, not the Hankel quotient or its
   image equivalence. See the [surjectivity guide](docs/README.md#raw-parametrization-surjectivity).
+- **Freeness over the raw parametrization source:** For every
+  `(R : Type u) [CommSemiring R]` and `n : ℕ`,
+  [`rncMap_moduleFree_iff`](ToricIdeals/RationalNormalCurve/Freeness.lean)
+  says that the full `Target R = MvPolynomial (Fin 2) R` is free over the
+  full `Source R n = MvPolynomial (Fin (n + 1)) R` exactly when
+  `n = 1 ∨ Subsingleton R`. The theorem explicitly supplies the module
+  `@Algebra.toModule ... (rncMap R n).toAlgebra`, whose action is
+  `p • q = rncMap R n p * q`; this matters even when the carriers coincide
+  in degree one. Freeness means existence of an arbitrary basis, not a finite
+  basis. Zero semirings and degree zero are included: the full source variable
+  still maps to `1`. No ring, domain, Noetherianity, nontriviality or
+  positive-degree premise is needed. This differs from coefficient-module
+  freeness of the Hankel quotient and from the ring-map flatness result below.
+  [Stored clients](ToricIdealsTest/Audit/RationalNormalCurveFreenessClient.lean)
+  use both directions, alongside
+  [independent models](ToricIdealsTest/Audit/RationalNormalCurveFreenessModels.lean).
 - **Raw parametrization flatness:** For every `(R : Type u) [CommRing R]`
   and `n : ℕ`,
   [`rncMap_flat_iff`](ToricIdeals/RationalNormalCurve/MapFlatness.lean)
@@ -242,6 +258,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness and flatness of the full Hankel quotient for its canonical coefficient action in every degree |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
+| [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.MapFlatness`](ToricIdeals/RationalNormalCurve/MapFlatness.lean) | All-degree full-source ring-map flatness criterion over commutative rings |
@@ -370,7 +387,10 @@ Mathlib's `Polynomial.not_finite`, surjective-image finiteness and finiteness
 of subsingleton modules. Raw-map surjectivity combines this library's
 exponent-image divisibility criterion and coefficient-vanishing API with
 Mathlib's `Finsupp.mapDomain_surjective`, monoid-algebra coefficient equivalence
-and subsingleton-target surjectivity. The code depends on mathlib
+and subsingleton-target surjectivity. Freeness over the raw source composes
+this library's semiring injectivity criterion and degree-one map identity with
+Mathlib's free-module faithfulness, faithful algebra-map injectivity, singleton
+basis and empty basis APIs. The code depends on mathlib
 and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
 credited tools, not bundled sources. The Markdown adapter follows earlier
 Formal Frontier documentation tooling.

@@ -121,6 +121,16 @@ theorem rncExponent_one (d : Fin (1 + 1) →₀ ℕ) : rncExponent 1 d = d := by
   fin_cases i <;>
     simp [rncExponent, Finsupp.weight_eq_sum, coordinateExponent, Fin.sum_univ_two]
 
+/-- The degree-one monomial parametrization is the identity on the bivariate
+polynomial semiring. -/
+@[simp] theorem rncMap_one : rncMap k 1 = RingHom.id (Target k) := by
+  have h : rncExponent 1 = AddMonoidHom.id (Fin 2 →₀ ℕ) := by
+    apply AddMonoidHom.ext
+    intro d
+    exact rncExponent_one d
+  rw [rncMap, h]
+  simp only [AddMonoidAlgebra.mapDomainRingHom_id]
+
 /-- The degree-one monomial parametrization is injective. -/
 theorem rncMap_one_injective : Function.Injective (rncMap k 1) := by
   apply AddMonoidAlgebra.mapDomain_injective
