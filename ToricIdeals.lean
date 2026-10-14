@@ -10,6 +10,7 @@ public import ToricIdeals.RationalNormalCurve.Artinian
 public import ToricIdeals.RationalNormalCurve.Augmentation
 public import ToricIdeals.RationalNormalCurve.AxisProjection
 public import ToricIdeals.RationalNormalCurve.BaseChange
+public import ToricIdeals.RationalNormalCurve.CoefficientFiniteness
 public import ToricIdeals.RationalNormalCurve.CoordinateRegularity
 public import ToricIdeals.RationalNormalCurve.EndpointMap
 public import ToricIdeals.RationalNormalCurve.ExponentImage
@@ -38,6 +39,12 @@ At degree zero they concern the one-variable polynomial quotient by `⊥`, not
 the parametrization kernel or image. They include zero rings and reduced
 coefficient rings with zero divisors; radicality asserts neither properness nor
 primality.
+
+`ToricIdeals.RationalNormalCurve.CoefficientFiniteness` provides
+`quotient_moduleFinite_iff`: in every degree over every commutative ring `R`,
+the full Hankel quotient is finite for its canonical coefficient `R`-action
+exactly when `R` is a zero ring. This is distinct from finiteness over the
+polynomial algebra of endpoint coordinates or over the quotient itself.
 
 `ToricIdeals.SplitQuadric.Exponents` gives the natural-number exponent map of
 `(w, x, y, z) ↦ (W, WT, Y, YT)`, its image cone `t ≤ u + v`, and a unique

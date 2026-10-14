@@ -6,6 +6,9 @@ module
 
 import Mathlib.Data.ZMod.Basic
 import ToricIdeals
+import ToricIdealsTest.Audit.PolynomialCoefficientFinitenessModels
+import ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessClient
+import ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessModels
 
 /-!
 # Audit examples

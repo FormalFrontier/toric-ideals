@@ -109,6 +109,50 @@ the [tensor models](../ToricIdealsTest/RationalNormalCurveBaseChangeTensorModels
 compute the polynomial and tensor-quotient equivalences separately.
 These clients and models are private examples, not additional public API.
 
+## Finite coefficient modules of Hankel quotients
+
+Import `ToricIdeals.RationalNormalCurve.CoefficientFiniteness`, or the root
+`ToricIdeals`. The public theorem is in `ToricIdeals.RationalNormalCurve`:
+
+```lean
+theorem quotient_moduleFinite_iff (R : Type u) [CommRing R] (n : ℕ) :
+    Module.Finite R (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R
+```
+
+This concerns finite generation for the canonical coefficient `R`-module
+action on the full Hankel quotient, in every degree and every coefficient
+universe. At degree zero the ideal is `⊥`, so the quotient retains its
+polynomial indeterminate rather than becoming the parametrization image.
+No Noetherian, Artinian, domain, nontriviality or positive-degree premise is
+needed. A nonzero finite coefficient ring, such as `ZMod 4`, still gives a
+quotient that is not finite as a coefficient module.
+
+Use `(quotient_moduleFinite_iff R n).mp` to recover `Subsingleton R` from
+finite generation, and `.mpr` to obtain finite generation for zero
+coefficients. The private
+[criterion clients](../ToricIdealsTest/Audit/RationalNormalCurveCoefficientFinitenessClient.lean)
+rule out finite generation over `ℤ` in degree zero and give finite modules
+over `ZMod 1` in every degree. The separate
+[polynomial models](../ToricIdealsTest/Audit/PolynomialCoefficientFinitenessModels.lean)
+and [Hankel quotient models](../ToricIdealsTest/Audit/RationalNormalCurveCoefficientFinitenessModels.lean)
+use only the polynomial and axis APIs. They include nonreduced coefficients,
+a surviving square-zero constant, zero coefficients and a higher-universe
+coefficient ring.
+
+The proof uses the coefficient-linear surjection `axisProjection R n` onto
+`Polynomial R`. A surjective image of a finite module is finite, contradicting
+Mathlib's `Polynomial.not_finite` for nontrivial coefficients. For zero
+coefficients, `Module.subsingleton` makes the quotient carrier subsingleton,
+and Mathlib's finite-carrier module result applies.
+
+The [endpoint theorem](../ToricIdeals/RationalNormalCurve/EndpointMap.lean)
+`endpointMap_finite` instead uses `MvPolynomial (Fin 2) R` as scalars, and
+holds for every commutative coefficient ring. Every quotient is also finite
+as its canonical module over itself. Neither statement asserts coefficient
+finiteness. The Noetherian and Artinian coefficient-module criteria are
+separate chain conditions; this proof does not infer finite generation from
+Noetherianity of the coefficient ring or quotient ring.
+
 ## Jacobson Hankel quotients
 
 Import `ToricIdeals.RationalNormalCurve.Jacobson`, or the root `ToricIdeals`.
@@ -338,6 +382,11 @@ by `ToricIdeals`.
   At degree zero this is the full one-variable polynomial quotient by `⊥`,
   not the parametrization kernel or image. The zero coefficient ring is
   included, as are Noetherian rings with zero divisors or nilpotents.
+- **Coefficient-module finiteness:** For `(R : Type u) [CommRing R]` and
+  every `n : ℕ`, `quotient_moduleFinite_iff R n` states
+  `Module.Finite R (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R` for the
+  canonical coefficient action; see the
+  [criterion and scalar contrast](#finite-coefficient-modules-of-hankel-quotients).
 - **Jacobsonness:** `quotient_isJacobsonRing_iff R n` characterizes the
   full quotient in every degree by `IsJacobsonRing R`; see the
   [criterion, proof and coefficient examples](#jacobson-hankel-quotients).

@@ -58,6 +58,16 @@ the split quadric, together with its coordinate algebra and localization charts.
   At `n = 0`, the Hankel ideal is `⊥`: the target is the full one-variable
   polynomial quotient and both endpoints map to its single variable class,
   rather than using the raw parametrization `X₀ ↦ 1`.
+- **Finite coefficient modules in every degree:** For every
+  `(R : Type u) [CommRing R]` and `n : ℕ`,
+  [`quotient_moduleFinite_iff`](ToricIdeals/RationalNormalCurve/CoefficientFiniteness.lean)
+  says `Module.Finite R (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R`
+  for the canonical coefficient action. Thus every nonzero coefficient ring
+  gives a quotient that is not finitely generated over `R`, even in degree
+  zero, with its full one-variable polynomial quotient. No Noetherian, domain
+  or positive-degree hypothesis is needed. This does not contradict
+  `endpointMap_finite`: its scalars are `MvPolynomial (Fin 2) R`, not `R`.
+  See the [coefficient-module guide](docs/README.md#finite-coefficient-modules-of-hankel-quotients).
 - **Arithmetic exponent image:** For every `n : ℕ` and natural-valued target
   `t : Fin 2 →₀ ℕ`,
   [`mem_mrange_rncExponent_iff`](ToricIdeals/RationalNormalCurve/ExponentImage.lean)
@@ -190,6 +200,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.Jacobson`](ToricIdeals/RationalNormalCurve/Jacobson.lean) | All-degree coefficient criterion for quotient Jacobsonness |
 | [`ToricIdeals.RationalNormalCurve.Artinian`](ToricIdeals/RationalNormalCurve/Artinian.lean) | All-degree Artinian ring and left coefficient-module criteria |
 | [`ToricIdeals.RationalNormalCurve.AxisProjection`](ToricIdeals/RationalNormalCurve/AxisProjection.lean) | Coordinate-axis algebra map, split surjection and characteristic universal property |
+| [`ToricIdeals.RationalNormalCurve.CoefficientFiniteness`](ToricIdeals/RationalNormalCurve/CoefficientFiniteness.lean) | All-degree finiteness criterion for the canonical coefficient module |
 | [`ToricIdeals.RationalNormalCurve.BaseChange`](ToricIdeals/RationalNormalCurve/BaseChange.lean) | Scalar base change of the full Hankel quotient over arbitrary commutative rings in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoordinateRegularity`](ToricIdeals/RationalNormalCurve/CoordinateRegularity.lean) | Regularity of every coordinate class over arbitrary commutative rings in every degree |
 | [`ToricIdeals.SplitQuadric.Exponents`](ToricIdeals/SplitQuadric/Exponents.lean) | Exponent reduction, image cone and unique reduced representatives |
@@ -282,8 +293,10 @@ parametrization image. Jacobsonness and Noetherianity each have their own
 coefficient criterion; neither property is substituted for the other.
 The ring criteria take scalars in the quotient itself: Noetherianity detects
 `IsNoetherianRing R`, while Artinianity detects `Subsingleton R`. For the
-canonical left coefficient action, both Noetherianity and Artinianity detect
-`Subsingleton R`, without a finite-rank or positive-degree premise. The
+canonical left coefficient action, finite generation, Noetherianity and
+Artinianity each detect `Subsingleton R`, without a finite-rank or
+positive-degree premise. Finiteness over the endpoint polynomial algebra has
+different scalars and holds for every coefficient ring. The
 [root-import clients](ToricIdealsTest/RootClient.lean) contrast zero coefficients
 with finite nonreduced `ZMod 4` coefficients in every degree. See the
 [guide](docs/README.md) for theorem usage and boundary examples.
@@ -300,7 +313,10 @@ of this library's Noetherian module and uses the Jacobson providers in
 `Mathlib.RingTheory.Jacobson.Ring`. The left coefficient-module criteria use
 this library's coordinate-axis surjection, the polynomial coefficient-module
 criteria in [multivariate-polynomials](https://github.com/FormalFrontier/multivariate-polynomials),
-and Mathlib's Noetherian and Artinian module theory. The code depends on mathlib
+and Mathlib's Noetherian and Artinian module theory. Coefficient-module
+finiteness uses the same coordinate-axis surjection and directly reuses
+Mathlib's `Polynomial.not_finite`, surjective-image finiteness and finiteness
+of subsingleton modules. The code depends on mathlib
 and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
 credited tools, not bundled sources. The Markdown adapter follows earlier
 Formal Frontier documentation tooling.

@@ -12,7 +12,8 @@ project:
     the original Hankel ideal, all-degree coefficient criteria for domain,
     reduced, Noetherian and Jacobson Hankel quotient rings, the all-degree criterion
     that the Hankel quotient is Artinian over itself exactly for zero
-    coefficient rings, and an arithmetic
+    coefficient rings, finiteness of its canonical coefficient module exactly
+    for zero coefficient rings in every degree, and an arithmetic
     characterization of the natural exponent image and regularity of every
     coordinate class in every degree, with an injective coordinate-localization
     client over arbitrary commutative rings. The split-quadric coordinate algebra
@@ -48,7 +49,10 @@ sources:
       arithmetic exponent-image criterion. The Jacobson quotient criterion
       follows the library's Noetherian constant-coefficient augmentation
       argument and uses Mathlib's Jacobson polynomial, quotient and surjective
-      descent results.
+      descent results. The coefficient-module finiteness criterion uses the
+      library's coordinate-axis surjection and directly reuses Mathlib's
+      polynomial obstruction, surjective-image finiteness and subsingleton-module
+      finiteness results.
 
   - title: "The Rising Sea: Foundations of Algebraic Geometry"
     authors:
@@ -79,6 +83,11 @@ status:
     quotient_isArtinianRing_iff states that the Hankel quotient is Artinian
     as a module over itself if and only if Subsingleton R. Finite nonzero
     Artinian coefficients alone do not imply an Artinian quotient.
+    ToricIdeals.RationalNormalCurve.CoefficientFiniteness provides
+    quotient_moduleFinite_iff: for every (R : Type u) [CommRing R] and n : ℕ,
+    Module.Finite R (Source R n ⧸ hankelIdeal R n) is equivalent to
+    Subsingleton R for the canonical coefficient action. This differs from
+    endpointMap_finite, whose scalars are MvPolynomial (Fin 2) R.
     The original Hankel ideal is homogeneous for Mathlib's canonical
     natural-number grading of the source polynomial ring for every
     (R : Type u) [CommRing R] and n : ℕ, including zero rings and n = 0, 1.
@@ -139,7 +148,11 @@ fidelity:
     itself, not over its coefficient ring; it is equivalent to the coefficient
     ring being a zero ring, not merely Artinian. It includes nilpotent and
     product coefficients and the full degree-zero and degree-one polynomial
-    quotients. Standard-graded homogeneity also concerns the original Hankel ideal
+    quotients. Coefficient-module finiteness concerns the same full Hankel
+    quotient with its canonical R-action in every degree, including degree
+    zero. It needs no Noetherian coefficient-ring hypothesis and does not
+    substitute endpoint-polynomial scalars or quotient self-scalars for R.
+    Standard-graded homogeneity also concerns the original Hankel ideal
     in every degree: n = 0 has one source variable and ideal zero, while n = 1
     has two source variables and ideal zero. It requires no nontriviality,
     domain, field, reducedness or positive-degree assumption, and a minor's
@@ -175,6 +188,8 @@ acknowledgements: >-
   The project depends on mathlib without bundling it. Ravi Vakil's exercise is
   mathematical motivation and does not imply participation or endorsement.
   The Jacobson proof follows the library's Noetherian augmentation argument
-  and Mathlib's Jacobson ring theory. The Markdown adapter follows earlier
+  and Mathlib's Jacobson ring theory. The coefficient-module finiteness proof
+  uses the library's coordinate-axis surjection and Mathlib's polynomial and
+  module finiteness results. The Markdown adapter follows earlier
   Formal Frontier documentation tooling. Lean and doc-gen4 are separately
   credited tools, not bundled documentation or source material.
