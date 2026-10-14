@@ -107,6 +107,11 @@ the split quadric, together with its coordinate algebra and localization charts.
   without flatness of those modules or an action by the quotient. These
   coefficient-module properties are distinct from freeness and flatness
   over the full raw-parametrization source above.
+  The [coefficient augmentation](ToricIdeals/RationalNormalCurve/Augmentation.lean)
+  has kernel exactly the ideal spanned by all variable classes, also in degree
+  zero and over zero rings. The [quotient clients](ToricIdealsTest/Audit/RationalNormalCurveAugmentationKernel.lean)
+  use Mathlib's first isomorphism theorem to recover the coefficient algebra by
+  quotienting this span; nonzero square-zero coefficients are retained.
 - **Scalar base change in every degree:** For arbitrary commutative rings
   `R : Type u` and `S : Type v` with `[Algebra R S]`, write
   $Q_{R,n}=R[X_0,\ldots,X_n]/I_{R,n}$, where $I_{R,n}$ is the Hankel-minor ideal.
@@ -281,6 +286,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
+| [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness, flatness and faithful flatness of the full Hankel quotient for its canonical coefficient action in every degree |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
@@ -421,7 +427,10 @@ basis and empty basis APIs. Coefficient faithful flatness reuses the existing
 coefficient augmentation and freeness, together with Mathlib's nontrivial
 free-module result and transport from nonempty-index finitely supported
 functions for zero coefficients. Its tensor clients directly reuse Mathlib's
-faithfully-flat injectivity reflection and canonical unit injection. The code
+faithfully-flat injectivity reflection and canonical unit injection. The
+augmentation-kernel description reuses the evaluation-ideal theorem in
+multivariate-polynomials and Mathlib's ideal map/comap APIs; the coefficient
+quotient clients instantiate Mathlib's first isomorphism theorem. The code
 depends on mathlib and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
 credited tools, not bundled sources. The Markdown adapter follows earlier
 Formal Frontier documentation tooling.

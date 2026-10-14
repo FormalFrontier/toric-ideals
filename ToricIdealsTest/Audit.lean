@@ -7,6 +7,7 @@ module
 import Mathlib.Data.ZMod.Basic
 import ToricIdeals
 import ToricIdealsTest.Audit.PolynomialCoefficientFinitenessModels
+import ToricIdealsTest.Audit.RationalNormalCurveAugmentationKernel
 import ToricIdealsTest.Audit.RationalNormalCurveCoefficientFaithfullyFlatClients
 import ToricIdealsTest.Audit.RationalNormalCurveCoefficientFaithfullyFlatModels
 import ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessClient

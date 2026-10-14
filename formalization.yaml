@@ -134,6 +134,13 @@ status:
     and canonical unit injection for arbitrary coefficient modules in independent
     universes, with no flatness or quotient-action premise on the test modules.
     This is not freeness or flatness for the full raw-parametrization source.
+    ToricIdeals.RationalNormalCurve.Augmentation characterizes the kernel of
+    quotientAugmentation as the ideal spanned by all variable classes for every
+    (R : Type u) [CommRing R] and n : ℕ, including degree zero and zero rings.
+    Its membership criterion detects vanishing under augmentation. Quotient
+    clients instantiate Mathlib's first isomorphism theorem to recover R as an
+    R-algebra from the quotient by this span; the coefficient 2 in ZMod 4
+    remains nonzero with square zero in every degree.
     The original Hankel ideal is homogeneous for Mathlib's canonical
     natural-number grading of the source polynomial ring for every
     (R : Type u) [CommRing R] and n : ℕ, including zero rings and n = 0, 1.
@@ -332,6 +339,9 @@ acknowledgements: >-
   with Mathlib's coefficient algebra maps, supported monomial bases and
   finite antidiagonal equivalence; degree zero of the curve uses the full
   one-variable polynomial quotient instead of its parametrization image.
+  The augmentation-kernel description uses the evaluation-ideal theorem from
+  multivariate-polynomials and Mathlib's ideal map/comap APIs. Its coefficient
+  quotient clients use Mathlib's first isomorphism theorem for algebras.
   The Markdown adapter follows earlier
   Formal Frontier documentation tooling. Lean and doc-gen4 are separately
   credited tools, not bundled documentation or source material.
