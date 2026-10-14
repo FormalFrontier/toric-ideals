@@ -84,20 +84,29 @@ the split quadric, together with its coordinate algebra and localization charts.
   without a field or domain hypothesis. The [curve module](ToricIdeals/RationalNormalCurve.lean)
   develops the decreasing-energy reduction and uniqueness *among terminal
   exponents*; its choices are classical, not executable canonical algorithms.
-- **Free and flat coefficient modules in every degree:** For every
+- **Free and faithfully flat coefficient modules in every degree:** For every
   `(R : Type u) [CommRing R]` and `n : ℕ`,
   [`quotient_free`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean)
   says that the full Hankel quotient `Source R n ⧸ hankelIdeal R n` is free
   for its canonical coefficient action, and
   [`quotient_flat`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean)
-  gives flatness as a consequence. No domain, Noetherianity, nontriviality or
-  positive-degree assumption is needed. At `n = 0` this is the full
-  one-variable polynomial quotient by `⊥`: the variable survives, unlike
+  gives flatness as a consequence.
+  [`quotient_faithfullyFlat`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean)
+  gives genuine `Module.FaithfullyFlat R (Source R n ⧸ hankelIdeal R n)`.
+  All coefficient universes and zero rings are included; no domain,
+  Noetherianity, nontriviality or positive-degree assumption is needed.
+  At `n = 0` this is the full one-variable polynomial quotient by `⊥`: the variable survives, unlike
   the raw parametrization `X₀ ↦ 1`; the quotient is not replaced by the
   parametrization image.
   The [coefficient-module clients](ToricIdealsTest/CoefficientAlgebraUses.lean)
   use freeness to cancel integer doubling and flatness to preserve
-  injectivity under tensoring.
+  injectivity under tensoring. The
+  [faithfully-flat clients](ToricIdealsTest/Audit/RationalNormalCurveCoefficientFaithfullyFlatClients.lean)
+  directly use Mathlib's tensor injectivity **iff** and injection
+  `m ↦ 1 ⊗ m` for arbitrary coefficient modules in independent universes,
+  without flatness of those modules or an action by the quotient. These
+  coefficient-module properties are distinct from freeness and flatness
+  over the full raw-parametrization source above.
 - **Scalar base change in every degree:** For arbitrary commutative rings
   `R : Type u` and `S : Type v` with `[Algebra R S]`, write
   $Q_{R,n}=R[X_0,\ldots,X_n]/I_{R,n}$, where $I_{R,n}$ is the Hankel-minor ideal.
@@ -255,7 +264,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
-| [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness and flatness of the full Hankel quotient for its canonical coefficient action in every degree |
+| [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness, flatness and faithful flatness of the full Hankel quotient for its canonical coefficient action in every degree |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
@@ -390,8 +399,12 @@ Mathlib's `Finsupp.mapDomain_surjective`, monoid-algebra coefficient equivalence
 and subsingleton-target surjectivity. Freeness over the raw source composes
 this library's semiring injectivity criterion and degree-one map identity with
 Mathlib's free-module faithfulness, faithful algebra-map injectivity, singleton
-basis and empty basis APIs. The code depends on mathlib
-and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
+basis and empty basis APIs. Coefficient faithful flatness reuses the existing
+coefficient augmentation and freeness, together with Mathlib's nontrivial
+free-module result and transport from nonempty-index finitely supported
+functions for zero coefficients. Its tensor clients directly reuse Mathlib's
+faithfully-flat injectivity reflection and canonical unit injection. The code
+depends on mathlib and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
 credited tools, not bundled sources. The Markdown adapter follows earlier
 Formal Frontier documentation tooling.
 Contributions use AI-assisted development and independent agent review;

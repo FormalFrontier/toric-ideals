@@ -7,9 +7,10 @@ module
 import Mathlib.Algebra.Module.Submodule.Equiv
 import Mathlib.Algebra.MonoidAlgebra.Basic
 import Mathlib.Algebra.MonoidAlgebra.Module
+import ToricIdeals.RationalNormalCurve.Augmentation
 public import Mathlib.LinearAlgebra.Finsupp.VectorSpace
 public import Mathlib.LinearAlgebra.FreeModule.Basic
-public import Mathlib.RingTheory.Flat.Basic
+public import Mathlib.RingTheory.Flat.FaithfullyFlat.Basic
 public import ToricIdeals.RationalNormalCurve
 
 /-!
@@ -29,6 +30,13 @@ survives, although the monomial parametrization sends that variable to `1`.
 At degree one the quotient is the full two-variable polynomial ring. The
 positive-degree quotient-to-image equivalence is not a degree-zero equivalence.
 
+The full quotient is also faithfully flat for this coefficient action in every
+degree. For nontrivial coefficients, the existing coefficient augmentation makes
+the quotient nontrivial, so Mathlib's faithfully flat free-module result applies.
+For subsingleton coefficients, transport from finitely supported functions on a
+singleton handles the zero ring without a nontriviality assumption or a claim
+that an arbitrary chosen basis has a nonempty index.
+
 Mathlib already supplies the polynomial coefficient algebra, the algebra
 homomorphism `AddMonoidAlgebra.mapDomainAlgHom`, and the algebraic first
 isomorphism theorem `Ideal.quotientKerEquivRange`. Thus the algebra structure
@@ -46,9 +54,15 @@ parametrization's coefficient law is `rncMap_C` in
 * Mathlib contributors, `Mathlib.Algebra.MonoidAlgebra.Module`,
   `Mathlib.LinearAlgebra.Finsupp.VectorSpace`, and
   `Mathlib.LinearAlgebra.FreeModule.Basic`, for monomial bases and free modules.
+* Formal Frontier Agents, `ToricIdeals.RationalNormalCurve.Augmentation`, for
+  the coefficient augmentation of the full Hankel quotient.
 * Mathlib contributors, `Mathlib.RingTheory.Ideal.Quotient.Operations` and
   `Mathlib.RingTheory.Flat.Basic`, for quotient coefficient actions and the
   implication from freeness to flatness.
+* Mathlib contributors, `Mathlib.RingTheory.Flat.FaithfullyFlat.Basic` and
+  `Mathlib.LinearAlgebra.Finsupp.Defs`, for faithful flatness of nontrivial free
+  modules and nonempty-index finitely supported functions, transport along
+  linear equivalences, and the subsingleton-module equivalence.
 -/
 
 namespace ToricIdeals.RationalNormalCurve
@@ -111,6 +125,23 @@ theorem quotient_flat (n : ℕ) :
     Module.Flat k (Source k n ⧸ hankelIdeal k n) := by
   let : Module.Free k (Source k n ⧸ hankelIdeal k n) := quotient_free k n
   exact Module.Flat.of_free
+
+/-- The full quotient by the Hankel ideal is faithfully flat over its coefficient
+ring for the canonical coefficient-module structure, in every degree, including
+degree zero and over the zero ring. -/
+theorem quotient_faithfullyFlat (n : ℕ) :
+    Module.FaithfullyFlat k (Source k n ⧸ hankelIdeal k n) := by
+  rcases subsingleton_or_nontrivial k with hk | hk
+  · let : Subsingleton k := hk
+    let : Module.FaithfullyFlat k (Unit →₀ k) :=
+      Module.FaithfullyFlat.finsupp k Unit
+    exact Module.FaithfullyFlat.of_linearEquiv k (Unit →₀ k)
+      (Module.subsingletonEquiv k (Source k n ⧸ hankelIdeal k n) Unit)
+  · let : Nontrivial k := hk
+    let : Module.Free k (Source k n ⧸ hankelIdeal k n) := quotient_free k n
+    let : Nontrivial (Source k n ⧸ hankelIdeal k n) :=
+      (quotientAugmentation k n).toRingHom.domain_nontrivial
+    infer_instance
 
 end
 end ToricIdeals.RationalNormalCurve

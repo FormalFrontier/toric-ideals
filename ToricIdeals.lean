@@ -64,6 +64,17 @@ flat over the full source through the raw map exactly when the degree is one
 or the coefficients are subsingleton. Its source action is induced by
 `rncMap`, not the coefficient action on the target or Hankel quotient.
 
+`ToricIdeals.RationalNormalCurve.CoefficientAlgebra` provides
+`quotient_free`, `quotient_flat` and `quotient_faithfullyFlat`: for every
+`(R : Type u) [CommRing R]` and `n : ℕ`, the full Hankel quotient
+`Source R n ⧸ hankelIdeal R n` is free, flat and faithfully flat for its
+canonical coefficient `R`-action. Zero rings and degree zero are included,
+with the full one-variable polynomial quotient in degree zero. Faithful
+flatness permits direct use of Mathlib's tensor injectivity reflection and
+canonical tensor-unit injection for arbitrary coefficient modules, without
+a flatness hypothesis or quotient action on those modules. This coefficient
+action is distinct from the raw-source actions classified above.
+
 `ToricIdeals.RationalNormalCurve.CoefficientFiniteness` provides
 `quotient_moduleFinite_iff`: in every degree over every commutative ring `R`,
 the full Hankel quotient is finite for its canonical coefficient `R`-action

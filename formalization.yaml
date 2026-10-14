@@ -8,8 +8,10 @@ project:
     algebras, and the Hankel-minor presentation of the degree-n rational
     normal curve's monomial-map kernel for positive n over arbitrary commutative
     rings, with low-degree boundaries, a quotient-to-image equivalence,
-    domain-dependent consequences, all-degree freeness and flatness of the
-    full Hankel quotient for its canonical coefficient action, all-degree
+    domain-dependent consequences, all-degree freeness, flatness and faithful
+    flatness of the full Hankel quotient for its canonical coefficient action
+    over arbitrary commutative rings in all coefficient universes, including
+    zero rings and degree zero, all-degree
     standard-graded homogeneity of the original Hankel ideal, all-degree
     coefficient criteria for domain, reduced, Noetherian and Jacobson Hankel
     quotient rings, the all-degree criterion
@@ -74,6 +76,11 @@ sources:
       freeness classification composes the semiring injectivity criterion and
       degree-one map identity with Mathlib's free-module faithfulness, faithful
       algebra-map injectivity, singleton basis and empty basis APIs.
+      Coefficient faithful flatness uses the existing coefficient augmentation
+      and freeness with Mathlib's nontrivial free-module result, and transport
+      from nonempty-index finitely supported functions for zero coefficients.
+      Its tensor clients directly reuse Mathlib's faithfully flat injectivity
+      reflection and canonical tensor-unit injection.
 
   - title: "The Rising Sea: Foundations of Algebraic Geometry"
     authors:
@@ -109,6 +116,18 @@ status:
     Module.Finite R (Source R n ⧸ hankelIdeal R n) is equivalent to
     Subsingleton R for the canonical coefficient action. This differs from
     endpointMap_finite, whose scalars are MvPolynomial (Fin 2) R.
+    ToricIdeals.RationalNormalCurve.CoefficientAlgebra provides
+    quotient_free, quotient_flat and quotient_faithfullyFlat: for every
+    (R : Type u) [CommRing R] and n : ℕ, the full quotient
+    Source R n ⧸ hankelIdeal R n is free, flat and faithfully flat for its
+    canonical coefficient R-action. All coefficient universes, zero rings and
+    degree zero are included, without domain, Noetherianity, nontriviality or
+    positive-degree premises. In degree zero this is the full one-variable
+    polynomial quotient by the bottom ideal, not the parametrization image.
+    Private root-import clients directly use Mathlib's tensor injectivity iff
+    and canonical unit injection for arbitrary coefficient modules in independent
+    universes, with no flatness or quotient-action premise on the test modules.
+    This is not freeness or flatness for the full raw-parametrization source.
     The original Hankel ideal is homogeneous for Mathlib's canonical
     natural-number grading of the source polynomial ring for every
     (R : Type u) [CommRing R] and n : ℕ, including zero rings and n = 0, 1.
@@ -228,10 +247,11 @@ fidelity:
     not merely the carrier equality, is identified with self multiplication.
     Raw-map flatness concerns the full bivariate target over the full source
     through the parametrization, not coefficient-flatness of the target or
-    of the Hankel quotient. The latter quotient is free and flat as a
-    coefficient module in every degree, whereas the raw map is flat exactly
-    in degree one or for zero coefficients. Degree zero again sends X₀ to one, rather than
-    retaining the quotient's indeterminate. The theorem concerns genuine
+    of the Hankel quotient. The latter quotient is free and faithfully flat as
+    a coefficient module in every degree, including zero rings and degree zero,
+    whereas the raw map is flat exactly in degree one or for zero coefficients.
+    Degree zero again sends X₀ to one, rather than retaining the quotient's
+    indeterminate. The theorem concerns genuine
     commutative-ring flatness, not a classification of the broader semiring
     tensor-monomorphism-preservation property.
     The selector client requires 1 ≤ n because it
@@ -275,6 +295,11 @@ acknowledgements: >-
   Raw-source freeness uses the library's semiring injectivity criterion and
   degree-one map identity together with Mathlib's free-module faithfulness,
   faithful algebra-map injectivity and singleton/empty basis constructions.
+  Coefficient faithful flatness uses the existing coefficient augmentation and
+  freeness with Mathlib's nontrivial free-module result and transport from
+  nonempty-index finitely supported functions over zero coefficients; its
+  tensor clients directly reuse Mathlib's injectivity reflection and canonical
+  unit injection for faithfully flat modules.
   The Markdown adapter follows earlier
   Formal Frontier documentation tooling. Lean and doc-gen4 are separately
   credited tools, not bundled documentation or source material.
