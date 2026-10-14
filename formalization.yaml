@@ -18,7 +18,9 @@ project:
     for zero coefficient rings in every degree, and an arithmetic
     characterization of the natural exponent image, full-target raw-map
     surjectivity exactly in degree one or over subsingleton coefficients for
-    arbitrary commutative semirings in every degree, and regularity of every
+    arbitrary commutative semirings in every degree, full-source ring-map
+    flatness exactly in degree one or over subsingleton coefficients for
+    arbitrary commutative rings in every degree, and regularity of every
     coordinate class in every degree, with an injective coordinate-localization
     client over arbitrary commutative rings. The split-quadric coordinate algebra
     has an all-coefficient determinant kernel, an injective quotient parametrization,
@@ -59,7 +61,10 @@ sources:
       descent results. The coefficient-module finiteness criterion uses the
       library's coordinate-axis surjection and directly reuses Mathlib's
       polynomial obstruction, surjective-image finiteness and subsingleton-module
-      finiteness results.
+      finiteness results. The raw-map flatness classification composes the
+      degree-one exponent identity and Hankel-minor vanishing with Mathlib's
+      selected-variable polynomial equivalences, monic regularity and
+      preservation of regular scalar actions on flat modules.
 
   - title: "The Rising Sea: Foundations of Algebraic Geometry"
     authors:
@@ -109,6 +114,15 @@ status:
     the full MvPolynomial (Fin 2) R, including degree zero and zero coefficients.
     Its private root-import clients reach arbitrary target polynomials over
     ZMod 1 in every degree and exclude surjectivity over ℕ in degrees zero and two.
+    ToricIdeals.RationalNormalCurve.MapFlatness provides rncMap_flat_iff:
+    for every (R : Type u) [CommRing R] and n : ℕ, (rncMap R n).Flat is
+    equivalent to n = 1 or Subsingleton R. This is genuine ring-map flatness
+    of the full Target R = MvPolynomial (Fin 2) R as a module over the full
+    Source R n = MvPolynomial (Fin (n + 1)) R through (rncMap R n).toAlgebra,
+    with p • q = rncMap R n p * q. It includes degree zero, zero rings and
+    rings with zero divisors, without a domain, Noetherianity, nontriviality
+    or positive-degree hypothesis. Its private root-import clients use both
+    directions over zero coefficients and the nonreduced ring ZMod 4.
     ToricIdealsTest.RationalNormalCurveExponentImageModels gives independent
     small-degree image and exclusion examples.
     ToricIdealsTest.RationalNormalCurveExponentImageClient provides
@@ -177,6 +191,14 @@ fidelity:
     ring, domain, Noetherianity, nontriviality or positive-degree premise.
     Degree zero sends the sole source variable to one and has constant image;
     it does not replace the full degree-zero Hankel quotient by that image.
+    Raw-map flatness concerns the full bivariate target over the full source
+    through the parametrization, not coefficient-flatness of the target or
+    of the Hankel quotient. The latter quotient is free and flat as a
+    coefficient module in every degree, whereas the raw map is flat exactly
+    in degree one or for zero coefficients. Degree zero again sends X₀ to one, rather than
+    retaining the quotient's indeterminate. The theorem concerns genuine
+    commutative-ring flatness, not a classification of the broader semiring
+    tensor-monomorphism-preservation property.
     The selector client requires 1 ≤ n because it
     uses the existing fiber-selection law, and specializes its inherited
     commutative coefficient-ring parameter to ℤ; it requires no supplied
@@ -212,6 +234,9 @@ acknowledgements: >-
   module finiteness results. Raw-map surjectivity uses the library's exponent-image
   and coefficient-vanishing APIs together with Mathlib's Finsupp transport,
   monoid-algebra coefficient equivalence and subsingleton-target surjectivity.
+  Raw-map flatness uses the library's degree-one exponent identity and
+  Hankel-minor vanishing together with Mathlib's variable-selection
+  equivalences, monic regularity and regular-scalar flatness theorem.
   The Markdown adapter follows earlier
   Formal Frontier documentation tooling. Lean and doc-gen4 are separately
   credited tools, not bundled documentation or source material.

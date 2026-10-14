@@ -18,6 +18,7 @@ public import ToricIdeals.RationalNormalCurve.ExponentImage
 public import ToricIdeals.RationalNormalCurve.Homogeneous
 public import ToricIdeals.RationalNormalCurve.Injectivity
 public import ToricIdeals.RationalNormalCurve.Jacobson
+public import ToricIdeals.RationalNormalCurve.MapFlatness
 public import ToricIdeals.RationalNormalCurve.MapSurjectivity
 public import ToricIdeals.RationalNormalCurve.Noetherian
 public import ToricIdeals.SplitQuadric.Exponents
@@ -47,6 +48,12 @@ primality.
 the raw map reaches the full bivariate polynomial target exactly when the
 degree is one or the coefficients are subsingleton. This is not a statement
 about the Hankel quotient or a map onto the parametrization image.
+
+`ToricIdeals.RationalNormalCurve.MapFlatness` provides `rncMap_flat_iff`:
+over every commutative ring and in every degree, the full bivariate target is
+flat over the full source through the raw map exactly when the degree is one
+or the coefficients are subsingleton. Its source action is induced by
+`rncMap`, not the coefficient action on the target or Hankel quotient.
 
 `ToricIdeals.RationalNormalCurve.CoefficientFiniteness` provides
 `quotient_moduleFinite_iff`: in every degree over every commutative ring `R`,

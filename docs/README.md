@@ -66,6 +66,57 @@ has the same numerical criterion, but it is not used to prove surjectivity.
 The quotient-to-image equivalence is likewise not an identification with the
 full bivariate target.
 
+## Raw parametrization flatness
+
+Import `ToricIdeals.RationalNormalCurve.MapFlatness`, or the root
+`ToricIdeals`. The public theorem is in `ToricIdeals.RationalNormalCurve`:
+
+```lean
+theorem rncMap_flat_iff (R : Type u) [CommRing R] (n : ℕ) :
+    (rncMap R n).Flat ↔ n = 1 ∨ Subsingleton R
+```
+
+This is genuine commutative-ring morphism flatness in every coefficient
+universe and every degree, including zero. Mathlib's `RingHom.Flat` equips
+the full `Target R = MvPolynomial (Fin 2) R` with the module structure over
+the full `Source R n = MvPolynomial (Fin (n + 1)) R` induced by
+`(rncMap R n).toAlgebra`. Its action is `p • q = rncMap R n p * q`.
+There is no domain, Noetherianity, nontriviality or positive-degree premise,
+and no replacement of either carrier by a quotient, range or endpoint ring.
+
+Use `(rncMap_flat_iff R n).mpr` with degree one or subsingleton coefficients
+to obtain flatness of the ring map. Use `.mp` to recover that alternative
+from flatness. The private
+[root-import clients](../ToricIdealsTest/Audit/RationalNormalCurveFlatnessClient.lean)
+apply `.mpr` over `ZMod 1` in every degree and `.mp` to exclude flatness
+of the conic parametrization over `ZMod 4`. The latter ring has the nonzero
+square-zero coefficient `2`, but its degree-one map is flat. Separate
+[boundary models](../ToricIdealsTest/Audit/RationalNormalCurveFlatnessModels.lean)
+check integer degrees zero through three, nilpotent coefficients, reduced
+product coefficients with zero divisors, zero coefficients and a lifted
+coefficient universe independently of the classifier.
+
+The degree-one exponent identity identifies the polynomial map with the
+identity, and a subsingleton target module is flat. For the converse,
+`X₀ - 1` in degree zero and `X₁² - X₀ X₂` in degrees at least two are
+regular source scalars with zero image. A variable-selection equivalence
+makes each relation monic over a polynomial coefficient ring, so Mathlib's
+monic regularity applies even when the original coefficients have zero
+divisors. Vanishing of the quadratic relation reuses `minor_mem` and
+`hankelIdeal_le_ker`. Mathlib's
+`Module.Flat.isSMulRegular_of_isRegular` then forces this scalar to act
+injectively on the full target, contradicting its annihilation of the unit
+over nontrivial coefficients. This does not assume that flat ring maps
+are injective in general.
+
+This result is distinct from `quotient_free` and `quotient_flat`, which
+concern the full Hankel quotient as a coefficient `R`-module in every degree.
+At degree zero that quotient is `R[X₀]`, while the raw map sends `X₀` to
+`1` and is not flat for nontrivial coefficients. The ring-map theorem does
+not classify Mathlib's broader semiring `Module.Flat`, whose meaning is
+preservation of tensor monomorphisms rather than genuine finite-limit
+flatness over arbitrary semirings.
+
 ## Scalar base change of Hankel quotients
 
 Import `ToricIdeals.RationalNormalCurve.BaseChange`, or the root `ToricIdeals`.
@@ -347,6 +398,11 @@ by `ToricIdeals`.
   by subsingleton elimination. At `n = 1`, `rncExponent_one`,
   `rncMap_one_injective`, `hankelIdeal_one_eq_ker` give an injective map and
   equality without an extra hypothesis on `k`.
+- **Raw-map flatness:** For `(R : Type u) [CommRing R]` and every
+  `n : ℕ`, `rncMap_flat_iff R n` states
+  `(rncMap R n).Flat ↔ n = 1 ∨ Subsingleton R` for the full target over
+  the full source through this map; see the
+  [criterion and scalar distinction](#raw-parametrization-flatness).
 - **Decreasing reduction:** `sourceDegree`, `sourceWeight`, `sourceEnergy`,
   `outerExponent`, `innerExponent`, `reduceExponent` describe a move from a
   separated occupied pair toward adjacent positions. `monomial_add_one`,
