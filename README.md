@@ -206,6 +206,16 @@ the split quadric, together with its coordinate algebra and localization charts.
   rank. The [coordinate clients](ToricIdealsTest/Audit/RationalNormalCurveHomogeneousBasisClients.lean)
   reconstruct a bivariate quadratic and retain a nonzero square-zero
   coefficient in the five-coordinate conic component over `ZMod 4`.
+- **Krull dimensions in degrees zero and one:** For every universe-polymorphic
+  Noetherian commutative coefficient ring `R`,
+  [`ringKrullDim_quotient_hankelIdeal_zero`](ToricIdeals/RationalNormalCurve/Dimension.lean)
+  and `ringKrullDim_quotient_hankelIdeal_one` give the dimensions of the full
+  Hankel quotients as `ringKrullDim R + 1` and `ringKrullDim R + 2`.
+  These equalities take values in `WithBot ℕ∞`, including zero rings (dimension
+  `⊥`) and coefficients of infinite dimension. No domain, nontriviality or
+  finite-dimension hypothesis is imposed. Degree zero retains its one polynomial
+  variable; it is not the parametrization image. This dimension API covers
+  degrees zero and one only, not a general-degree dimension formula.
 - **Noetherian quotient in every degree:** For any `(R : Type u) [CommRing R]` and every
   `n : ℕ`, including zero,
   [`quotient_isNoetherianRing_iff`](ToricIdeals/RationalNormalCurve/Noetherian.lean)
@@ -288,6 +298,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness, flatness and faithful flatness of the full Hankel quotient for its canonical coefficient action in every degree |
+| [`ToricIdeals.RationalNormalCurve.Dimension`](ToricIdeals/RationalNormalCurve/Dimension.lean) | Full Hankel quotient dimensions in degrees zero and one over every Noetherian commutative coefficient ring |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
