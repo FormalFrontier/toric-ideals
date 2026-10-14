@@ -18,7 +18,10 @@ project:
     for zero coefficient rings in every degree, and an arithmetic
     characterization of the natural exponent image, full-target raw-map
     surjectivity exactly in degree one or over subsingleton coefficients for
-    arbitrary commutative semirings in every degree, full-source ring-map
+    arbitrary commutative semirings in every degree, finite type of the raw
+    parametrization over its full source in every degree, module finiteness
+    of its full target over that source exactly when n is nonzero or the
+    coefficient semiring is subsingleton, and full-source ring-map
     flatness exactly in degree one or over subsingleton coefficients for
     arbitrary commutative rings in every degree, and regularity of every
     coordinate class in every degree, with an injective coordinate-localization
@@ -123,6 +126,17 @@ status:
     rings with zero divisors, without a domain, Noetherianity, nontriviality
     or positive-degree hypothesis. Its private root-import clients use both
     directions over zero coefficients and the nonreduced ring ZMod 4.
+    ToricIdeals.RationalNormalCurve.ParametrizationFinite provides
+    rncMap_finiteType and rncMap_moduleFinite_iff for every
+    (R : Type u) [CommSemiring R] and n : ℕ, including zero.
+    With f = rncMap R n, Algebra.FiniteType (Source R n) (Target R) holds via
+    f.toAlgebra, and Module.Finite (Source R n) (Target R) via
+    f.toAlgebra.toModule is equivalent to n ≠ 0 or Subsingleton R.
+    Both are finite-generation properties, also for semirings; the scalar
+    action uses the full Source R n, not coefficient or Hankel-quotient scalars.
+    At n = 0, X₀ remains in the source but maps to 1: finite type holds,
+    but module finiteness fails over nontrivial coefficients. At n = 1 the
+    parametrization is an isomorphism.
     ToricIdealsTest.RationalNormalCurveExponentImageModels gives independent
     small-degree image and exclusion examples.
     ToricIdealsTest.RationalNormalCurveExponentImageClient provides

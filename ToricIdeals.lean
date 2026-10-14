@@ -21,6 +21,7 @@ public import ToricIdeals.RationalNormalCurve.Jacobson
 public import ToricIdeals.RationalNormalCurve.MapFlatness
 public import ToricIdeals.RationalNormalCurve.MapSurjectivity
 public import ToricIdeals.RationalNormalCurve.Noetherian
+public import ToricIdeals.RationalNormalCurve.ParametrizationFinite
 public import ToricIdeals.SplitQuadric.Exponents
 public import ToricIdeals.SplitQuadric
 

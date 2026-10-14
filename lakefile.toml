@@ -50,5 +50,7 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.RationalNormalCurve.EndpointMap",
   "ToricIdealsTest.CoefficientAlgebraModels",
   "ToricIdealsTest.CoefficientAlgebraUses",
+  "ToricIdealsTest.ParametrizationFiniteModels",
+  "ToricIdealsTest.ParametrizationFiniteClients",
   "ToricIdealsTest.SplitQuadricExamples",
   "ToricIdealsTest.SplitQuadricRootClient"]
