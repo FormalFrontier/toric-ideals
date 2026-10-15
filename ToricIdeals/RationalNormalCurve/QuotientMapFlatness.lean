@@ -45,40 +45,6 @@ private def originEpsilon (R : Type u) [CommRing R] (n : ℕ) :
 private local instance (R : Type u) [CommRing R] (n : ℕ) :
     Algebra (originQuotient R n) R := (originEpsilon R n).toAlgebra
 
-private theorem originEpsilon_mk (R : Type u) [CommRing R] (n : ℕ)
-    (hn : 0 < n) (f : Source R n) :
-    originEpsilon R n (Ideal.Quotient.mk (hankelIdeal R n) f) =
-      MvPolynomial.constantCoeff f := by
-  have hcomp : MvPolynomial.constantCoeff.comp (rncMap R n) =
-      (MvPolynomial.constantCoeff : Source R n →+* R) := by
-    apply MvPolynomial.ringHom_ext
-    · intro r
-      simp only [RingHom.comp_apply, rncMap_C, MvPolynomial.constantCoeff_C]
-    · intro i
-      have he : coordinateExponent n i ≠ 0 := by
-        intro h
-        have h0 := congrArg (fun e : Fin 2 →₀ ℕ => e 0) h
-        have h1 := congrArg (fun e : Fin 2 →₀ ℕ => e 1) h
-        simp only [coordinateExponent, Finsupp.add_apply, Finsupp.single_eq_same,
-          Finsupp.single_eq_of_ne (by decide : (0 : Fin 2) ≠ 1),
-          Finsupp.single_eq_of_ne (by decide : (1 : Fin 2) ≠ 0),
-          Finsupp.zero_apply, add_zero, zero_add] at h0 h1
-        omega
-      simp only [RingHom.comp_apply, rncMap_X, MvPolynomial.constantCoeff_monomial,
-        ite_eq_right he, MvPolynomial.constantCoeff_X]
-  change MvPolynomial.constantCoeff (rncMap R n f) = MvPolynomial.constantCoeff f
-  exact RingHom.congr_fun hcomp f
-
-private theorem originEpsilon_eq_augmentation (R : Type u) [CommRing R] (n : ℕ)
-    (hn : 0 < n) :
-    originEpsilon R n = (quotientAugmentation R n).toRingHom := by
-  apply RingHom.ext
-  intro q
-  refine Quotient.inductionOn' q ?_
-  intro f
-  exact (originEpsilon_mk R n hn f).trans
-    (quotientAugmentation_mk R n f).symm
-
 /-- The first partial derivative evaluated at the source origin, as an additive map. -/
 private def originDerivative (R : Type u) [CommRing R] (n : ℕ) : Source R n →+ R :=
   (MvPolynomial.constantCoeff : Source R n →+* R).toAddMonoidHom.comp
@@ -143,7 +109,10 @@ private theorem originDerivativeQuotient_mul (R : Type u) [CommRing R] (n : ℕ)
   change originDerivative R n (f * g) =
     originEpsilon R n (Ideal.Quotient.mk (hankelIdeal R n) f) * originDerivative R n g +
       originEpsilon R n (Ideal.Quotient.mk (hankelIdeal R n) g) * originDerivative R n f
-  simpa only [originEpsilon_mk R n hn] using originDerivative_mul R n f g
+  have hε : originEpsilon R n = (quotientAugmentation R n).toRingHom :=
+    constantCoeff_comp_quotientMap R n hn
+  simpa only [hε, AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom,
+    quotientAugmentation_mk] using originDerivative_mul R n f g
 
 private def firstCoordinate (n : ℕ) (hn : 2 ≤ n) : Fin (n + 1) :=
   ⟨1, by omega⟩
@@ -173,9 +142,11 @@ private theorem originIdeal_le_ker (R : Type u) [CommRing R] (n : ℕ) (hn : 2 �
   intro q hq
   simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hq
   apply RingHom.mem_ker.mpr
+  have hε : originEpsilon R n = (quotientAugmentation R n).toRingHom :=
+    constantCoeff_comp_quotientMap R n (by omega : 0 < n)
   rcases hq with rfl | rfl <;>
-    simp only [originA, originB, originEpsilon_mk R n (by omega : 0 < n),
-      MvPolynomial.constantCoeff_X]
+    simp only [originA, originB, hε, AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom,
+      quotientAugmentation_mk, MvPolynomial.constantCoeff_X]
 
 /-- Restricting the origin derivative to the augmentation ideal removes its second Leibniz term. -/
 private def originAlpha (R : Type u) [CommRing R] (n : ℕ) (hn : 2 ≤ n) :

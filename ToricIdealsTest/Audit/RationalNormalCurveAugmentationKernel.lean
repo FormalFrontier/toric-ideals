@@ -189,6 +189,30 @@ private theorem zero_coefficients_all_degrees (n : ℕ) :
     apply Ideal.Quotient.eq_zero_iff_mem.mpr
     exact Ideal.subset_span (Set.mem_range_self i)
 
+/-- The conic parametrization has the prescribed constant coefficient on every
+class of the full integer Hankel quotient. -/
+private theorem integer_conic_constantCoeff (q : Source ℤ 2 ⧸ hankelIdeal ℤ 2) :
+    constantCoeff (quotientMap ℤ 2 q) = quotientAugmentation ℤ 2 q := by
+  exact RingHom.congr_fun (constantCoeff_comp_quotientMap ℤ 2 (by decide)) q
+
+/-- The retained degree-zero integer variable distinguishes the parametrization
+constant coefficient from the coefficient augmentation. -/
+private theorem integer_degree_zero_incompatible :
+    Ideal.Quotient.mkₐ ℤ (hankelIdeal ℤ 0) (X (0 : Fin 1)) ≠ 0 ∧
+      (constantCoeff : Target ℤ →+* ℤ).comp (quotientMap ℤ 0).toRingHom ≠
+        (quotientAugmentation ℤ 0).toRingHom := by
+  refine ⟨integer_degree_zero.1, ?_⟩
+  intro h
+  have hx := RingHom.congr_fun h
+    (Ideal.Quotient.mk (hankelIdeal ℤ 0) (X (0 : Fin 1)))
+  change constantCoeff (quotientMap ℤ 0
+    (Ideal.Quotient.mk (hankelIdeal ℤ 0) (X (0 : Fin 1)))) =
+      quotientAugmentation ℤ 0
+        (Ideal.Quotient.mk (hankelIdeal ℤ 0) (X (0 : Fin 1))) at hx
+  have hone : (1 : ℤ) = 0 := by
+    simpa [quotientMap_mk, rncMap_X, coordinateExponent] using hx
+  exact one_ne_zero hone
+
 /-- A concrete integer conic class has nonzero raw coordinate `37` and is
 `37` times the prescribed variable vector for the canonical coefficient action. -/
 private theorem integer_conic_cotangent_witness :

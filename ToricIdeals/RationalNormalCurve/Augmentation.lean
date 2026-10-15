@@ -8,6 +8,7 @@ public import Mathlib.Algebra.MvPolynomial.Eval
 public import Mathlib.RingTheory.Ideal.Quotient.Operations
 public import Mathlib.RingTheory.MvPolynomial.Ideal
 public import ToricIdeals.RationalNormalCurve
+public import ToricIdeals.RationalNormalCurve.QuotientMap
 import MultivariatePolynomials.EvaluationIdeal
 
 /-!
@@ -85,6 +86,38 @@ noncomputable def quotientAugmentation (R : Type u) [CommRing R] (n : ℕ) :
       MvPolynomial.constantCoeff f := by
   change MvPolynomial.aeval (0 : Fin (n + 1) → R) f = MvPolynomial.constantCoeff f
   simpa only [Algebra.algebraMap_self_apply] using (MvPolynomial.aeval_zero (S₁ := R) f)
+
+/-- In positive degree, taking the constant coefficient after the quotient
+parametrization agrees with the coefficient augmentation. In degree zero the
+source variable remains in the full quotient and is sent to `1` by the
+parametrization, whereas its augmentation is `0`. -/
+theorem constantCoeff_comp_quotientMap (R : Type u) [CommRing R] (n : ℕ) (hn : 0 < n) :
+    (MvPolynomial.constantCoeff : Target R →+* R).comp (quotientMap R n).toRingHom =
+      (quotientAugmentation R n).toRingHom := by
+  have hcomp : MvPolynomial.constantCoeff.comp (rncMap R n) =
+      (MvPolynomial.constantCoeff : Source R n →+* R) := by
+    apply MvPolynomial.ringHom_ext
+    · intro r
+      simp only [RingHom.comp_apply, rncMap_C, MvPolynomial.constantCoeff_C]
+    · intro i
+      have he : coordinateExponent n i ≠ 0 := by
+        intro h
+        have h0 := congrArg (fun e : Fin 2 →₀ ℕ => e 0) h
+        have h1 := congrArg (fun e : Fin 2 →₀ ℕ => e 1) h
+        simp only [coordinateExponent, Finsupp.add_apply, Finsupp.single_eq_same,
+          Finsupp.single_eq_of_ne (by decide : (0 : Fin 2) ≠ 1),
+          Finsupp.single_eq_of_ne (by decide : (1 : Fin 2) ≠ 0),
+          Finsupp.zero_apply, add_zero, zero_add] at h0 h1
+        omega
+      simp only [RingHom.comp_apply, rncMap_X, MvPolynomial.constantCoeff_monomial,
+        ite_eq_right he, MvPolynomial.constantCoeff_X]
+  apply RingHom.ext
+  intro q
+  refine Quotient.inductionOn' q ?_
+  intro f
+  change MvPolynomial.constantCoeff (rncMap R n f) =
+    quotientAugmentation R n (Ideal.Quotient.mk (hankelIdeal R n) f)
+  exact (RingHom.congr_fun hcomp f).trans (quotientAugmentation_mk R n f).symm
 
 /-- The coefficient augmentation is surjective in every degree. -/
 theorem quotientAugmentation_surjective (R : Type u) [CommRing R] (n : ℕ) :
