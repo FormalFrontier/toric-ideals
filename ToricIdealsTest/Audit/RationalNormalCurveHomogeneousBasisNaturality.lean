@@ -180,6 +180,67 @@ private theorem quotientMap_degree_zero_coefficient
         Ideal.Quotient.mkₐ_eq_mk, MvPolynomial.algebraMap_eq] using
         (Ideal.Quotient.mk_algebraMap (R₁ := S) (hankelIdeal S n) (φ r))
 
+open scoped TensorProduct
+
+/-- Reduction of integer coefficients modulo two preserves a nonzero degree-one
+basis vector on the conic and the corresponding full-quotient inclusion,
+although it kills the nonzero integer coefficient two. -/
+private theorem integer_mod_two_tensor_basis :
+    quotientHomogeneousBaseChangeEquiv ℤ (ZMod 2) 2 1
+        ((1 : ZMod 2) ⊗ₜ[ℤ] quotientHomogeneousBasis ℤ 2 1 1) =
+      quotientHomogeneousBasis (ZMod 2) 2 1 1 ∧
+    quotientBaseChangeAlgEquiv ℤ (ZMod 2) 2
+        (((quotientHomogeneousSubmodule ℤ 2 1).subtype.baseChange (ZMod 2))
+          ((1 : ZMod 2) ⊗ₜ[ℤ] quotientHomogeneousBasis ℤ 2 1 1)) =
+      (quotientHomogeneousBasis (ZMod 2) 2 1 1 :
+        Source (ZMod 2) 2 ⧸ hankelIdeal (ZMod 2) 2) ∧
+    (1 : ZMod 2) ⊗ₜ[ℤ] quotientHomogeneousBasis ℤ 2 1 1 ≠ 0 ∧
+    (quotientHomogeneousBasis (ZMod 2) 2 1 1 :
+      Source (ZMod 2) 2 ⧸ hankelIdeal (ZMod 2) 2) ≠ 0 ∧
+    (2 : ℤ) ≠ 0 ∧ algebraMap ℤ (ZMod 2) (2 : ℤ) = 0 := by
+  have hcoordinate :
+      quotientHomogeneousBaseChangeEquiv ℤ (ZMod 2) 2 1
+          ((1 : ZMod 2) ⊗ₜ[ℤ] quotientHomogeneousBasis ℤ 2 1 1) =
+        quotientHomogeneousBasis (ZMod 2) 2 1 1 := by
+    change ((quotientHomogeneousBasis ℤ 2 1).baseChange (ZMod 2)).equiv
+      (quotientHomogeneousBasis (ZMod 2) 2 1) (Equiv.refl _)
+      ((1 : ZMod 2) ⊗ₜ[ℤ] quotientHomogeneousBasis ℤ 2 1 1) = _
+    simpa only [Module.Basis.baseChange_apply, Equiv.refl_apply] using
+      (Module.Basis.equiv_apply
+        (b := (quotientHomogeneousBasis ℤ 2 1).baseChange (ZMod 2))
+        (i := (1 : Fin (2 * 1 + 1)))
+        (b' := quotientHomogeneousBasis (ZMod 2) 2 1) (e := Equiv.refl _))
+  have hfull :
+      quotientBaseChangeAlgEquiv ℤ (ZMod 2) 2
+          (((quotientHomogeneousSubmodule ℤ 2 1).subtype.baseChange (ZMod 2))
+            ((1 : ZMod 2) ⊗ₜ[ℤ] quotientHomogeneousBasis ℤ 2 1 1)) =
+        (quotientHomogeneousBasis (ZMod 2) 2 1 1 :
+          Source (ZMod 2) 2 ⧸ hankelIdeal (ZMod 2) 2) := by
+    obtain ⟨p, hp⟩ := Ideal.Quotient.mk_surjective
+      (quotientHomogeneousBasis ℤ 2 1 1 : Source ℤ 2 ⧸ hankelIdeal ℤ 2)
+    have hnatural := quotientMap_quotientHomogeneousBasis ℤ (ZMod 2)
+      (algebraMap ℤ (ZMod 2)) 2 1 1
+    rw [← hp, Ideal.quotientMap_mk] at hnatural
+    rw [LinearMap.baseChange_tmul]
+    change quotientBaseChangeAlgEquiv ℤ (ZMod 2) 2
+      ((1 : ZMod 2) ⊗ₜ[ℤ]
+        (quotientHomogeneousBasis ℤ 2 1 1 : Source ℤ 2 ⧸ hankelIdeal ℤ 2)) = _
+    rw [← hp, quotientBaseChangeAlgEquiv_tmul_mk, one_smul]
+    exact hnatural
+  have hdomain :
+      (1 : ZMod 2) ⊗ₜ[ℤ] quotientHomogeneousBasis ℤ 2 1 1 ≠ 0 := by
+    simpa only [Module.Basis.baseChange_apply] using
+      (((quotientHomogeneousBasis ℤ 2 1).baseChange (ZMod 2)).ne_zero
+        (1 : Fin (2 * 1 + 1)))
+  have htarget :
+      (quotientHomogeneousBasis (ZMod 2) 2 1 1 :
+        Source (ZMod 2) 2 ⧸ hankelIdeal (ZMod 2) 2) ≠ 0 := by
+    intro h
+    exact (quotientHomogeneousBasis (ZMod 2) 2 1).ne_zero 1 (Subtype.ext h)
+  refine ⟨hcoordinate, hfull, hdomain, htarget, by decide, ?_⟩
+  exact (map_natCast (algebraMap ℤ (ZMod 2)) 2).trans
+    (by decide : (2 : ZMod 2) = 0)
+
 end
 
 end ToricIdeals.RationalNormalCurve

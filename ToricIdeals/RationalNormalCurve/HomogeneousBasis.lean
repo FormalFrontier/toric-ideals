@@ -5,6 +5,8 @@ Authors: Formal Frontier Agents
 module
 
 public import ToricIdeals.RationalNormalCurve.Homogeneous
+public import ToricIdeals.RationalNormalCurve.BaseChange
+public import Mathlib.LinearAlgebra.TensorProduct.Basis
 import ToricIdeals.RationalNormalCurve.ExponentImage
 import Mathlib.Algebra.Module.Submodule.Equiv
 import Mathlib.Algebra.MonoidAlgebra.Basic
@@ -40,6 +42,13 @@ For positive `n`, this compares quotient classes through the Hankel kernel
 theorem, rather than identifying the choices of terminal representatives over
 the two coefficient rings. At `n = 0`, it preserves the class of `X 0 ^ d`.
 
+For a commutative `R`-algebra `S`, `quotientHomogeneousBaseChangeEquiv`
+identifies the scalar extension of each homogeneous component with the component
+over `S`. It sends `s ⊗ₜ bᵢ` to `s • bᵢ`, extends the finite coefficient
+coordinates from `R` to `S`, and commutes with the canonical inclusions into
+the full quotients and their scalar-change equivalence. No flatness or
+injectivity hypothesis is needed.
+
 ## References
 
 * Ravi Vakil, *The Rising Sea: Foundations of Algebraic Geometry*, Exercise
@@ -48,7 +57,8 @@ the two coefficient rings. At `n = 0`, it preserves the class of `X 0 ^ d`.
   coefficient-independent exponent identities, terminal normalization and
   all-ring Hankel kernel theorem.
 * Mathlib contributors, supported monomial bases, finite antidiagonals,
-  coefficient algebra homomorphisms and the algebraic first isomorphism theorem.
+  coefficient algebra homomorphisms, the algebraic first isomorphism theorem,
+  and scalar extension of bases and linear maps.
 -/
 
 @[expose] public section
@@ -545,6 +555,108 @@ theorem quotientHomogeneousCoordinates_ext (R : Type u) [CommRing R] (n d : ℕ)
     (h : ∀ i, quotientHomogeneousCoordinates R n d x i =
       quotientHomogeneousCoordinates R n d y i) : x = y :=
   (quotientHomogeneousCoordinates R n d).injective (funext h)
+
+open scoped TensorProduct
+
+/-- Scalar extension of the degree-`d` submodule of the full Hankel quotient.
+The equivalence identifies the scalar-extended monomial basis with the basis
+over the coefficient algebra, with the same indices for every `n` and `d`. -/
+def quotientHomogeneousBaseChangeEquiv
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S] (n d : ℕ) :
+    S ⊗[R] quotientHomogeneousSubmodule R n d ≃ₗ[S]
+      quotientHomogeneousSubmodule S n d :=
+  ((quotientHomogeneousBasis R n d).baseChange S).equiv
+    (quotientHomogeneousBasis S n d) (Equiv.refl _)
+
+/-- A pure tensor of an indexed basis vector maps to the scalar multiple
+of the basis vector with the same index. -/
+@[simp]
+theorem quotientHomogeneousBaseChangeEquiv_tmul_basis
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S]
+    (n d : ℕ) (s : S) (i : Fin (n * d + 1)) :
+    quotientHomogeneousBaseChangeEquiv R S n d
+        (s ⊗ₜ[R] quotientHomogeneousBasis R n d i) =
+      s • quotientHomogeneousBasis S n d i := by
+  have h : quotientHomogeneousBaseChangeEquiv R S n d
+      ((1 : S) ⊗ₜ[R] quotientHomogeneousBasis R n d i) =
+        quotientHomogeneousBasis S n d i := by
+    change ((quotientHomogeneousBasis R n d).baseChange S).equiv
+      (quotientHomogeneousBasis S n d) (Equiv.refl _)
+      ((1 : S) ⊗ₜ[R] quotientHomogeneousBasis R n d i) = _
+    simpa only [Module.Basis.baseChange_apply, Equiv.refl_apply] using
+      (Module.Basis.equiv_apply
+        (b := (quotientHomogeneousBasis R n d).baseChange S) (i := i)
+        (b' := quotientHomogeneousBasis S n d) (e := Equiv.refl _))
+  rw [TensorProduct.tmul_eq_smul_one_tmul, map_smul, h]
+
+/-- Scalar extension of a homogeneous component commutes with its inclusion
+in the full Hankel quotient and the full quotient's scalar-change equivalence.
+The tensor-extended inclusion is Mathlib's `S`-linear `LinearMap.baseChange`. -/
+theorem quotientHomogeneousBaseChangeEquiv_coe
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S] (n d : ℕ) :
+    (quotientHomogeneousSubmodule S n d).subtype.comp
+        (quotientHomogeneousBaseChangeEquiv R S n d).toLinearMap =
+      (quotientBaseChangeAlgEquiv R S n).toLinearEquiv.toLinearMap.comp
+        ((quotientHomogeneousSubmodule R n d).subtype.baseChange S) := by
+  apply ((quotientHomogeneousBasis R n d).baseChange S).ext
+  intro i
+  simp only [Module.Basis.baseChange_apply, LinearMap.comp_apply,
+    LinearMap.baseChange_tmul]
+  change (quotientHomogeneousBaseChangeEquiv R S n d
+      ((1 : S) ⊗ₜ[R] quotientHomogeneousBasis R n d i) :
+      Source S n ⧸ hankelIdeal S n) =
+    quotientBaseChangeAlgEquiv R S n
+      ((1 : S) ⊗ₜ[R] (quotientHomogeneousBasis R n d i :
+        Source R n ⧸ hankelIdeal R n))
+  rw [quotientHomogeneousBaseChangeEquiv_tmul_basis, one_smul,
+    quotientBaseChangeAlgEquiv_tmul, one_smul,
+    quotientMap_quotientHomogeneousBasis]
+
+/-- On a pure tensor, the underlying full quotient class is obtained by
+changing coefficients and multiplying by the scalar in `S`. -/
+theorem quotientHomogeneousBaseChangeEquiv_tmul
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S]
+    (n d : ℕ) (s : S) (x : quotientHomogeneousSubmodule R n d) :
+    (quotientHomogeneousBaseChangeEquiv R S n d (s ⊗ₜ[R] x) :
+        Source S n ⧸ hankelIdeal S n) =
+      s • Ideal.quotientMap (hankelIdeal S n) (MvPolynomial.map (algebraMap R S))
+        ((Ideal.map_le_iff_le_comap).mp (map_hankelIdeal (algebraMap R S) n).le)
+        (x : Source R n ⧸ hankelIdeal R n) := by
+  have h := LinearMap.congr_fun
+    (quotientHomogeneousBaseChangeEquiv_coe R S n d) (s ⊗ₜ[R] x)
+  change (quotientHomogeneousBaseChangeEquiv R S n d (s ⊗ₜ[R] x) :
+      Source S n ⧸ hankelIdeal S n) =
+    quotientBaseChangeAlgEquiv R S n
+      (((quotientHomogeneousSubmodule R n d).subtype.baseChange S) (s ⊗ₜ[R] x)) at h
+  rw [LinearMap.baseChange_tmul, quotientBaseChangeAlgEquiv_tmul] at h
+  exact h
+
+/-- The inverse sends each indexed basis vector to its scalar-extended
+basis vector. -/
+@[simp]
+theorem quotientHomogeneousBaseChangeEquiv_symm_basis
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S]
+    (n d : ℕ) (i : Fin (n * d + 1)) :
+    (quotientHomogeneousBaseChangeEquiv R S n d).symm
+        (quotientHomogeneousBasis S n d i) =
+      (1 : S) ⊗ₜ[R] quotientHomogeneousBasis R n d i := by
+  apply (quotientHomogeneousBaseChangeEquiv R S n d).injective
+  rw [LinearEquiv.apply_symm_apply,
+    quotientHomogeneousBaseChangeEquiv_tmul_basis, one_smul]
+
+/-- A pure tensor is evaluated by extending its finite basis coordinates
+from `R` to `S` and reconstructing in the target homogeneous component. -/
+theorem quotientHomogeneousBaseChangeEquiv_apply_tmul
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S]
+    (n d : ℕ) (s : S) (x : quotientHomogeneousSubmodule R n d) :
+    quotientHomogeneousBaseChangeEquiv R S n d (s ⊗ₜ[R] x) =
+      ∑ i, ((quotientHomogeneousBasis R n d).repr x i • s) •
+        quotientHomogeneousBasis S n d i := by
+  have h := congrArg (quotientHomogeneousBaseChangeEquiv R S n d)
+    (((quotientHomogeneousBasis R n d).baseChange S).sum_repr (s ⊗ₜ[R] x))
+  simpa only [map_sum, map_smul, Module.Basis.baseChange_repr_tmul,
+    Module.Basis.baseChange_apply, quotientHomogeneousBaseChangeEquiv_tmul_basis,
+    one_smul] using h.symm
 
 end
 

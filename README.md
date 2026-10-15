@@ -231,6 +231,13 @@ the split quadric, together with its coordinate algebra and localization charts.
   [coefficient-change clients](ToricIdealsTest/Audit/RationalNormalCurveHomogeneousBasisNaturality.lean)
   show how a nilpotent coefficient perturbation is erased by `ZMod 4 → ZMod 2`
   and retain the cubic variable class at `n = 0`.
+  For any commutative `R`-algebra `S`,
+  [`quotientHomogeneousBaseChangeEquiv`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean)
+  identifies the scalar-extended component `S ⊗[R] H(R,n,d)` with `H(S,n,d)`
+  as `S`-modules, where `H` denotes this homogeneous quotient submodule.
+  It extends finite basis coordinates, sends `s ⊗ₜ bᵢ` to `s • bᵢ`, and
+  commutes with the inclusions into the full quotients and their scalar-change
+  equivalence, without flatness or injectivity assumptions.
 - **Krull dimensions in degrees zero and one:** For every universe-polymorphic
   Noetherian commutative coefficient ring `R`,
   [`ringKrullDim_quotient_hankelIdeal_zero`](ToricIdeals/RationalNormalCurve/Dimension.lean)

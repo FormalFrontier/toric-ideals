@@ -123,4 +123,16 @@ theorem quotientBaseChangeAlgEquiv_tower
   | add q q' ih ih' =>
       simpa only [TensorProduct.tmul_add, map_add] using congrArg₂ (· + ·) ih ih'
 
+/-- On a pure tensor of an arbitrary quotient class, scalar base change is
+coefficient transport through the induced quotient map, followed by scaling. -/
+theorem quotientBaseChangeAlgEquiv_tmul
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] [Algebra R S]
+    (n : ℕ) (s : S) (q : Source R n ⧸ hankelIdeal R n) :
+    quotientBaseChangeAlgEquiv R S n (s ⊗ₜ[R] q) =
+      s • Ideal.quotientMap (hankelIdeal S n) (MvPolynomial.map (algebraMap R S))
+        ((Ideal.map_le_iff_le_comap).mp (map_hankelIdeal (algebraMap R S) n).le) q := by
+  obtain ⟨p, rfl⟩ := Ideal.Quotient.mk_surjective q
+  rw [quotientBaseChangeAlgEquiv_tmul_mk, Ideal.quotientMap_mk]
+  exact map_smul (Ideal.Quotient.mkₐ S (hankelIdeal S n)) s _
+
 end ToricIdeals.RationalNormalCurve
