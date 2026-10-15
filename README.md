@@ -206,6 +206,17 @@ the split quadric, together with its coordinate algebra and localization charts.
   and `n = 0, 1` are included, with no nontriviality or positive-degree premise.
   This result constructs no quotient grading; finite homogeneous components
   are described by the coefficient bases below.
+- **Unique finite homogeneous reconstruction:** For every
+  `(R : Type u) [CommRing R]` and every `n : ℕ`,
+  [`quotientHomogeneousSubmodule_isInternal`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean)
+  identifies the full Hankel quotient with the internal direct sum of its
+  homogeneous image submodules. Every quotient element has a unique finitely
+  supported family of homogeneous components, whose sum is that element.
+  Mathlib's `chooseDecomposition`, `decomposeLinearEquiv` and reconstruction
+  operations provide the corresponding decomposition data. Zero rings,
+  nilpotent coefficients and `n = 0` are included; at `n = 0` the components
+  retain the powers of the surviving polynomial variable. No field, domain,
+  nontriviality, flatness or positive-degree premise is required.
 - **Explicit homogeneous-component bases:** For every
   `(R : Type u) [CommRing R]` and all `n d : ℕ`,
   [`quotientHomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean)
@@ -329,6 +340,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | Module | Contents |
 | --- | --- |
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
+| [`ToricIdeals.HomogeneousImage`](ToricIdeals/HomogeneousImage.lean) | Transport of internal submodule decompositions under surjective linear maps with homogeneous kernel |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
@@ -338,7 +350,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
-| [`ToricIdeals.RationalNormalCurve.HomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean) | Explicit finite coefficient bases and coordinates of all homogeneous components of the full Hankel quotient, preserved with their indices under arbitrary coefficient change |
+| [`ToricIdeals.RationalNormalCurve.HomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean) | Internal homogeneous decomposition of the full Hankel quotient, finite coefficient bases and coordinates of its components, preserved with their indices under arbitrary coefficient change |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.MapFlatness`](ToricIdeals/RationalNormalCurve/MapFlatness.lean) | All-degree full-source ring-map flatness criterion over commutative rings |
 | [`ToricIdeals.RationalNormalCurve.MapSurjectivity`](ToricIdeals/RationalNormalCurve/MapSurjectivity.lean) | All-degree full-target raw parametrization surjectivity over commutative semirings |

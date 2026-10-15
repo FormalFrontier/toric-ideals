@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import ToricIdeals.HomogeneousImage
 public import ToricIdeals.RationalNormalCurve.Homogeneous
 public import ToricIdeals.RationalNormalCurve.BaseChange
 public import Mathlib.LinearAlgebra.TensorProduct.Basis
@@ -77,6 +78,23 @@ abbrev quotientHomogeneousSubmodule (R : Type u) [CommRing R] (n d : ℕ) :
     Submodule R (Source R n ⧸ hankelIdeal R n) :=
   (MvPolynomial.homogeneousSubmodule (Fin (n + 1)) R d).map
     (Ideal.Quotient.mkₐ R (hankelIdeal R n)).toLinearMap
+
+/-- The homogeneous submodules form an internal direct sum of the full Hankel
+quotient: every quotient class is a unique finite sum of homogeneous components.
+This holds over every commutative ring and for every `n`. At `n = 0`, the
+components retain the powers of the surviving variable in the full one-variable
+quotient, rather than their images under the parametrization. -/
+theorem quotientHomogeneousSubmodule_isInternal (R : Type u) [CommRing R] (n : ℕ) :
+    DirectSum.IsInternal (quotientHomogeneousSubmodule R n) := by
+  let _ : GradedAlgebra (MvPolynomial.homogeneousSubmodule (Fin (n + 1)) R) :=
+    MvPolynomial.gradedAlgebra
+  refine DirectSum.isInternal_map_of_surjective_of_isHomogeneous_ker
+    (MvPolynomial.homogeneousSubmodule (Fin (n + 1)) R)
+    (Ideal.Quotient.mkₐ R (hankelIdeal R n)).toLinearMap
+    Ideal.Quotient.mk_surjective ?_
+  intro d p hp
+  exact Ideal.Quotient.eq_zero_iff_mem.mpr
+    (hankelIdeal_isHomogeneous R n d (Ideal.Quotient.eq_zero_iff_mem.mp hp))
 
 /-- Membership means having a homogeneous polynomial representative. -/
 theorem mem_quotientHomogeneousSubmodule_iff (R : Type u) [CommRing R] (n d : ℕ)

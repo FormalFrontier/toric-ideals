@@ -139,6 +139,21 @@ private theorem conic_nilpotent_nonzero_and_square_zero :
           Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2),
       mul_pow, hb, ← map_pow, hsq, map_zero, zero_mul]
 
+-- This reconstruction uses internality; the nonzero nilpotent example above
+-- uses only the basis and product API, independently of this decomposition.
+private theorem conic_finite_homogeneous_reconstruction
+    (q : Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) :
+    ∃ (degrees : Finset ℕ)
+      (components : DirectSum ℕ (fun d => ↥(quotientHomogeneousSubmodule (ZMod 4) 2 d))),
+      (∑ d ∈ degrees,
+        (components d : Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2)) = q := by
+  classical
+  let _ : DirectSum.Decomposition (quotientHomogeneousSubmodule (ZMod 4) 2) :=
+    (quotientHomogeneousSubmodule_isInternal (ZMod 4) 2).chooseDecomposition
+  let components := DirectSum.decompose (quotientHomogeneousSubmodule (ZMod 4) 2) q
+  exact ⟨components.support, components,
+    DirectSum.sum_support_decompose (quotientHomogeneousSubmodule (ZMod 4) 2) q⟩
+
 private theorem zeroCoefficient_vectors_coincide :
     quotientHomogeneousBasis (ZMod 1) 2 2 0 = quotientHomogeneousBasis (ZMod 1) 2 2 1 :=
   Subsingleton.elim _ _
