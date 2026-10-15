@@ -126,11 +126,18 @@ private theorem conic_nilpotent_nonzero_and_square_zero :
     have hc := congrFun conic_nilpotent_coordinates 0
     rw [hzero, map_zero] at hc
     exact (by decide : (2 : ZMod 4) ≠ 0) (by simpa using hc.symm)
-  · change (Ideal.Quotient.mkₐ (ZMod 4) (hankelIdeal (ZMod 4) 2)
-      (C 2 * X 0 ^ 2)) ^ 2 = 0
-    rw [← map_pow, mul_pow, ← map_pow]
+  · have hb :
+        (quotientHomogeneousBasis (ZMod 4) 2 2 0 :
+          Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) ^ 2 =
+        (quotientHomogeneousBasis (ZMod 4) 2 4 0 :
+          Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) := by
+      simpa [pow_two] using quotientHomogeneousBasis_mul (ZMod 4) 2 2 2 0 0
     have hsq : (2 : ZMod 4) ^ 2 = 0 := by decide
-    rw [hsq, map_zero, zero_mul, map_zero]
+    rw [conic_nilpotent_reconstruction, Submodule.coe_smul,
+      Algebra.smul_def (2 : ZMod 4)
+        (quotientHomogeneousBasis (ZMod 4) 2 2 0 :
+          Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2),
+      mul_pow, hb, ← map_pow, hsq, map_zero, zero_mul]
 
 private theorem zeroCoefficient_vectors_coincide :
     quotientHomogeneousBasis (ZMod 1) 2 2 0 = quotientHomogeneousBasis (ZMod 1) 2 2 1 :=

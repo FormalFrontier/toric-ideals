@@ -54,4 +54,7 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.ParametrizationFiniteClients",
   "ToricIdealsTest.SplitQuadricExamples",
   "ToricIdealsTest.SplitQuadricRootClient",
-  "ToricIdealsTest.RationalNormalCurveDimensionBaseCases"]
+  "ToricIdealsTest.RationalNormalCurveDimensionBaseCases",
+  "ToricIdealsTest.QuotientMapCompatibility",
+  "ToricIdealsTest.QuotientMapFlatnessType",
+  "ToricIdealsTest.QuotientMapFlatnessModels"]

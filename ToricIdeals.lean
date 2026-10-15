@@ -27,6 +27,8 @@ public import ToricIdeals.RationalNormalCurve.Noetherian
 public import ToricIdeals.RationalNormalCurve.ParametrizationFinite
 public import ToricIdeals.SplitQuadric.Exponents
 public import ToricIdeals.SplitQuadric
+public import ToricIdeals.RationalNormalCurve.QuotientMap
+public import ToricIdeals.RationalNormalCurve.QuotientMapFlatness
 
 /-!
 # Toric ideals
@@ -65,6 +67,15 @@ over every commutative ring and in every degree, the full bivariate target is
 flat over the full source through the raw map exactly when the degree is one
 or the coefficients are subsingleton. Its source action is induced by
 `rncMap`, not the coefficient action on the target or Hankel quotient.
+
+`ToricIdeals.RationalNormalCurve.QuotientMapFlatness` provides
+`quotientMap_flat_iff`: for every commutative coefficient ring `R` and every
+`n : ℕ`, the full bivariate target is flat over the full Hankel quotient
+`Source R n ⧸ hankelIdeal R n` through `quotientMap R n` exactly when
+`n = 1 ∨ Subsingleton R`. This includes degree zero and zero coefficient
+rings, without a domain hypothesis. The scalar action is induced by the
+quotient parametrization, not by coefficient inclusion; the target is the
+full polynomial ring, not the parametrization image.
 
 `ToricIdeals.RationalNormalCurve.CoefficientAlgebra` provides
 `quotient_free`, `quotient_flat` and `quotient_faithfullyFlat`: for every

@@ -31,6 +31,14 @@ existing Hankel normalizer. At `n = 0`, the full quotient is the one-variable
 polynomial ring, and the basis vector is the class of `X 0 ^ d`; the
 parametrization, which sends `X 0` to `1`, is not used for these coordinates.
 No additional grading or scalar action on the quotient is introduced.
+Multiplication in the full quotient adds the degrees and the basis indices,
+including at `n = 0`, where it multiplies powers of the surviving variable.
+
+Changing coefficients along any homomorphism of commutative rings preserves
+these basis vectors with their indices unchanged in the full Hankel quotient.
+For positive `n`, this compares quotient classes through the Hankel kernel
+theorem, rather than identifying the choices of terminal representatives over
+the two coefficient rings. At `n = 0`, it preserves the class of `X 0 ^ d`.
 
 ## References
 
@@ -51,7 +59,7 @@ open MvPolynomial
 
 noncomputable section
 
-universe u
+universe u v
 
 /-- The standard degree-`d` submodule of the full Hankel quotient, with the
 canonical coefficient action induced by the quotient algebra map. -/
@@ -353,6 +361,81 @@ theorem quotientHomogeneousBasis_apply_of_pos (R : Type u) [CommRing R] (n d : �
     (fun e => Ideal.Quotient.mkₐ R (hankelIdeal R n)
       (monomial (fiberNormalExponent R n e) 1))
     (twoExponentIndex_symm (n * d) i)
+
+/-- Changing coefficients sends each homogeneous Hankel-quotient basis vector
+to the vector with the same index. The equality is in the full quotient, for
+arbitrary commutative coefficient rings and every `n` and `d`, including zero.
+The coefficient-change map has the full Hankel quotient over `S` as its target;
+it is distinct from the parametrization `quotientMap R n` into the bivariate
+polynomial ring.
+For positive `n`, the Hankel kernel theorem compares the quotient classes of
+the independently chosen terminal representatives. -/
+theorem quotientMap_quotientHomogeneousBasis
+    (R : Type u) (S : Type v) [CommRing R] [CommRing S] (φ : R →+* S)
+    (n d : ℕ) (i : Fin (n * d + 1)) :
+    Ideal.quotientMap (hankelIdeal S n) (MvPolynomial.map φ)
+      ((Ideal.map_le_iff_le_comap).mp (map_hankelIdeal φ n).le)
+      (quotientHomogeneousBasis R n d i : Source R n ⧸ hankelIdeal R n) =
+        (quotientHomogeneousBasis S n d i : Source S n ⧸ hankelIdeal S n) := by
+  by_cases hn : n = 0
+  · subst n
+    rw [quotientHomogeneousBasis_zero_apply, quotientHomogeneousBasis_zero_apply]
+    rw [Ideal.Quotient.mkₐ_eq_mk R, Ideal.quotientMap_mk,
+      ← Ideal.Quotient.mkₐ_eq_mk S]
+    simp only [map_pow, MvPolynomial.map_X]
+  · have hn' : 1 ≤ n := Nat.one_le_iff_ne_zero.mpr hn
+    rw [quotientHomogeneousBasis_apply_of_pos R n d hn',
+      quotientHomogeneousBasis_apply_of_pos S n d hn']
+    have ht := ((twoExponentIndex (n * d)).symm i).2
+    rw [twoExponentIndex_symm] at ht
+    -- Equality is checked in the parametrization only after excluding `n = 0`.
+    apply quotientCoefficientEmbedding_injective S n hn'
+    rw [Ideal.Quotient.mkₐ_eq_mk R, Ideal.quotientMap_mk,
+      ← Ideal.Quotient.mkₐ_eq_mk S]
+    simp only [MvPolynomial.map_monomial, map_one,
+      quotientCoefficientEmbedding_mk, rncMap_monomial,
+      (fiberNormalExponent_degree R n d hn' _ ht).2,
+      (fiberNormalExponent_degree S n d hn' _ ht).2]
+
+/-- Multiplication of homogeneous basis vectors in the full Hankel quotient
+adds their degrees and indices. This holds over every commutative ring,
+including zero rings and rings with nilpotents, and for all `n`, `d`, and `e`.
+At `n = 0`, it is the power law for the surviving variable. -/
+theorem quotientHomogeneousBasis_mul (R : Type u) [CommRing R] (n d e : ℕ)
+    (i : Fin (n * d + 1)) (j : Fin (n * e + 1)) :
+    let k : Fin (n * (d + e) + 1) :=
+      ⟨i.val + j.val, Nat.lt_succ_of_le (by
+        simpa only [Nat.mul_add] using
+          Nat.add_le_add (Nat.le_of_lt_succ i.isLt) (Nat.le_of_lt_succ j.isLt))⟩
+    (quotientHomogeneousBasis R n d i : Source R n ⧸ hankelIdeal R n) *
+        (quotientHomogeneousBasis R n e j : Source R n ⧸ hankelIdeal R n) =
+      (quotientHomogeneousBasis R n (d + e) k : Source R n ⧸ hankelIdeal R n) := by
+  dsimp only
+  by_cases hn0 : n = 0
+  · subst n
+    simp only [quotientHomogeneousBasis_zero_apply, ← map_mul, ← pow_add]
+  · have hn : 1 ≤ n := Nat.one_le_iff_ne_zero.mpr hn0
+    have hvector (a : ℕ) (l : Fin (n * a + 1)) :
+        quotientCoefficientEmbedding R n hn
+            (quotientHomogeneousBasis R n a l : Source R n ⧸ hankelIdeal R n) =
+          monomial (Finsupp.single 0 (n * a - l.val) + Finsupp.single 1 l.val) 1 := by
+      rw [quotientHomogeneousBasis_apply_of_pos R n a hn,
+        quotientCoefficientEmbedding_mk, rncMap_monomial]
+      have h := (fiberNormalExponent_degree R n a hn
+        ((twoExponentIndex (n * a)).symm l).1 ((twoExponentIndex (n * a)).symm l).2).2
+      simpa only [twoExponentIndex_symm] using
+        congrArg (fun t : Fin 2 →₀ ℕ => monomial t (1 : R)) h
+    apply quotientCoefficientEmbedding_injective R n hn
+    simp only [map_mul, hvector, monomial_mul_monomial, mul_one]
+    apply congrArg (fun t : Fin 2 →₀ ℕ => monomial t (1 : R))
+    have hi : i.val ≤ n * d := Nat.le_of_lt_succ i.isLt
+    have hj : j.val ≤ n * e := Nat.le_of_lt_succ j.isLt
+    have hdiff : n * d - i.val + (n * e - j.val) =
+        n * (d + e) - (i.val + j.val) := by
+      rw [Nat.mul_add]
+      omega
+    ext a
+    fin_cases a <;> simp [hdiff]
 
 /-- Coordinates of a homogeneous representative for positive `n` are the
 coefficients of its parametrization, in increasing order of the second exponent. -/

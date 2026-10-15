@@ -60,6 +60,23 @@ the split quadric, together with its coordinate algebra and localization charts.
   without a domain, Noetherianity or positive-degree premise. This is
   distinct from coefficient-flatness of the Hankel quotient; see the
   [flatness guide](docs/README.md#raw-parametrization-flatness).
+- **Flatness over the full Hankel quotient:** For every
+  `(R : Type u) [CommRing R]` and every `n : ℕ`,
+  [`quotientMap_flat_iff`](ToricIdeals/RationalNormalCurve/QuotientMapFlatness.lean)
+  says `(quotientMap R n).toRingHom.Flat ↔ n = 1 ∨ Subsingleton R`.
+  Here [`quotientMap`](ToricIdeals/RationalNormalCurve/QuotientMap.lean) goes
+  from the full `Source R n ⧸ hankelIdeal R n` to the full bivariate
+  `Target R`, not to the parametrization image. Its scalar action is
+  `q • p = quotientMap R n q * p`. No domain, nontriviality or
+  positive-degree assumption is needed. Degree zero retains its source
+  variable in the quotient although its image is `1`; degree one is flat
+  over every coefficient ring, and zero coefficients give flatness in all
+  degrees. For nontrivial coefficients and `2 ≤ n`, the
+  [named clients](ToricIdealsTest/QuotientMapFlatnessType.lean) contrast
+  coefficient-`R` flatness of the full quotient with nonflatness of this
+  quotient-to-target map. The
+  [independent boundary controls](ToricIdealsTest/QuotientMapFlatnessModels.lean)
+  use a separate quotient lift and include nilpotent `ZMod 4` coefficients.
 - **Raw parametrization finite type and module finiteness:** For every
   `(R : Type u) [CommSemiring R]` and `n : ℕ`, let
   `f = rncMap R n : Source R n →+* Target R`, with `Xᵢ ↦ U^(n-i)V^i`.
@@ -206,6 +223,14 @@ the split quadric, together with its coordinate algebra and localization charts.
   rank. The [coordinate clients](ToricIdealsTest/Audit/RationalNormalCurveHomogeneousBasisClients.lean)
   reconstruct a bivariate quadratic and retain a nonzero square-zero
   coefficient in the five-coordinate conic component over `ZMod 4`.
+  [`quotientMap_quotientHomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean)
+  preserves every basis vector and its index under coefficient change along
+  any homomorphism `R →+* S` of commutative rings in independent universes.
+  The equality is in the full Hankel quotient, including `n = 0`, `d = 0`
+  and zero rings, with no injectivity or flatness premise. The
+  [coefficient-change clients](ToricIdealsTest/Audit/RationalNormalCurveHomogeneousBasisNaturality.lean)
+  show how a nilpotent coefficient perturbation is erased by `ZMod 4 → ZMod 2`
+  and retain the cubic variable class at `n = 0`.
 - **Krull dimensions in degrees zero and one:** For every universe-polymorphic
   Noetherian commutative coefficient ring `R`,
   [`ringKrullDim_quotient_hankelIdeal_zero`](ToricIdeals/RationalNormalCurve/Dimension.lean)
@@ -303,10 +328,12 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
-| [`ToricIdeals.RationalNormalCurve.HomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean) | Explicit finite coefficient bases and coordinates of all homogeneous components of the full Hankel quotient |
+| [`ToricIdeals.RationalNormalCurve.HomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean) | Explicit finite coefficient bases and coordinates of all homogeneous components of the full Hankel quotient, preserved with their indices under arbitrary coefficient change |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.MapFlatness`](ToricIdeals/RationalNormalCurve/MapFlatness.lean) | All-degree full-source ring-map flatness criterion over commutative rings |
 | [`ToricIdeals.RationalNormalCurve.MapSurjectivity`](ToricIdeals/RationalNormalCurve/MapSurjectivity.lean) | All-degree full-target raw parametrization surjectivity over commutative semirings |
+| [`ToricIdeals.RationalNormalCurve.QuotientMap`](ToricIdeals/RationalNormalCurve/QuotientMap.lean) | Full Hankel quotient parametrization and representative formulas in every degree |
+| [`ToricIdeals.RationalNormalCurve.QuotientMapFlatness`](ToricIdeals/RationalNormalCurve/QuotientMapFlatness.lean) | All-degree flatness criterion for the full target over the full Hankel quotient |
 | [`ToricIdeals.RationalNormalCurve.ParametrizationFinite`](ToricIdeals/RationalNormalCurve/ParametrizationFinite.lean) | All-degree finite type and relative finite-module criterion for the full raw parametrization over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.Noetherian`](ToricIdeals/RationalNormalCurve/Noetherian.lean) | All-degree Noetherian ring and left coefficient-module criteria |
 | [`ToricIdeals.RationalNormalCurve.Jacobson`](ToricIdeals/RationalNormalCurve/Jacobson.lean) | All-degree coefficient criterion for quotient Jacobsonness |
@@ -439,9 +466,21 @@ coefficient augmentation and freeness, together with Mathlib's nontrivial
 free-module result and transport from nonempty-index finitely supported
 functions for zero coefficients. Its tensor clients directly reuse Mathlib's
 faithfully-flat injectivity reflection and canonical unit injection. The
+quotient-map flatness proof uses the origin derivative on a two-generated quotient ideal and a linear
+coefficient functional on the target to exhibit the obstruction to flatness
+of the quotient parametrization. That argument combines this library's
+exponent-image criterion and coefficient-vanishing API with Mathlib's partial
+derivations, additive quotient descent, tensor maps and flat-module
+preservation of injections. The boundary degrees use the bijective quotient
+projection and this library's raw-map flatness criterion. This flatness
+classification is independent of the cited source motivation for the Hankel
+presentation. The
 augmentation-kernel description reuses the evaluation-ideal theorem in
 multivariate-polynomials and Mathlib's ideal map/comap APIs; the coefficient
-quotient clients instantiate Mathlib's first isomorphism theorem. The code
+quotient clients instantiate Mathlib's first isomorphism theorem. Homogeneous-basis
+coefficient change uses the library's characteristic representative laws and
+Hankel kernel theorem, together with Mathlib's polynomial and quotient maps;
+independent terminal choices are compared through their images. The code
 depends on mathlib and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
 credited tools, not bundled sources. The Markdown adapter follows earlier
 Formal Frontier documentation tooling.

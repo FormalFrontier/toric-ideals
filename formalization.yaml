@@ -14,7 +14,9 @@ project:
     zero rings and degree zero, all-degree
     standard-graded homogeneity of the original Hankel ideal, explicit bases
     indexed by Fin (n*d+1) and finite coordinates for every degree-d component
-    of the full Hankel quotient over arbitrary commutative rings, all-degree
+    of the full Hankel quotient over arbitrary commutative rings, with basis
+    vectors preserved by arbitrary coefficient homomorphisms in independent
+    universes, all-degree
     coefficient criteria for domain, reduced, Noetherian and Jacobson Hankel
     quotient rings, the all-degree criterion
     that the Hankel quotient is Artinian over itself exactly for zero
@@ -87,6 +89,9 @@ sources:
       exponent-total identity and terminal normalizer, then transport Mathlib's
       supported monomial basis and finite antidiagonal enumeration. The
       one-variable case instead uses the bottom-ideal polynomial quotient.
+      Coefficient change of these indexed bases compares independently chosen
+      terminal representatives through the Hankel kernel theorem and reuses
+      Mathlib's polynomial and quotient homomorphisms.
 
   - title: "The Rising Sea: Foundations of Algebraic Geometry"
     authors:
@@ -159,6 +164,14 @@ status:
     Root-import clients reconstruct a bivariate quadratic, verify a conic
     relation in finite coordinates and retain a nonzero square-zero coefficient
     in the five-coordinate ZMod 4 conic component.
+    quotientMap_quotientHomogeneousBasis sends each indexed vector to the
+    vector with the same index under the quotient homomorphism induced by any
+    coefficient homomorphism R →+* S, for arbitrary commutative rings in
+    independent universes and all n,d, including zero. The ideal-preservation
+    witness is derived from map_hankelIdeal; no injectivity or flatness premise
+    is needed. Its clients erase a nonzero coefficient-2 perturbation over
+    ZMod 4 when mapping to ZMod 2, retain the scaled cubic variable class in
+    the full n = 0 quotient and identify degree-zero scalar images.
     ToricIdeals.RationalNormalCurve.ExponentImage provides
     mem_mrange_rncExponent_iff: for every n : ℕ and t : Fin 2 →₀ ℕ,
     membership in AddMonoidHom.mrange (rncExponent n) is equivalent to
@@ -270,7 +283,10 @@ fidelity:
     image or quotient self-action. The positive-n coordinate computation
     rescales source degree d to target degree n*d; the separate n = 0
     computation retains X₀^d. Fin (n*d+1) is the index of explicit basis data,
-    not a dimension assertion over a zero ring. The exponent-image criterion has no coefficient-ring or
+    not a dimension assertion over a zero ring. Coefficient change of basis
+    vectors is an equality in the full quotient, not an identification of
+    independently chosen terminal exponents or a claim that arbitrary
+    coefficient change is injective. The exponent-image criterion has no coefficient-ring or
     positive-degree premise. The raw-map surjectivity classifier also has no
     ring, domain, Noetherianity, nontriviality or positive-degree premise.
     Degree zero sends the sole source variable to one and has constant image;
@@ -339,6 +355,9 @@ acknowledgements: >-
   with Mathlib's coefficient algebra maps, supported monomial bases and
   finite antidiagonal equivalence; degree zero of the curve uses the full
   one-variable polynomial quotient instead of its parametrization image.
+  Indexed-basis coefficient change compares the terminal representatives
+  through the Hankel kernel theorem, using Mathlib's polynomial coefficient
+  and quotient maps without identifying their separate choices.
   The augmentation-kernel description uses the evaluation-ideal theorem from
   multivariate-polynomials and Mathlib's ideal map/comap APIs. Its coefficient
   quotient clients use Mathlib's first isomorphism theorem for algebras.
