@@ -11,11 +11,13 @@ public import ToricIdeals.RationalNormalCurve.Augmentation
 public import ToricIdeals.RationalNormalCurve.AxisProjection
 public import ToricIdeals.RationalNormalCurve.BaseChange
 public import ToricIdeals.RationalNormalCurve.CoefficientAlgebra
+public import ToricIdeals.RationalNormalCurve.CoefficientMap
 public import ToricIdeals.RationalNormalCurve.CoefficientFiniteness
 public import ToricIdeals.RationalNormalCurve.CoordinateRegularity
 public import ToricIdeals.RationalNormalCurve.Dimension
 public import ToricIdeals.RationalNormalCurve.EndpointMap
 public import ToricIdeals.RationalNormalCurve.ExponentImage
+public import ToricIdeals.RationalNormalCurve.FormallySmooth
 public import ToricIdeals.RationalNormalCurve.Freeness
 public import ToricIdeals.RationalNormalCurve.Homogeneous
 public import ToricIdeals.RationalNormalCurve.HomogeneousBasis

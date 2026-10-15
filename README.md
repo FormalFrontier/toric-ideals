@@ -11,12 +11,29 @@ the split quadric, together with its coordinate algebra and localization charts.
 
 ## Headline results
 
+- **Coefficient maps on full Hankel quotients:** For commutative rings `R` and
+  `S`, an arbitrary ring homomorphism `φ : R →+* S` induces an injective
+  (respectively surjective) map on the full Hankel quotients exactly when `φ`
+  is injective (respectively surjective), for every `n`, including zero.
+  The [coefficient-map criteria](ToricIdeals/RationalNormalCurve/CoefficientMap.lean)
+  concern the stock ideal quotient map, not the parametrization into bivariate
+  polynomials. No domain, field, flatness or nontriviality hypothesis is needed.
+
 - **Integral closedness of full Hankel quotients:** For any commutative domain
   `R` and every `n : ℕ`,
   [`quotient_isIntegrallyClosed_iff`](ToricIdeals/RationalNormalCurve/IntegralClosure.lean)
   states `IsIntegrallyClosed (Source R n ⧸ hankelIdeal R n) ↔ IsIntegrallyClosed R`,
   using the canonical quotient and integral-closedness predicate. At `n = 0` the
   full quotient is `R[X₀]`, not the raw parameterization image `R`.
+
+- **Formal smoothness of full Hankel quotients:** For any commutative ring
+  `R` and every `n : ℕ`,
+  [`quotient_formallySmooth_iff`](ToricIdeals/RationalNormalCurve/FormallySmooth.lean)
+  states that `Algebra.FormallySmooth R (Source R n ⧸ hankelIdeal R n)` holds
+  if and only if `n ≤ 1 ∨ Subsingleton R`, for the canonical coefficient
+  algebra action. Thus the quotient is formally smooth exactly in degrees zero
+  and one, or over a zero coefficient ring. The degree-zero quotient remains
+  `R[X₀]`, not the parametrization image. No characteristic restriction is needed.
 
 - **Coefficientwise fiber normalization:** When *every* source monomial and
   coefficient is congruent modulo a left ideal to a source exponent chosen by
@@ -405,9 +422,11 @@ The root import `ToricIdeals` re-exports the leaves below except
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.Cotangent`](ToricIdeals/RationalNormalCurve/Cotangent.lean) | Coefficient-ring basis of the augmentation kernel modulo its square, prescribed quotient-variable vectors and raw linear coordinates; direct import |
 | [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness, flatness and faithful flatness of the full Hankel quotient for its canonical coefficient action in every degree |
+| [`ToricIdeals.RationalNormalCurve.CoefficientMap`](ToricIdeals/RationalNormalCurve/CoefficientMap.lean) | Injectivity and surjectivity of full Hankel quotient coefficient maps in every degree |
 | [`ToricIdeals.RationalNormalCurve.Dimension`](ToricIdeals/RationalNormalCurve/Dimension.lean) | Full Hankel quotient dimension in every degree over Noetherian commutative coefficient rings, with degree-zero and degree-one specializations |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity, full-quotient endpoint basis and coordinate API |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
+| [`ToricIdeals.RationalNormalCurve.FormallySmooth`](ToricIdeals/RationalNormalCurve/FormallySmooth.lean) | All-degree formal-smoothness criterion for the full Hankel quotient over arbitrary commutative coefficients |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.GradedAlgebra`](ToricIdeals/RationalNormalCurve/GradedAlgebra.lean) | Standard multiplicative grading of the full Hankel quotient and degree-zero projection compatibility with coefficient augmentation; direct import |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
