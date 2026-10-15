@@ -147,7 +147,7 @@ the split quadric, together with its coordinate algebra and localization charts.
   This is the full Hankel quotient, including the polynomial cases `n = 0, 1`,
   not a replacement by the parametrization image; see
   [base change and its representative formula](docs/README.md#scalar-base-change-of-hankel-quotients).
-- **Endpoint coordinates and finite Hankel quotient:** For every
+- **Endpoint coordinates, basis and finite Hankel quotient:** For every
   `(R : Type u) [CommRing R]` and `n : ℕ`, the Hankel quotient
   `Source R n ⧸ hankelIdeal R n` is integral and a finite module over
   `MvPolynomial (Fin 2) R` through
@@ -155,10 +155,22 @@ the split quadric, together with its coordinate algebra and localization charts.
   ([`endpointMap_isIntegral`](ToricIdeals/RationalNormalCurve/EndpointMap.lean),
   [`endpointMap_finite`](ToricIdeals/RationalNormalCurve/EndpointMap.lean)).
   For `1 ≤ n`, the endpoint map is injective
-  ([`endpointMap_injective`](ToricIdeals/RationalNormalCurve/EndpointMap.lean)).
+  ([`endpointMap_injective`](ToricIdeals/RationalNormalCurve/EndpointMap.lean)), and
+  [`endpointBasis`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) is a
+  `Fin n`-indexed basis of the full quotient with vectors `1, X₁, …, Xₙ₋₁`.
+  Its module is exactly `Algebra.toModule` for `endpointMap.toAlgebra`, so
+  scalars act by `p • q = endpointMap n p * q`. The `repr` API
+  (`endpointBasis_repr_one`, `endpointBasis_repr_X`,
+  `endpointBasis_repr_endpointMap` and `endpointBasis_repr_endpointMap_mul`)
+  gives the coordinates of the unit, interior variable classes and endpoint
+  polynomials, and computes multiplication by endpoint polynomials coordinatewise.
+  These statements allow arbitrary commutative coefficient rings, including
+  the zero ring; the indexed basis makes no numerical rank or normality claim.
+  Finite freeness and flatness over the endpoint polynomial ring alone do not
+  prove normality.
   At `n = 0`, the Hankel ideal is `⊥`: the target is the full one-variable
-  polynomial quotient and both endpoints map to its single variable class,
-  rather than using the raw parametrization `X₀ ↦ 1`.
+  polynomial quotient, retaining all `X₀^d`, and both endpoints map to its
+  single variable class, rather than using the raw parametrization `X₀ ↦ 1`.
 - **Finite coefficient modules in every degree:** For every
   `(R : Type u) [CommRing R]` and `n : ℕ`,
   [`quotient_moduleFinite_iff`](ToricIdeals/RationalNormalCurve/CoefficientFiniteness.lean)
@@ -369,13 +381,14 @@ The root import `ToricIdeals` re-exports the leaves below except
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness, flatness and faithful flatness of the full Hankel quotient for its canonical coefficient action in every degree |
 | [`ToricIdeals.RationalNormalCurve.Dimension`](ToricIdeals/RationalNormalCurve/Dimension.lean) | Full Hankel quotient dimension in every degree over Noetherian commutative coefficient rings, with degree-zero and degree-one specializations |
-| [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
+| [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity, full-quotient endpoint basis and coordinate API |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.GradedAlgebra`](ToricIdeals/RationalNormalCurve/GradedAlgebra.lean) | Standard multiplicative grading of the full Hankel quotient and degree-zero projection compatibility with coefficient augmentation; direct import |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
 | [`ToricIdeals.RationalNormalCurve.HomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean) | Internal homogeneous decomposition of the full Hankel quotient, finite coefficient bases and coordinates of its components, preserved with their indices under arbitrary coefficient change |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |
+| [`ToricIdeals.RationalNormalCurve.IntegralClosure`](ToricIdeals/RationalNormalCurve/IntegralClosure.lean) | In every degree, the full Hankel quotient over a commutative domain is integrally closed if and only if its coefficient ring is |
 | [`ToricIdeals.RationalNormalCurve.MapFlatness`](ToricIdeals/RationalNormalCurve/MapFlatness.lean) | All-degree full-source ring-map flatness criterion over commutative rings |
 | [`ToricIdeals.RationalNormalCurve.MapSurjectivity`](ToricIdeals/RationalNormalCurve/MapSurjectivity.lean) | All-degree full-target raw parametrization surjectivity over commutative semirings |
 | [`ToricIdeals.RationalNormalCurve.QuotientMap`](ToricIdeals/RationalNormalCurve/QuotientMap.lean) | Full Hankel quotient parametrization and representative formulas in every degree |

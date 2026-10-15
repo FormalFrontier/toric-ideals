@@ -19,7 +19,10 @@ coefficient-ring boundary.
 The constant-class argument follows the kernel-containment reasoning in
 `ToricIdeals.RationalNormalCurve` and its coefficient-ring examples by
 Formal Frontier Agents. No example uses the integral, finite or injective
-endpoint-map theorems.
+endpoint-map theorems. A further example uses `endpointBasis` and its
+coordinate equivalence to give a unique two-polynomial expansion of every
+full conic quotient element over `ZMod 4`. This last example depends on the
+endpoint basis; the preceding coefficient and boundary models do not.
 -/
 
 open MvPolynomial
@@ -137,6 +140,45 @@ private theorem zero_ring_boundary (n : ℕ) :
     Subsingleton.elim _ _
   refine ⟨by decide, hunit, ?_⟩
   simpa only [map_zero] using congrArg (endpointMap (R := ZMod 1) n) hpoly
+
+/-- Every full conic quotient element has unique endpoint-polynomial
+coefficients on `1` and the interior variable class. -/
+private theorem conic_endpoint_coordinates
+    (q : Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) :
+    ∃! c : Fin 2 → MvPolynomial (Fin 2) (ZMod 4),
+      q = endpointMap (R := ZMod 4) 2 (c 0) +
+        endpointMap (R := ZMod 4) 2 (c 1) *
+          Ideal.Quotient.mk (hankelIdeal (ZMod 4) 2) (X (1 : Fin 3)) := by
+  let : Algebra (MvPolynomial (Fin 2) (ZMod 4))
+      (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) :=
+    (endpointMap (R := ZMod 4) 2).toAlgebra
+  let : Module (MvPolynomial (Fin 2) (ZMod 4))
+      (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) :=
+    @Algebra.toModule (MvPolynomial (Fin 2) (ZMod 4))
+      (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) _ _
+      (endpointMap (R := ZMod 4) 2).toAlgebra
+  let b := endpointBasis (ZMod 4) 2 (by decide)
+  have hzero : b (0 : Fin 2) = 1 := by
+    have hindex : (⟨0, by decide⟩ : Fin 2) = 0 := Fin.mk_zero' 2
+    simpa only [b, hindex] using endpointBasis_apply_zero (R := ZMod 4) 2 (by decide)
+  have hone : b (1 : Fin 2) =
+      Ideal.Quotient.mk (hankelIdeal (ZMod 4) 2) (X (1 : Fin 3)) := by
+    have hindex : (1 : Fin 2).castSucc = (1 : Fin 3) := by decide
+    simpa only [b, hindex] using
+      endpointBasis_apply_of_pos (R := ZMod 4) 2 (by decide) (1 : Fin 2) (by decide)
+  have hexp (c : Fin 2 → MvPolynomial (Fin 2) (ZMod 4)) :
+      b.equivFun.symm c = endpointMap (R := ZMod 4) 2 (c 0) +
+        endpointMap (R := ZMod 4) 2 (c 1) *
+          Ideal.Quotient.mk (hankelIdeal (ZMod 4) 2) (X (1 : Fin 3)) := by
+    rw [b.equivFun_symm_apply, Fin.sum_univ_two, hzero, hone]
+    simp only [Algebra.smul_def, RingHom.algebraMap_toAlgebra, mul_one]
+  refine ⟨b.equivFun q, ?_, ?_⟩
+  · exact (b.equivFun.symm_apply_apply q).symm.trans (hexp _)
+  · intro c hc
+    apply b.equivFun.symm.injective
+    calc
+      b.equivFun.symm c = q := (hexp c).trans hc.symm
+      _ = b.equivFun.symm (b.equivFun q) := (b.equivFun.symm_apply_apply q).symm
 
 end
 
