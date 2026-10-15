@@ -63,4 +63,5 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.RationalNormalCurveDimensionBaseCases",
   "ToricIdealsTest.QuotientMapCompatibility",
   "ToricIdealsTest.QuotientMapFlatnessType",
-  "ToricIdealsTest.QuotientMapFlatnessModels"]
+  "ToricIdealsTest.QuotientMapFlatnessModels",
+  "ToricIdealsTest.RationalNormalCurveMapUnramifiedSmallModels"]

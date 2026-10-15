@@ -67,6 +67,18 @@ the split quadric, together with its coordinate algebra and localization charts.
   without a domain, Noetherianity or positive-degree premise. This is
   distinct from coefficient-flatness of the Hankel quotient; see the
   [flatness guide](docs/README.md#raw-parametrization-flatness).
+- **Formal unramifiedness over the raw parametrization source:** For every
+  `(R : Type u) [CommRing R]` and `n : ℕ`,
+  [`rncMap_formallyUnramified_iff`](ToricIdeals/RationalNormalCurve/MapUnramified.lean)
+  says `RingHom.FormallyUnramified (rncMap R n) ↔ n = 1 ∨ Subsingleton R`.
+  The base is the full `Source R n = MvPolynomial (Fin (n + 1)) R` through
+  `(rncMap R n).toAlgebra`, and the target is the full bivariate polynomial
+  ring `Target R`. This is not formal unramifiedness over the coefficient
+  ring `R`, nor a property of the Hankel quotient or parametrization image.
+  Degree zero retains the source `R[X₀]` and sends `X₀` to `1`, not `0`;
+  the property is false for every nonzero `R`. Degree one is the identity,
+  and zero coefficient rings give formal unramifiedness in every degree.
+  No domain, nontriviality or positive-degree hypothesis is needed.
 - **Flatness over the full Hankel quotient:** For every
   `(R : Type u) [CommRing R]` and every `n : ℕ`,
   [`quotientMap_flat_iff`](ToricIdeals/RationalNormalCurve/QuotientMapFlatness.lean)
@@ -404,6 +416,7 @@ The root import `ToricIdeals` re-exports the leaves below except
 | [`ToricIdeals.RationalNormalCurve.IntegralClosure`](ToricIdeals/RationalNormalCurve/IntegralClosure.lean) | In every degree, the full Hankel quotient over a commutative domain is integrally closed if and only if its coefficient ring is |
 | [`ToricIdeals.RationalNormalCurve.MapFlatness`](ToricIdeals/RationalNormalCurve/MapFlatness.lean) | All-degree full-source ring-map flatness criterion over commutative rings |
 | [`ToricIdeals.RationalNormalCurve.MapSurjectivity`](ToricIdeals/RationalNormalCurve/MapSurjectivity.lean) | All-degree full-target raw parametrization surjectivity over commutative semirings |
+| [`ToricIdeals.RationalNormalCurve.MapUnramified`](ToricIdeals/RationalNormalCurve/MapUnramified.lean) | All-degree formal unramifiedness over the full raw parametrization source, via its induced algebra structure, over commutative rings |
 | [`ToricIdeals.RationalNormalCurve.QuotientMap`](ToricIdeals/RationalNormalCurve/QuotientMap.lean) | Full Hankel quotient parametrization and representative formulas in every degree |
 | [`ToricIdeals.RationalNormalCurve.QuotientMapFlatness`](ToricIdeals/RationalNormalCurve/QuotientMapFlatness.lean) | All-degree flatness criterion for the full target over the full Hankel quotient |
 | [`ToricIdeals.RationalNormalCurve.ParametrizationFinite`](ToricIdeals/RationalNormalCurve/ParametrizationFinite.lean) | All-degree finite type and relative finite-module criterion for the full raw parametrization over commutative semirings |

@@ -24,6 +24,7 @@ public import ToricIdeals.RationalNormalCurve.IntegralClosure
 public import ToricIdeals.RationalNormalCurve.Jacobson
 public import ToricIdeals.RationalNormalCurve.MapFlatness
 public import ToricIdeals.RationalNormalCurve.MapSurjectivity
+public import ToricIdeals.RationalNormalCurve.MapUnramified
 public import ToricIdeals.RationalNormalCurve.Noetherian
 public import ToricIdeals.RationalNormalCurve.ParametrizationFinite
 public import ToricIdeals.SplitQuadric.Exponents
@@ -68,6 +69,15 @@ over every commutative ring and in every degree, the full bivariate target is
 flat over the full source through the raw map exactly when the degree is one
 or the coefficients are subsingleton. Its source action is induced by
 `rncMap`, not the coefficient action on the target or Hankel quotient.
+
+`ToricIdeals.RationalNormalCurve.MapUnramified` provides
+`rncMap_formallyUnramified_iff`: for every `(R : Type u) [CommRing R]` and
+`n : ℕ`, `RingHom.FormallyUnramified (rncMap R n) ↔ n = 1 ∨ Subsingleton R`.
+The base is the full source polynomial ring through `(rncMap R n).toAlgebra`,
+not the coefficient ring, Hankel quotient or parametrization image. In degree
+zero the source remains `R[X₀]`, whose variable maps to `1` in the full
+bivariate target; the property is false for nonzero coefficients. Degree one
+is the identity, and zero coefficients give formal unramifiedness in all degrees.
 
 `ToricIdeals.RationalNormalCurve.QuotientMapFlatness` provides
 `quotientMap_flat_iff`: for every commutative coefficient ring `R` and every
