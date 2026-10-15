@@ -20,6 +20,7 @@ public import ToricIdeals.RationalNormalCurve.Freeness
 public import ToricIdeals.RationalNormalCurve.Homogeneous
 public import ToricIdeals.RationalNormalCurve.HomogeneousBasis
 public import ToricIdeals.RationalNormalCurve.Injectivity
+public import ToricIdeals.RationalNormalCurve.IntegralClosure
 public import ToricIdeals.RationalNormalCurve.Jacobson
 public import ToricIdeals.RationalNormalCurve.MapFlatness
 public import ToricIdeals.RationalNormalCurve.MapSurjectivity

@@ -7,6 +7,9 @@ module
 public import Mathlib.Algebra.Ring.Prod
 public import Mathlib.Data.ZMod.Basic
 public import ToricIdeals.RationalNormalCurve
+import Mathlib.RingTheory.Int.Basic
+import Mathlib.RingTheory.Polynomial.RationalRoot
+import ToricIdeals.RationalNormalCurve.IntegralClosure
 
 /-!
 # Coefficient-ring models for rational-normal-curve quotients
@@ -334,5 +337,15 @@ private theorem zero_coefficients_degree_zero_unit_not_prime_not_domain :
   · intro hdomain
     exact zmod_one_not_domain
       ((quotient_isDomain_iff (ZMod 1) 0).mp hdomain)
+
+-- The degree-two Hankel quotient over the integers is integrally closed.
+example : IsIntegrallyClosed (Source ℤ 2 ⧸ hankelIdeal ℤ 2) :=
+  (quotient_isIntegrallyClosed_iff ℤ 2).2 inferInstance
+
+-- The full degree-zero quotient is integrally closed over an integrally closed
+-- coefficient domain; its polynomial variable is retained.
+example (R : Type*) [CommRing R] [IsDomain R] [IsIntegrallyClosed R] :
+    IsIntegrallyClosed (Source R 0 ⧸ hankelIdeal R 0) :=
+  (quotient_isIntegrallyClosed_iff R 0).2 inferInstance
 
 end ToricIdeals.RationalNormalCurve.DomainModels

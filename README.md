@@ -11,6 +11,13 @@ the split quadric, together with its coordinate algebra and localization charts.
 
 ## Headline results
 
+- **Integral closedness of full Hankel quotients:** For any commutative domain
+  `R` and every `n : ℕ`,
+  [`quotient_isIntegrallyClosed_iff`](ToricIdeals/RationalNormalCurve/IntegralClosure.lean)
+  states `IsIntegrallyClosed (Source R n ⧸ hankelIdeal R n) ↔ IsIntegrallyClosed R`,
+  using the canonical quotient and integral-closedness predicate. At `n = 0` the
+  full quotient is `R[X₀]`, not the raw parameterization image `R`.
+
 - **Coefficientwise fiber normalization:** When *every* source monomial and
   coefficient is congruent modulo a left ideal to a source exponent chosen by
   its target index, an element whose coefficients sum to zero along target
