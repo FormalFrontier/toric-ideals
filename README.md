@@ -224,6 +224,21 @@ the split quadric, together with its coordinate algebra and localization charts.
   nilpotent coefficients and `n = 0` are included; at `n = 0` the components
   retain the powers of the surviving polynomial variable. No field, domain,
   nontriviality, flatness or positive-degree premise is required.
+- **Standard graded algebra of the full Hankel quotient:** For every
+  `(R : Type u) [CommRing R]` and `n : ℕ`,
+  [`quotientHomogeneousGradedAlgebra`](ToricIdeals/RationalNormalCurve/GradedAlgebra.lean)
+  supplies `GradedAlgebra (quotientHomogeneousSubmodule R n)` on the existing
+  full quotient and its canonical coefficient action. Mathlib's decomposition
+  algebra equivalence, typed graded products and projections are then available
+  directly. `quotientHomogeneous_projZeroRingHom` identifies the quotient-valued
+  degree-zero ring homomorphism with coefficient inclusion after
+  `quotientAugmentation`; the degree-zero piece is the coefficient image.
+  At parameter `n = 0`, the full quotient is `R[X₀]`, with `X₀` in homogeneous
+  degree one, projected to zero rather than to its parametrization image `1`.
+  Zero rings and nilpotent coefficients are included, without a field, domain
+  or nontriviality assumption. The [degree-zero examples](ToricIdealsTest/Audit/RationalNormalCurveHomogeneousBasisClients.lean)
+  use the integer conic and retain the nonzero variable at parameter zero and
+  the nonzero square-zero coefficient `2` over `ZMod 4`.
 - **Explicit homogeneous-component bases:** For every
   `(R : Type u) [CommRing R]` and all `n d : ℕ`,
   [`quotientHomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean)
@@ -342,11 +357,12 @@ coverage are tracked separately and not claimed by this README.
 
 ## Modules
 
-Every leaf below is re-exported by the root import `ToricIdeals`.
+The root import `ToricIdeals` re-exports the leaves below except
+`ToricIdeals.RationalNormalCurve.GradedAlgebra`, which is available by direct import.
 
 | Module | Contents |
 | --- | --- |
-| [`ToricIdeals`](ToricIdeals.lean) | Root import for all public APIs |
+| [`ToricIdeals`](ToricIdeals.lean) | Root import for the re-exported public APIs |
 | [`ToricIdeals.HomogeneousImage`](ToricIdeals/HomogeneousImage.lean) | Transport of internal submodule decompositions under surjective linear maps with homogeneous kernel |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
@@ -356,6 +372,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
+| [`ToricIdeals.RationalNormalCurve.GradedAlgebra`](ToricIdeals/RationalNormalCurve/GradedAlgebra.lean) | Standard multiplicative grading of the full Hankel quotient and degree-zero projection compatibility with coefficient augmentation; direct import |
 | [`ToricIdeals.RationalNormalCurve.Homogeneous`](ToricIdeals/RationalNormalCurve/Homogeneous.lean) | Standard source-graded homogeneity of the Hankel ideal |
 | [`ToricIdeals.RationalNormalCurve.HomogeneousBasis`](ToricIdeals/RationalNormalCurve/HomogeneousBasis.lean) | Internal homogeneous decomposition of the full Hankel quotient, finite coefficient bases and coordinates of its components, preserved with their indices under arbitrary coefficient change |
 | [`ToricIdeals.RationalNormalCurve.Injectivity`](ToricIdeals/RationalNormalCurve/Injectivity.lean) | All-degree raw parametrization injectivity over commutative semirings |
@@ -398,7 +415,9 @@ full commit from that history. Libraries used together must share a compatible
 Mathlib revision and toolchain; see [build](#build) for this checkout's pinned
 environment.
 
-Import `ToricIdeals` for all public APIs, or import a leaf module directly.
+Import `ToricIdeals` for the re-exported public APIs, or import a leaf module
+directly. The standard quotient grading requires the direct import
+`ToricIdeals.RationalNormalCurve.GradedAlgebra`, as noted in [Modules](#modules).
 The following complete module is stored verbatim in
 [`ToricIdealsTest/ReadmeKernel.lean`](ToricIdealsTest/ReadmeKernel.lean) and built
 by the default test target:

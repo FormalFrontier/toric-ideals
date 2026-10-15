@@ -6,6 +6,8 @@ module
 
 import Mathlib.Data.ZMod.Basic
 import ToricIdeals
+import ToricIdeals.RationalNormalCurve.GradedAlgebra
+import Mathlib.Algebra.Algebra.Operations
 
 /-!
 # Clients of homogeneous Hankel-quotient coordinates
@@ -14,6 +16,11 @@ These examples use the public basis and coordinate API. They reconstruct a
 bivariate polynomial, check a conic relation by its five coordinates, and
 retain a nonzero square-zero coefficient in a positive-degree component.
 The one-variable and zero-coefficient boundaries use the full quotient.
+
+The integer conic also uses the standard grading through its degree-zero ring
+homomorphism and coefficient-augmentation compatibility. The parameter-zero
+variable has homogeneous degree one, and degree zero retains nilpotent
+coefficients. These operations also apply over the zero coefficient ring.
 -/
 
 open MvPolynomial
@@ -161,6 +168,69 @@ private theorem zeroCoefficient_vectors_coincide :
 private theorem zeroCoefficient_inverse_coordinates (n d : ℕ) :
     (quotientHomogeneousCoordinates (ZMod 1) n d).symm (fun _ => 0) = 0 :=
   (quotientHomogeneousCoordinates (ZMod 1) n d).symm.map_zero
+
+private theorem integer_conic_zero_piece :
+    quotientHomogeneousSubmodule ℤ 2 0 =
+      (1 : Submodule ℤ (Source ℤ 2 ⧸ hankelIdeal ℤ 2)) := by
+  simpa only [quotientHomogeneousSubmodule, MvPolynomial.homogeneousSubmodule_zero] using
+    (Submodule.map_one (Ideal.Quotient.mkₐ ℤ (hankelIdeal ℤ 2)))
+
+private theorem integer_conic_zero_projection_mul
+    (q r : Source ℤ 2 ⧸ hankelIdeal ℤ 2) :
+    GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) (q * r) =
+      GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) q *
+        GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) r :=
+  (GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2)).map_mul q r
+
+private theorem integer_conic_zero_projection_augmentation
+    (q : Source ℤ 2 ⧸ hankelIdeal ℤ 2) :
+    GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) q =
+      algebraMap ℤ (Source ℤ 2 ⧸ hankelIdeal ℤ 2) (quotientAugmentation ℤ 2 q) :=
+  RingHom.congr_fun (quotientHomogeneous_projZeroRingHom ℤ 2) q
+
+private theorem integer_zero_parameter :
+    Ideal.Quotient.mkₐ ℤ (hankelIdeal ℤ 0) (MvPolynomial.X (0 : Fin 1)) ≠ 0 ∧
+      Ideal.Quotient.mkₐ ℤ (hankelIdeal ℤ 0) (MvPolynomial.X (0 : Fin 1)) ∈
+        quotientHomogeneousSubmodule ℤ 0 1 ∧
+      GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 0)
+        (Ideal.Quotient.mkₐ ℤ (hankelIdeal ℤ 0) (MvPolynomial.X (0 : Fin 1))) = 0 ∧
+      GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 0) 1 = 1 := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro hzero
+    have hmem := Ideal.Quotient.eq_zero_iff_mem.mp hzero
+    rw [hankelIdeal_zero] at hmem
+    exact MvPolynomial.X_ne_zero (R := ℤ) (0 : Fin 1) (Ideal.mem_bot.mp hmem)
+  · exact (mem_quotientHomogeneousSubmodule_iff ℤ 0 1 _).mpr
+      ⟨MvPolynomial.X 0, isHomogeneous_X ℤ 0, rfl⟩
+  · rw [quotientHomogeneous_projZeroRingHom, RingHom.comp_apply,
+      AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom, Ideal.Quotient.mkₐ_eq_mk,
+      quotientAugmentation_mk, MvPolynomial.constantCoeff_X, map_zero]
+  · exact map_one _
+
+private theorem mod_four_nilpotent_coefficient :
+    algebraMap (ZMod 4) (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) 2 ≠ 0 ∧
+      algebraMap (ZMod 4) (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) 2 *
+        algebraMap (ZMod 4) (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) 2 = 0 ∧
+      GradedRing.projZeroRingHom (quotientHomogeneousSubmodule (ZMod 4) 2)
+        (algebraMap (ZMod 4) (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) 2) =
+          algebraMap (ZMod 4) (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) 2 := by
+  refine ⟨?_, ?_, ?_⟩
+  · intro hzero
+    have htwo : (2 : ZMod 4) = 0 := by
+      simpa only [AlgHom.commutes, Algebra.algebraMap_self_apply, map_zero] using
+        congrArg (quotientAugmentation (ZMod 4) 2) hzero
+    exact (by decide : (2 : ZMod 4) ≠ 0) htwo
+  · have hsq : (2 : ZMod 4) * (2 : ZMod 4) = 0 := by decide
+    rw [← map_mul, hsq, map_zero]
+  · rw [quotientHomogeneous_projZeroRingHom, RingHom.comp_apply,
+      AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom, AlgHom.commutes,
+      Algebra.algebraMap_self_apply]
+
+private theorem zero_coefficients :
+    GradedRing.projZeroRingHom (quotientHomogeneousSubmodule (ZMod 1) 0)
+      (Ideal.Quotient.mkₐ (ZMod 1) (hankelIdeal (ZMod 1) 0)
+        (MvPolynomial.X (0 : Fin 1))) = 0 := by
+  exact Subsingleton.elim _ _
 
 end
 
