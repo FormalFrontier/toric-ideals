@@ -238,16 +238,19 @@ the split quadric, together with its coordinate algebra and localization charts.
   It extends finite basis coordinates, sends `s ⊗ₜ bᵢ` to `s • bᵢ`, and
   commutes with the inclusions into the full quotients and their scalar-change
   equivalence, without flatness or injectivity assumptions.
-- **Krull dimensions in degrees zero and one:** For every universe-polymorphic
-  Noetherian commutative coefficient ring `R`,
+- **Krull dimension in every degree:** For every
+  `(R : Type u) [CommRing R] [IsNoetherianRing R]` and `n : ℕ`,
+  [`ringKrullDim_quotient_hankelIdeal`](ToricIdeals/RationalNormalCurve/Dimension.lean)
+  gives the full Hankel quotient formula
+  `ringKrullDim (Source R n ⧸ hankelIdeal R n) = ringKrullDim R + (if n = 0 then 1 else 2)`.
+  The equality takes values in `WithBot ℕ∞`, including zero rings (dimension
+  `⊥`) and coefficients of infinite dimension. No field, domain, nontriviality,
+  finite-dimension or positive-degree hypothesis is imposed. Degree zero retains
+  its one polynomial variable; the quotient is not the raw parametrization image.
+  The specializations
   [`ringKrullDim_quotient_hankelIdeal_zero`](ToricIdeals/RationalNormalCurve/Dimension.lean)
-  and `ringKrullDim_quotient_hankelIdeal_one` give the dimensions of the full
-  Hankel quotients as `ringKrullDim R + 1` and `ringKrullDim R + 2`.
-  These equalities take values in `WithBot ℕ∞`, including zero rings (dimension
-  `⊥`) and coefficients of infinite dimension. No domain, nontriviality or
-  finite-dimension hypothesis is imposed. Degree zero retains its one polynomial
-  variable; it is not the parametrization image. This dimension API covers
-  degrees zero and one only, not a general-degree dimension formula.
+  and [`ringKrullDim_quotient_hankelIdeal_one`](ToricIdeals/RationalNormalCurve/Dimension.lean)
+  give `ringKrullDim R + 1` and `ringKrullDim R + 2`, respectively.
 - **Noetherian quotient in every degree:** For any `(R : Type u) [CommRing R]` and every
   `n : ℕ`, including zero,
   [`quotient_isNoetherianRing_iff`](ToricIdeals/RationalNormalCurve/Noetherian.lean)
@@ -330,7 +333,7 @@ Every leaf below is re-exported by the root import `ToricIdeals`.
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness, flatness and faithful flatness of the full Hankel quotient for its canonical coefficient action in every degree |
-| [`ToricIdeals.RationalNormalCurve.Dimension`](ToricIdeals/RationalNormalCurve/Dimension.lean) | Full Hankel quotient dimensions in degrees zero and one over every Noetherian commutative coefficient ring |
+| [`ToricIdeals.RationalNormalCurve.Dimension`](ToricIdeals/RationalNormalCurve/Dimension.lean) | Full Hankel quotient dimension in every degree over Noetherian commutative coefficient rings, with degree-zero and degree-one specializations |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity |
 | [`ToricIdeals.RationalNormalCurve.ExponentImage`](ToricIdeals/RationalNormalCurve/ExponentImage.lean) | Arithmetic characterization of the natural exponent image in every degree |
 | [`ToricIdeals.RationalNormalCurve.Freeness`](ToricIdeals/RationalNormalCurve/Freeness.lean) | All-degree full-source module freeness criterion over commutative semirings |
@@ -487,9 +490,15 @@ multivariate-polynomials and Mathlib's ideal map/comap APIs; the coefficient
 quotient clients instantiate Mathlib's first isomorphism theorem. Homogeneous-basis
 coefficient change uses the library's characteristic representative laws and
 Hankel kernel theorem, together with Mathlib's polynomial and quotient maps;
-independent terminal choices are compared through their images. The code
-depends on mathlib and multivariate-polynomials (both Apache-2.0); Lean and doc-gen4 are separately
-credited tools, not bundled sources. The Markdown adapter follows earlier
+independent terminal choices are compared through their images. The Hankel
+quotient dimension formula combines this library's endpoint map with the
+injective-integral dimension theorem in
+[minimal-primes](https://github.com/FormalFrontier/minimal-primes/blob/537058e2a3f4610d3126f22af057a1f6cd96c886/MinimalPrimes/RingTheory/KrullDimension/Integral.lean),
+whose finite-chain proof uses incomparability, lying-over and going-up,
+and Mathlib's Noetherian polynomial dimension formula. The code depends on
+mathlib, multivariate-polynomials and minimal-primes (all Apache-2.0; see the
+[complete minimal-primes license](https://github.com/FormalFrontier/minimal-primes/blob/537058e2a3f4610d3126f22af057a1f6cd96c886/LICENSE)).
+Lean and doc-gen4 are separately credited tools, not bundled sources. The Markdown adapter follows earlier
 Formal Frontier documentation tooling.
 Contributions use AI-assisted development and independent agent review;
 `Authors: Formal Frontier Agents` is collective author credit, not a

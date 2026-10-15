@@ -18,6 +18,11 @@ name = "multivariate-polynomials"
 git = "https://github.com/FormalFrontier/multivariate-polynomials.git"
 rev = "1d35a823d61bc2edee63a3c76d6e009dc9245fa3"
 
+[[require]]
+name = "minimal-primes"
+git = "https://github.com/FormalFrontier/minimal-primes.git"
+rev = "537058e2a3f4610d3126f22af057a1f6cd96c886"
+
 [[lean_lib]]
 name = "ToricIdeals"
 
@@ -54,6 +59,7 @@ roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest
   "ToricIdealsTest.ParametrizationFiniteClients",
   "ToricIdealsTest.SplitQuadricExamples",
   "ToricIdealsTest.SplitQuadricRootClient",
+  "ToricIdealsTest.RationalNormalCurveDimensionType",
   "ToricIdealsTest.RationalNormalCurveDimensionBaseCases",
   "ToricIdealsTest.QuotientMapCompatibility",
   "ToricIdealsTest.QuotientMapFlatnessType",
