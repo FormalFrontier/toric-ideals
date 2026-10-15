@@ -6,6 +6,7 @@ module
 
 public import Mathlib.Algebra.MvPolynomial.Eval
 public import Mathlib.RingTheory.Ideal.Quotient.Operations
+public import Mathlib.RingTheory.MvPolynomial.Ideal
 public import ToricIdeals.RationalNormalCurve
 import MultivariatePolynomials.EvaluationIdeal
 
@@ -43,6 +44,21 @@ first isomorphism theorem identifies the quotient by this span with `R`.
 universe u
 
 namespace ToricIdeals.RationalNormalCurve
+
+/-- Every Hankel relation belongs to the square of the polynomial augmentation
+ideal, over every commutative coefficient ring and in every degree. -/
+theorem hankelIdeal_le_idealOfVars_sq (R : Type u) [CommRing R] (n : ℕ) :
+    hankelIdeal R n ≤ (MvPolynomial.idealOfVars (Fin (n + 1)) R) ^ 2 := by
+  rw [hankelIdeal, pow_two]
+  apply Ideal.span_le.mpr
+  rintro _ ⟨p, rfl⟩
+  apply Ideal.sub_mem
+  · exact Ideal.mul_mem_mul
+      (Ideal.subset_span (Set.mem_range_self p.1.1.castSucc))
+      (Ideal.subset_span (Set.mem_range_self p.1.2.succ))
+  · exact Ideal.mul_mem_mul
+      (Ideal.subset_span (Set.mem_range_self p.1.1.succ))
+      (Ideal.subset_span (Set.mem_range_self p.1.2.castSucc))
 
 /-- The coefficient augmentation of the full Hankel quotient, induced by
 sending every variable to zero and fixing the coefficient ring. -/

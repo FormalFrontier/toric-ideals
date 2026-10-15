@@ -6,6 +6,7 @@ module
 
 import Mathlib.Data.ZMod.Basic
 import ToricIdeals.RationalNormalCurve.Augmentation
+import ToricIdeals.RationalNormalCurve.Cotangent
 
 /-!
 # Quotienting the variable classes recovers the coefficient algebra
@@ -18,10 +19,18 @@ coefficients survive in degree one. The nonzero square-zero coefficient `2` in
 `ZMod 4` survives the second quotient in every degree, while zero coefficients
 make the variable span the unit ideal.
 
+The vertex cotangent basis gives a nonzero integer conic class with raw linear
+coordinate `37`, represented by `37 • X₀`. Its scalar multiple interpretation
+uses the inherited coefficient action. The degree-zero basis retains the class
+of `X₀`; zero coefficients allow vanishing indexed basis vectors, while the
+nonzero nilpotent coefficient `2` in `ZMod 4` does not annihilate a basis vector.
+
 ## References
 
 * Formal Frontier Agents, `ToricIdeals.RationalNormalCurve.Augmentation`, for the
-  augmentation kernel and its variable-span description.
+  augmentation kernel and its variable-span description, and
+  `ToricIdeals.RationalNormalCurve.Cotangent`, for the prescribed-variable basis
+  and raw linear-coordinate formula.
 * Mathlib contributors, `Mathlib.RingTheory.Ideal.Quotient.Operations`, for
   `quotientEquivAlgOfEq` and `quotientKerAlgEquivOfSurjective`.
 -/
@@ -179,6 +188,72 @@ private theorem zero_coefficients_all_degrees (n : ℕ) :
   · intro i
     apply Ideal.Quotient.eq_zero_iff_mem.mpr
     exact Ideal.subset_span (Set.mem_range_self i)
+
+/-- A concrete integer conic class has nonzero raw coordinate `37` and is
+`37` times the prescribed variable vector for the canonical coefficient action. -/
+private theorem integer_conic_cotangent_witness :
+    ∃ z : (RingHom.ker (quotientAugmentation ℤ 2).toRingHom).Cotangent,
+      z = (37 : ℤ) • quotientAugmentationCotangentBasis ℤ 2 (0 : Fin 3) ∧
+      (quotientAugmentationCotangentBasis ℤ 2).repr z (0 : Fin 3) = 37 ∧ z ≠ 0 := by
+  let p : Source ℤ 2 := (37 : ℤ) • X (0 : Fin 3)
+  have hp : constantCoeff p = 0 := by simp [p]
+  let z := (RingHom.ker (quotientAugmentation ℤ 2).toRingHom).toCotangent
+    ⟨Ideal.Quotient.mkₐ ℤ (hankelIdeal ℤ 2) p, by
+      apply RingHom.mem_ker.mpr
+      simpa only [AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom,
+        Ideal.Quotient.mkₐ_eq_mk, quotientAugmentation_mk] using hp⟩
+  have hcoord : (quotientAugmentationCotangentBasis ℤ 2).repr z (0 : Fin 3) = 37 := by
+    simpa only [z, p, coeff_smul, coeff_X_same, smul_eq_mul, mul_one] using
+      quotientAugmentationCotangentBasis_repr_mk ℤ 2 p hp (0 : Fin 3)
+  refine ⟨z, ?_, hcoord, ?_⟩
+  · rw [quotientAugmentationCotangentBasis_apply]
+    change ((RingHom.ker (quotientAugmentation ℤ 2).toRingHom).toCotangent.restrictScalars ℤ)
+      _ = (37 : ℤ) •
+        ((RingHom.ker (quotientAugmentation ℤ 2).toRingHom).toCotangent.restrictScalars ℤ) _
+    rw [← map_smul]
+    congr 1
+  · intro hzero
+    have hbad : (37 : ℤ) = 0 := by
+      simpa only [hzero, map_zero, Finsupp.zero_apply] using hcoord.symm
+    exact (by decide : (37 : ℤ) ≠ 0) hbad
+
+/-- At degree zero the full polynomial quotient has the nonzero cotangent
+vector `[X₀]`, as detected by its raw coefficient `1`. -/
+private theorem integer_degree_zero_cotangent :
+    hankelIdeal ℤ 0 = ⊥ ∧ quotientAugmentationCotangentBasis ℤ 0 (0 : Fin 1) ≠ 0 := by
+  refine ⟨hankelIdeal_zero ℤ, ?_⟩
+  have hcoord : (quotientAugmentationCotangentBasis ℤ 0).repr
+      (quotientAugmentationCotangentBasis ℤ 0 (0 : Fin 1)) (0 : Fin 1) = 1 := by
+    rw [quotientAugmentationCotangentBasis_apply]
+    simpa only [coeff_X_same] using
+      quotientAugmentationCotangentBasis_repr_mk ℤ 0 (X (0 : Fin 1))
+        (by simp only [constantCoeff_X]) (0 : Fin 1)
+  intro hzero
+  have hbad : (0 : ℤ) = 1 := by
+    simpa only [hzero, map_zero, Finsupp.zero_apply] using hcoord
+  exact (by decide : (0 : ℤ) ≠ 1) hbad
+
+/-- A zero coefficient ring permits a basis indexed by all variables even
+though each vector vanishes; no numerical rank is asserted. -/
+private theorem zero_coefficients_cotangent_vectors (n : ℕ) (i : Fin (n + 1)) :
+    quotientAugmentationCotangentBasis (ZMod 1) n i = 0 := by
+  apply (quotientAugmentationCotangentBasis (ZMod 1) n).repr.injective
+  ext j
+  exact Subsingleton.elim _ _
+
+/-- A nonzero square-zero coefficient does not annihilate the conic's first
+cotangent basis vector under the canonical coefficient action. -/
+private theorem mod_four_cotangent_scalar :
+    (2 : ZMod 4) ^ 2 = 0 ∧
+      (2 : ZMod 4) • quotientAugmentationCotangentBasis (ZMod 4) 2 (0 : Fin 3) ≠ 0 := by
+  refine ⟨by decide, ?_⟩
+  intro hzero
+  have hcoord := congrArg
+    (fun z => (quotientAugmentationCotangentBasis (ZMod 4) 2).repr z (0 : Fin 3)) hzero
+  have hbad : (2 : ZMod 4) = 0 := by
+    simpa only [map_smul, Module.Basis.repr_self, Finsupp.smul_apply,
+      Finsupp.single_eq_same, smul_eq_mul, mul_one, map_zero, Finsupp.zero_apply] using hcoord
+  exact (by decide : (2 : ZMod 4) ≠ 0) hbad
 
 end
 

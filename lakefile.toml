@@ -16,7 +16,7 @@ rev = "83abb3e776bdefcbc447a1e44d0debe4010039e5"
 [[require]]
 name = "multivariate-polynomials"
 git = "https://github.com/FormalFrontier/multivariate-polynomials.git"
-rev = "1d35a823d61bc2edee63a3c76d6e009dc9245fa3"
+rev = "098b5667e444e150112bfcc79360fcf30dd70c45"
 
 [[require]]
 name = "minimal-primes"

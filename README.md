@@ -136,6 +136,17 @@ the split quadric, together with its coordinate algebra and localization charts.
   zero and over zero rings. The [quotient clients](ToricIdealsTest/Audit/RationalNormalCurveAugmentationKernel.lean)
   use Mathlib's first isomorphism theorem to recover the coefficient algebra by
   quotienting this span; nonzero square-zero coefficients are retained.
+- **Vertex cotangent coordinates:** For every `(R : Type u) [CommRing R]` and
+  `n : ℕ`,
+  [`quotientAugmentationCotangentBasis`](ToricIdeals/RationalNormalCurve/Cotangent.lean)
+  is a `Fin (n + 1)`-indexed coefficient-ring basis of Mathlib's module `I/I²`,
+  where `I` is the kernel of the coefficient augmentation of the full Hankel
+  quotient. Its vectors are the classes of the quotient variables, and the
+  coordinates of every representative with zero constant coefficient are its
+  raw linear coefficients. The action is the inherited canonical coefficient
+  action. At `n = 0` the vector is `[X₀]`, not `1`; over zero rings this is an
+  indexed basis, not a numerical rank assertion. Import
+  `ToricIdeals.RationalNormalCurve.Cotangent` directly for this API.
 - **Scalar base change in every degree:** For arbitrary commutative rings
   `R : Type u` and `S : Type v` with `[Algebra R S]`, write
   $Q_{R,n}=R[X_0,\ldots,X_n]/I_{R,n}$, where $I_{R,n}$ is the Hankel-minor ideal.
@@ -370,7 +381,8 @@ coverage are tracked separately and not claimed by this README.
 ## Modules
 
 The root import `ToricIdeals` re-exports the leaves below except
-`ToricIdeals.RationalNormalCurve.GradedAlgebra`, which is available by direct import.
+`ToricIdeals.RationalNormalCurve.Cotangent` and
+`ToricIdeals.RationalNormalCurve.GradedAlgebra`, which require direct imports.
 
 | Module | Contents |
 | --- | --- |
@@ -379,6 +391,7 @@ The root import `ToricIdeals` re-exports the leaves below except
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
+| [`ToricIdeals.RationalNormalCurve.Cotangent`](ToricIdeals/RationalNormalCurve/Cotangent.lean) | Coefficient-ring basis of the augmentation kernel modulo its square, prescribed quotient-variable vectors and raw linear coordinates; direct import |
 | [`ToricIdeals.RationalNormalCurve.CoefficientAlgebra`](ToricIdeals/RationalNormalCurve/CoefficientAlgebra.lean) | Freeness, flatness and faithful flatness of the full Hankel quotient for its canonical coefficient action in every degree |
 | [`ToricIdeals.RationalNormalCurve.Dimension`](ToricIdeals/RationalNormalCurve/Dimension.lean) | Full Hankel quotient dimension in every degree over Noetherian commutative coefficient rings, with degree-zero and degree-one specializations |
 | [`ToricIdeals.RationalNormalCurve.EndpointMap`](ToricIdeals/RationalNormalCurve/EndpointMap.lean) | Endpoint evaluation, all-degree integrality and finiteness, positive-degree injectivity, full-quotient endpoint basis and coordinate API |
@@ -429,8 +442,10 @@ Mathlib revision and toolchain; see [build](#build) for this checkout's pinned
 environment.
 
 Import `ToricIdeals` for the re-exported public APIs, or import a leaf module
-directly. The standard quotient grading requires the direct import
-`ToricIdeals.RationalNormalCurve.GradedAlgebra`, as noted in [Modules](#modules).
+directly. For the vertex cotangent basis or standard quotient grading, import
+`ToricIdeals.RationalNormalCurve.Cotangent` or
+`ToricIdeals.RationalNormalCurve.GradedAlgebra` directly, respectively, as noted
+in [Modules](#modules).
 The following complete module is stored verbatim in
 [`ToricIdealsTest/ReadmeKernel.lean`](ToricIdealsTest/ReadmeKernel.lean) and built
 by the default test target:
