@@ -1,5 +1,9 @@
 # Mathematical API and guides
 
+See the [detailed result inventory](Results.md) for all-degree statements and
+scalar distinctions, and the [mathematical references and credits](Credits.md)
+for proof-family attribution, dependencies and notices.
+
 ## Raw parametrization injectivity
 
 For every `(R : Type u) [CommSemiring R]` and `n : ℕ`,
@@ -369,9 +373,11 @@ or dimension calculation.
 ## Mathematical API
 
 The declarations listed in this section are public. The generic theorem is in
-namespace `ToricIdeals`; the curve names are in `ToricIdeals.RationalNormalCurve`, and the split-quadric
-names are in `ToricIdeals.SplitQuadric`. All leaf modules are also re-exported
-by `ToricIdeals`.
+namespace `ToricIdeals`; curve names are in `ToricIdeals.RationalNormalCurve`.
+Split-quadric exponent names are in `ToricIdeals.SplitQuadric`; coordinate-algebra
+names are in `SplitQuadric`. Except for `ToricIdeals.RationalNormalCurve.Cotangent`
+and `ToricIdeals.RationalNormalCurve.GradedAlgebra`, leaf modules are re-exported
+by `ToricIdeals`; those two require direct imports.
 
 - **Generic fibers:** `AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero` says that
   if, for *every* source exponent `m` and coefficient `r`, its basis term is
