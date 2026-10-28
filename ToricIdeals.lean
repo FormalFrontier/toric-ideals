@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import ToricIdeals.MonoidAlgebra.Evaluation
 public import ToricIdeals.MonoidAlgebra.FiberNormalization
 public import ToricIdeals.RationalNormalCurve
 public import ToricIdeals.RationalNormalCurve.Artinian

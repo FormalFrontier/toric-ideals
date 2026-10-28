@@ -4,6 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import ToricIdeals.MonoidAlgebra.Evaluation
 public import ToricIdeals.SplitQuadric.Basic
 public import ToricIdeals.SplitQuadric.Exponents
 
@@ -17,8 +18,8 @@ The coefficient ring is arbitrary, including zero rings and rings with nilpotent
 
 ## Implementation notes
 
-The bridge uses polynomial algebra-homomorphism extensionality and the four
-variable images. It makes no assertion about kernels, quotient rings or
+The bridge specializes weighted monomial evaluation to the four variable images.
+It makes no assertion about kernels, quotient rings or
 surjectivity. No coefficient or exponent-map construction is duplicated.
 
 ## References
@@ -41,14 +42,6 @@ namespace SplitQuadric
 
 open ToricIdeals.SplitQuadric
 
-private theorem parametrization_single (i : Fin 4) :
-    exponentMap (Finsupp.single i 1) =
-      ![Finsupp.single (0 : Fin 3) 1,
-        Finsupp.single (0 : Fin 3) 1 + Finsupp.single (2 : Fin 3) 1,
-        Finsupp.single (1 : Fin 3) 1,
-        Finsupp.single (1 : Fin 3) 1 + Finsupp.single (2 : Fin 3) 1] i := by
-  fin_cases i <;> simp
-
 variable (A : Type u) [CommRing A]
 
 /-- Polynomial substitution by `(W, WT, Y, YT)` is the existing algebra
@@ -56,27 +49,12 @@ homomorphism induced by the additive determinantal exponent map. -/
 theorem theta_eq_mapDomainAlgHom :
     theta A =
       AddMonoidAlgebra.mapDomainAlgHom A A exponentMap := by
+  rw [exponentMap, ← MvPolynomial.aeval_single_eq_mapDomainAlgHom]
   apply MvPolynomial.algHom_ext
   intro i
-  rw [theta_X]
-  change parameterValues A i =
-    AddMonoidAlgebra.mapDomain exponentMap
-      (AddMonoidAlgebra.single (Finsupp.single i 1) (1 : A))
-  rw [AddMonoidAlgebra.mapDomain_single, parametrization_single]
-  fin_cases i
-  · change (MvPolynomial.X (0 : Fin 3) : ParameterPolynomial A) =
-      MvPolynomial.monomial (Finsupp.single (0 : Fin 3) 1) (1 : A)
-    rfl
-  · change (MvPolynomial.X (0 : Fin 3) : ParameterPolynomial A) * MvPolynomial.X 2 =
-      MvPolynomial.monomial
-        (Finsupp.single (0 : Fin 3) 1 + Finsupp.single (2 : Fin 3) 1) (1 : A)
-    simp only [MvPolynomial.X, MvPolynomial.monomial_mul_monomial, mul_one]
-  · change (MvPolynomial.X (1 : Fin 3) : ParameterPolynomial A) =
-      MvPolynomial.monomial (Finsupp.single (1 : Fin 3) 1) (1 : A)
-    rfl
-  · change (MvPolynomial.X (1 : Fin 3) : ParameterPolynomial A) * MvPolynomial.X 2 =
-      MvPolynomial.monomial
-        (Finsupp.single (1 : Fin 3) 1 + Finsupp.single (2 : Fin 3) 1) (1 : A)
-    simp only [MvPolynomial.X, MvPolynomial.monomial_mul_monomial, mul_one]
+  rw [theta_X, MvPolynomial.aeval_X]
+  fin_cases i <;>
+    simp [parameterValues, MvPolynomial.X, MvPolynomial.single_eq_monomial,
+      MvPolynomial.monomial_mul_monomial]
 
 end SplitQuadric
