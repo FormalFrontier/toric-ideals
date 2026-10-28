@@ -24,17 +24,6 @@ universe u v w
 
 open AddMonoidAlgebra
 
-private theorem commutative_specialization
-    {R : Type u} {M : Type v} {N : Type w}
-    [CommRing R] [AddCommMonoid M] [AddCommMonoid N]
-    (I : Ideal (AddMonoidAlgebra R M)) (exponentMap : M →+ N)
-    (normal : N → M)
-    (basis_sub_normal_mem : ∀ (m : M) (r : R),
-      single m r - single (normal (exponentMap m)) r ∈ I)
-    {f : AddMonoidAlgebra R M}
-    (hf : AddMonoidAlgebra.mapDomain exponentMap f = 0) : f ∈ I :=
-  ToricIdeals.AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
-    I exponentMap normal basis_sub_normal_mem hf
 
 /-- Identifying exponent one with exponent zero generates the kernel of the
 constant-zero exponent homomorphism over every coefficient ring. -/

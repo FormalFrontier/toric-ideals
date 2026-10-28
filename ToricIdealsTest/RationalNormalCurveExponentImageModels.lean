@@ -88,9 +88,6 @@ private theorem degree_zero_nonzero_target_excluded :
   rw [hd] at htotal
   simp [targetPair] at htotal
 
-private theorem degree_one_identity (t : Fin 2 →₀ ℕ) :
-    rncExponent 1 t = t :=
-  rncExponent_one t
 
 private theorem degree_one_mixed_target :
     targetPair 2 3 ∈ AddMonoidHom.mrange (rncExponent 1) := by

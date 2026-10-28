@@ -63,7 +63,7 @@ private theorem polynomial_coefficient_free (σ : Type v) :
 
 private theorem polynomial_coefficient_flat (σ : Type v) :
     Module.Flat k (MvPolynomial σ k) := by
-  letI := polynomial_coefficient_free k σ
+  let := polynomial_coefficient_free k σ
   exact Module.Flat.of_free
 
 private theorem monomial_basis_coefficient (σ : Type v) (d : σ →₀ ℕ) :
@@ -109,7 +109,7 @@ private theorem degree_zero_free :
 
 private theorem degree_zero_flat :
     Module.Flat k (Source k 0 ⧸ hankelIdeal k 0) := by
-  letI := degree_zero_free k
+  let := degree_zero_free k
   exact Module.Flat.of_free
 
 private noncomputable def degree_one_polynomial :
@@ -137,7 +137,7 @@ private theorem degree_one_free :
 
 private theorem degree_one_flat :
     Module.Flat k (Source k 1 ⧸ hankelIdeal k 1) := by
-  letI := degree_one_free k
+  let := degree_one_free k
   exact Module.Flat.of_free
 
 /-!
@@ -164,7 +164,7 @@ private theorem zero_ring_free (n : ℕ) :
 private theorem zero_ring_flat (n : ℕ) :
     Module.Flat (PUnit.{1})
       (Source (PUnit.{1}) n ⧸ hankelIdeal (PUnit.{1}) n) := by
-  letI := zero_ring_free n
+  let := zero_ring_free n
   exact Module.Flat.of_free
 
 private theorem integer_one_variable_free :
@@ -267,7 +267,7 @@ class under this equivalence.
 
 private theorem mod_four_not_flat_over_integer : ¬ Module.Flat ℤ (ZMod 4) := by
   intro hflat
-  letI : Module.Flat ℤ (ZMod 4) := hflat
+  let : Module.Flat ℤ (ZMod 4) := hflat
   have hregular : IsSMulRegular ℤ (4 : ℤ) :=
     (IsRegular.of_ne_zero (by decide : (4 : ℤ) ≠ 0)).left.isSMulRegular
   have h := IsSMulRegular.of_flat (R := ℤ) (S := ZMod 4) hregular

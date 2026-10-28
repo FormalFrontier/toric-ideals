@@ -38,9 +38,6 @@ private theorem nat_zero_not_finite :
       have hi : i = (0 : Fin 1) := Fin.eq_zero i
       subst i
       simp [e, coordinateExponent]
-  have he : Function.Surjective e := by
-    intro r
-    exact ⟨C r, by simp [e]⟩
   let : Algebra (Source ℕ 0) ℕ := e.toAlgebra
   let : Algebra (Source ℕ 0) (Target ℕ) := (rncMap ℕ 0).toAlgebra
   let : Module (Source ℕ 0) ℕ :=

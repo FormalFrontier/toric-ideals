@@ -210,7 +210,7 @@ private theorem integer_degree_zero_incompatible :
       quotientAugmentation ℤ 0
         (Ideal.Quotient.mk (hankelIdeal ℤ 0) (X (0 : Fin 1))) at hx
   have hone : (1 : ℤ) = 0 := by
-    simpa [quotientMap_mk, rncMap_X, coordinateExponent] using hx
+    simp [quotientMap_mk, rncMap_X, coordinateExponent] at hx
   exact one_ne_zero hone
 
 /-- A concrete integer conic class has nonzero raw coordinate `37` and is

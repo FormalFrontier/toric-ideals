@@ -75,7 +75,7 @@ private theorem axisIdeal_le_evalZero_ker : axisIdeal ≤ RingHom.ker evalZero :
 
 /-- Evaluation at zero factors through the closed quotient. -/
 private noncomputable def quotientEvalZero : AxisQuotient →+* ZMod 4 :=
-  Ideal.Quotient.lift axisIdeal evalZero fun p hp =>
+  Ideal.Quotient.lift axisIdeal evalZero fun _ hp =>
     RingHom.mem_ker.mp (axisIdeal_le_evalZero_ker hp)
 
 private noncomputable def quotientTwo : AxisQuotient :=

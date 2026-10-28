@@ -6,7 +6,9 @@
       "path": ".",
       "targets": [
         "ToricIdeals",
-        "ToricIdealsTest"
+        "ToricIdealsTest",
+        "ToricIdealsKernelTests",
+        "ToricIdealsModelTests"
       ]
     }
   ],

@@ -104,35 +104,35 @@ theorem axisProjection_comp_mk :
   exact Ideal.Quotient.liftₐ_comp _ _ _
 
 /-- The axis projection preserves the class of each constant polynomial. -/
-@[simp] theorem axisProjection_C (r : R) :
+theorem axisProjection_C (r : R) :
     axisProjection R n
       (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.C r)) = Polynomial.C r := by
   simp only [axisProjection_mk, MvPolynomial.aeval_C, Polynomial.algebraMap_eq]
 
 /-- The canonical coefficient map into the quotient is sent to polynomial
 constants by the axis projection. -/
-@[simp] theorem axisProjection_algebraMap (r : R) :
+theorem axisProjection_algebraMap (r : R) :
     axisProjection R n
       (algebraMap R (Source R n ⧸ hankelIdeal R n) r) = Polynomial.C r := by
   simpa only [Polynomial.algebraMap_eq] using (axisProjection R n).commutes r
 
 /-- The first coordinate is sent to the polynomial indeterminate, and every
 other coordinate is sent to zero. -/
-@[simp] theorem axisProjection_X (i : Fin (n + 1)) :
+theorem axisProjection_X (i : Fin (n + 1)) :
     axisProjection R n
       (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X i)) =
       if i = 0 then Polynomial.X else 0 := by
   rw [axisProjection_mk, MvPolynomial.aeval_X]
 
 /-- The class of the first coordinate maps to `Polynomial.X`. -/
-@[simp] theorem axisProjection_X_zero :
+theorem axisProjection_X_zero :
     axisProjection R n
       (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X (0 : Fin (n + 1)))) =
       Polynomial.X := by
   simp only [axisProjection_X, ↓reduceIte]
 
 /-- Every coordinate with nonzero index vanishes under the axis projection. -/
-@[simp] theorem axisProjection_X_of_ne_zero (i : Fin (n + 1)) (hi : i ≠ 0) :
+theorem axisProjection_X_of_ne_zero (i : Fin (n + 1)) (hi : i ≠ 0) :
     axisProjection R n
       (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X i)) = 0 := by
   simp only [axisProjection_X, hi, ↓reduceIte]

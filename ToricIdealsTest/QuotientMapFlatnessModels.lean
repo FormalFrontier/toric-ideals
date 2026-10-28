@@ -25,7 +25,7 @@ noncomputable section
 private def rawQuotientMap (R : Type*) [CommRing R] (n : ℕ) :
     (Source R n ⧸ hankelIdeal R n) →+* Target R :=
   Ideal.Quotient.lift (hankelIdeal R n) (rncMap R n)
-    (fun p hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp))
+    (fun _ hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp))
 
 private theorem rawQuotientMap_mk (R : Type*) [CommRing R] (n : ℕ) (p : Source R n) :
     rawQuotientMap R n (Ideal.Quotient.mk (hankelIdeal R n) p) = rncMap R n p := rfl
@@ -73,7 +73,7 @@ private theorem retainedVariable_ne_zero : retainedVariable ≠ 0 := by
   simp only [hankelIdeal_zero, Ideal.mem_bot] at hp
   have hc := congrArg
     (fun p : Source ℤ 0 => MvPolynomial.constantCoeff p) hp
-  exact (one_ne_zero : (1 : ℤ) ≠ 0) (by simpa using hc)
+  simp at hc
 
 private theorem retainedVariable_image : rawQuotientMap ℤ 0 retainedVariable = 0 := by
   simp [retainedVariable, rawQuotientMap_mk, rncMap_X, coordinateExponent]
@@ -81,9 +81,9 @@ private theorem retainedVariable_image : rawQuotientMap ℤ 0 retainedVariable =
 private theorem integer_zero_not_flat : ¬ @Module.Flat IntegerZeroQuotient (Target ℤ) _ _
     (@Algebra.toModule _ _ _ _ (rawQuotientMap ℤ 0).toAlgebra) := by
   intro h
-  letI : Algebra IntegerZeroQuotient (Target ℤ) := (rawQuotientMap ℤ 0).toAlgebra
-  letI : Module.Flat IntegerZeroQuotient (Target ℤ) := h
-  letI : (hankelIdeal ℤ 0).IsPrime := by
+  let : Algebra IntegerZeroQuotient (Target ℤ) := (rawQuotientMap ℤ 0).toAlgebra
+  let : Module.Flat IntegerZeroQuotient (Target ℤ) := h
+  let : (hankelIdeal ℤ 0).IsPrime := by
     rw [hankelIdeal_zero]
     infer_instance
   have hreg : IsSMulRegular IntegerZeroQuotient retainedVariable := by
@@ -131,9 +131,10 @@ private theorem no_linear_raw (p : Source R 2) (j : Fin 2) :
   | C r =>
     have hj : (0 : Fin 2 →₀ ℕ) ≠ Finsupp.single j 1 := by simp [eq_comm]
     simp [hj]
-  | add p q hp hq => simp only [map_add, MvPolynomial.coeff_add, hp, hq, add_zero]
+  | add p q hp hq =>
+    simp only [map_add, AddMonoidAlgebra.coeff_add, Finsupp.add_apply, hp, hq, add_zero]
   | mul_X p i _ =>
-    rw [map_mul, rncMap_X, coeff_mul_monomial', if_neg (no_linear_exponent i j)]
+    rw [map_mul, rncMap_X, coeff_mul_monomial', ite_eq_right (no_linear_exponent i j)]
 
 private theorem no_linear (q : Q) (j : Fin 2) :
     (φ q).coeff (Finsupp.single j 1) = 0 := by
@@ -154,7 +155,8 @@ private theorem constant_on_ideal (i : coordinateIdeal) : (φ i).coeff 0 = 0 := 
 -- Only the two fixed coefficients needed by the detector occur here.
 private def α : coordinateIdeal →ₗ[Q] R where
   toFun i := (φ i).coeff (Finsupp.single 0 2)
-  map_add' i j := by simp only [map_add, MvPolynomial.coeff_add, Submodule.coe_add]
+  map_add' i j := by
+    simp only [map_add, AddMonoidAlgebra.coeff_add, Finsupp.add_apply, Submodule.coe_add]
   map_smul' q i := by
     change (φ (q * (i : Q))).coeff (Finsupp.single 0 2) =
       ε q * (φ i).coeff (Finsupp.single 0 2)
@@ -165,7 +167,7 @@ private def α : coordinateIdeal →ₗ[Q] R where
 
 private def β : B →ₗ[Q] R where
   toFun p := p.coeff (Finsupp.single 1 1)
-  map_add' p q := MvPolynomial.coeff_add _ _ _
+  map_add' p q := (MvPolynomial.coeffAddMonoidHom _).map_add p q
   map_smul' q p := by
     change (φ q * p).coeff (Finsupp.single 1 1) =
       ε q * p.coeff (Finsupp.single 1 1)
@@ -179,7 +181,8 @@ private def detector : coordinateIdeal ⊗[Q] B →ₗ[Q] R :=
   (LinearMap.mul' Q R).comp (TensorProduct.map α β)
 
 private theorem detector_witness : detector witness = 1 := by
-  simp [detector, witness, α, β, ia, ib, a, φ, rawQuotientMap_mk,
+  have hβ (p : B) : β p = p.coeff (Finsupp.single 1 1) := rfl
+  simp [detector, witness, α, hβ, ia, ib, a, φ, rawQuotientMap_mk,
     rncMap_X, coordinateExponent]
 
 private theorem witness_in_kernel : coordinateIdeal.subtype.rTensor B witness = 0 := by
@@ -189,13 +192,13 @@ private theorem witness_in_kernel : coordinateIdeal.subtype.rTensor B witness = 
   have ha : φ a = X (0 : Fin 2) ^ 2 := by
     simp [φ, a, rawQuotientMap_mk, rncMap_X, coordinateExponent, X_pow_eq_monomial]
   have hb : φ b = X (0 : Fin 2) * X 1 := by
-    simp [φ, b, rawQuotientMap_mk, rncMap_X, coordinateExponent, X,
+    simp [φ, b, rawQuotientMap_mk, coordinateExponent, X,
       monomial_mul_monomial]
   rw [ha, hb, pow_two, mul_right_comm (X (0 : Fin 2)) (X 1) (X 0), sub_self]
 
 private theorem not_flat : ¬ @Module.Flat Q B _ _ (@Algebra.toModule _ _ _ _ φ.toAlgebra) := by
   intro h
-  letI : Module.Flat Q B := h
+  let : Module.Flat Q B := h
   have hinj := Module.Flat.rTensor_preserves_injective_linearMap (M := B)
     coordinateIdeal.subtype Subtype.val_injective
   have hw : witness = 0 := hinj (by simpa only [map_zero] using witness_in_kernel)

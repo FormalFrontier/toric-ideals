@@ -175,13 +175,6 @@ private theorem integer_conic_zero_piece :
   simpa only [quotientHomogeneousSubmodule, MvPolynomial.homogeneousSubmodule_zero] using
     (Submodule.map_one (Ideal.Quotient.mkₐ ℤ (hankelIdeal ℤ 2)))
 
-private theorem integer_conic_zero_projection_mul
-    (q r : Source ℤ 2 ⧸ hankelIdeal ℤ 2) :
-    GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) (q * r) =
-      GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) q *
-        GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) r :=
-  (GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2)).map_mul q r
-
 private theorem integer_conic_zero_projection_augmentation
     (q : Source ℤ 2 ⧸ hankelIdeal ℤ 2) :
     GradedRing.projZeroRingHom (quotientHomogeneousSubmodule ℤ 2) q =

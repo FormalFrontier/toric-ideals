@@ -77,15 +77,14 @@ theorem ringKrullDim_quotient_hankelIdeal (R : Type u) [CommRing R]
   by_cases hn : n = 0
   · subst n
     simpa using (ringKrullDim_quotient_hankelIdeal_zero (R := R))
-  · rw [if_neg hn]
+  · rw [ite_eq_right hn]
     calc
       ringKrullDim (Source R n ⧸ hankelIdeal R n) =
           ringKrullDim (MvPolynomial (Fin 2) R) :=
         ((endpointMap_isIntegral (R := R) n).ringKrullDim_eq
           (endpointMap_injective (R := R) n (Nat.one_le_iff_ne_zero.mpr hn))).symm
       _ = ringKrullDim R + 2 := by
-        simpa using (MvPolynomial.ringKrullDim_of_isNoetherianRing_of_finite
-          (R := R) (ι := Fin 2))
+        simp
 
 end
 

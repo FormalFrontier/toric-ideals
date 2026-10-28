@@ -1,6 +1,7 @@
 name = "toric-ideals"
 version = "0.1.0"
-defaultTargets = ["ToricIdeals", "ToricIdealsTest"]
+lintDriver = "batteries/runLinter"
+defaultTargets = ["ToricIdeals", "ToricIdealsTest", "ToricIdealsModelTests", "ToricIdealsKernelTests"]
 
 [leanOptions]
 autoImplicit = false
@@ -28,42 +29,122 @@ name = "ToricIdeals"
 
 [[lean_lib]]
 name = "ToricIdealsTest"
-roots = ["ToricIdealsTest.Audit", "ToricIdealsTest.RootClient", "ToricIdealsTest.ReadmeKernel",
-  "ToricIdealsTest.FiberNormalizationExamples", "ToricIdealsTest.FiberNormalizationClient",
+roots = ["ToricIdealsTest.FiberNormalizationExamples", "ToricIdealsTest.FiberNormalizationClient",
   "ToricIdealsTest.RationalNormalCurveDomainModels",
+  "ToricIdealsTest.RationalNormalCurveCoordinateLocalization",
+  "ToricIdealsTest.RationalNormalCurveReducedModels"]
+
+[[lean_lib]]
+name = "ToricIdealsKernelTests"
+roots = ["ToricIdealsTest.ReadmeKernel"]
+
+[lean_lib.leanOptions]
+weak.linter.privateModule = false
+
+# Keep this library last so these selected verification modules use test options.
+# The private Artinian and coefficient-algebra models are verification modules,
+# unlike the public examples in ToricIdealsTest. All remain in default builds.
+# The globs build individual modules; the root prefixes also claim descendants,
+# so recheck ownership if these selected modules gain submodules.
+[[lean_lib]]
+name = "ToricIdealsModelTests"
+roots = ["ToricIdealsTest.RationalNormalCurveArtinianModels",
+  "ToricIdealsTest.CoefficientAlgebraModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousBasisNaturalityModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousBasisClients",
+  "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousQuotientModels",
+  "ToricIdealsTest.Audit.PolynomialCoefficientFinitenessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessClient",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFaithfullyFlatModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFaithfullyFlatClients",
+  "ToricIdealsTest.Audit.RationalNormalCurveFreenessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveFlatnessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientBoundaryModels",
+  "ToricIdealsTest.RootClient",
   "ToricIdealsTest.RationalNormalCurveInjectivityModels",
   "ToricIdealsTest.RationalNormalCurveSemiringInjectivityModels",
   "ToricIdealsTest.RationalNormalCurveAugmentationModels",
   "ToricIdealsTest.RationalNormalCurveAugmentationNilpotentModels",
-  "ToricIdealsTest.RationalNormalCurveCoordinateRegularityModels",
-  "ToricIdealsTest.RationalNormalCurveCoordinateLocalization",
-  "ToricIdealsTest.RationalNormalCurveExponentImageModels",
-  "ToricIdealsTest.RationalNormalCurveExponentImageClient",
-  "ToricIdealsTest.RationalNormalCurveReducedModels",
   "ToricIdealsTest.RationalNormalCurveHomogeneityModels",
   "ToricIdealsTest.RationalNormalCurveHomogeneityClient",
-  "ToricIdealsTest.RationalNormalCurveJacobsonModels",
-  "ToricIdealsTest.RationalNormalCurveJacobsonClient",
   "ToricIdealsTest.RationalNormalCurveNoetherianModels",
   "ToricIdealsTest.RationalNormalCurveNoetherianNegativeModels",
-  "ToricIdealsTest.RationalNormalCurveArtinianModels",
-  "ToricIdealsTest.SplitQuadricModels",
   "ToricIdealsTest.RationalNormalCurveBaseChangeSmallModels",
   "ToricIdealsTest.RationalNormalCurveBaseChangeNonflatModels",
   "ToricIdealsTest.RationalNormalCurveBaseChangeTensorModels",
-  "ToricIdealsTest.RationalNormalCurveCoefficientModules",
-  "ToricIdealsTest.RationalNormalCurve.EndpointMap",
-  "ToricIdealsTest.CoefficientAlgebraModels",
-  "ToricIdealsTest.CoefficientAlgebraUses",
   "ToricIdealsTest.ParametrizationFiniteModels",
   "ToricIdealsTest.ParametrizationFiniteClients",
+  "ToricIdealsTest.RationalNormalCurveCoordinateRegularityModels",
+  "ToricIdealsTest.RationalNormalCurveExponentImageModels",
+  "ToricIdealsTest.RationalNormalCurveExponentImageClient",
+  "ToricIdealsTest.SplitQuadricModels",
+  "ToricIdealsTest.RationalNormalCurve.EndpointMap",
+  "ToricIdealsTest.CoefficientAlgebraUses",
   "ToricIdealsTest.SplitQuadricExamples",
   "ToricIdealsTest.SplitQuadricRootClient",
-  "ToricIdealsTest.RationalNormalCurveDimensionType",
-  "ToricIdealsTest.RationalNormalCurveDimensionBaseCases",
   "ToricIdealsTest.QuotientMapCompatibility",
   "ToricIdealsTest.QuotientMapFlatnessType",
   "ToricIdealsTest.QuotientMapFlatnessModels",
   "ToricIdealsTest.CoefficientMap",
+  "ToricIdealsTest.RationalNormalCurveJacobsonClient",
+  "ToricIdealsTest.RationalNormalCurveCoefficientModules",
+  "ToricIdealsTest.RationalNormalCurveDimensionType",
+  "ToricIdealsTest.RationalNormalCurveDimensionBaseCases",
   "ToricIdealsTest.RationalNormalCurveFormallySmoothSmallModels",
-  "ToricIdealsTest.RationalNormalCurveMapUnramifiedSmallModels"]
+  "ToricIdealsTest.RationalNormalCurveMapUnramifiedSmallModels",
+  "ToricIdealsTest.Audit",
+  "ToricIdealsTest.RationalNormalCurveJacobsonModels"]
+globs = ["ToricIdealsTest.RationalNormalCurveArtinianModels",
+  "ToricIdealsTest.RationalNormalCurveArtinianModels.Integer",
+  "ToricIdealsTest.RationalNormalCurveArtinianModels.ModFour",
+  "ToricIdealsTest.RationalNormalCurveArtinianModels.Product",
+  "ToricIdealsTest.CoefficientAlgebraModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousBasisNaturalityModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousBasisClients",
+  "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousQuotientModels",
+  "ToricIdealsTest.Audit.PolynomialCoefficientFinitenessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessClient",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFinitenessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFaithfullyFlatModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientFaithfullyFlatClients",
+  "ToricIdealsTest.Audit.RationalNormalCurveFreenessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveFlatnessModels",
+  "ToricIdealsTest.Audit.RationalNormalCurveCoefficientBoundaryModels",
+  "ToricIdealsTest.RootClient",
+  "ToricIdealsTest.RationalNormalCurveInjectivityModels",
+  "ToricIdealsTest.RationalNormalCurveSemiringInjectivityModels",
+  "ToricIdealsTest.RationalNormalCurveAugmentationModels",
+  "ToricIdealsTest.RationalNormalCurveAugmentationNilpotentModels",
+  "ToricIdealsTest.RationalNormalCurveHomogeneityModels",
+  "ToricIdealsTest.RationalNormalCurveHomogeneityClient",
+  "ToricIdealsTest.RationalNormalCurveNoetherianModels",
+  "ToricIdealsTest.RationalNormalCurveNoetherianNegativeModels",
+  "ToricIdealsTest.RationalNormalCurveBaseChangeSmallModels",
+  "ToricIdealsTest.RationalNormalCurveBaseChangeNonflatModels",
+  "ToricIdealsTest.RationalNormalCurveBaseChangeTensorModels",
+  "ToricIdealsTest.ParametrizationFiniteModels",
+  "ToricIdealsTest.ParametrizationFiniteClients",
+  "ToricIdealsTest.RationalNormalCurveCoordinateRegularityModels",
+  "ToricIdealsTest.RationalNormalCurveExponentImageModels",
+  "ToricIdealsTest.RationalNormalCurveExponentImageClient",
+  "ToricIdealsTest.SplitQuadricModels",
+  "ToricIdealsTest.RationalNormalCurve.EndpointMap",
+  "ToricIdealsTest.CoefficientAlgebraUses",
+  "ToricIdealsTest.SplitQuadricExamples",
+  "ToricIdealsTest.SplitQuadricRootClient",
+  "ToricIdealsTest.QuotientMapCompatibility",
+  "ToricIdealsTest.QuotientMapFlatnessType",
+  "ToricIdealsTest.QuotientMapFlatnessModels",
+  "ToricIdealsTest.CoefficientMap",
+  "ToricIdealsTest.RationalNormalCurveJacobsonClient",
+  "ToricIdealsTest.RationalNormalCurveCoefficientModules",
+  "ToricIdealsTest.RationalNormalCurveDimensionType",
+  "ToricIdealsTest.RationalNormalCurveDimensionBaseCases",
+  "ToricIdealsTest.RationalNormalCurveFormallySmoothSmallModels",
+  "ToricIdealsTest.RationalNormalCurveMapUnramifiedSmallModels",
+  "ToricIdealsTest.Audit",
+  "ToricIdealsTest.RationalNormalCurveJacobsonModels"]
+
+[lean_lib.leanOptions]
+weak.linter.privateModule = false

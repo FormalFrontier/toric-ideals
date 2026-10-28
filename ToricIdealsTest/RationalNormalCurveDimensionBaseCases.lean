@@ -89,13 +89,13 @@ private theorem nonreducedOne :
 
 private theorem zeroRingZero :
     ringKrullDim (Source (ZMod 1) 0 ⧸ hankelIdeal (ZMod 1) 0) = ⊥ := by
-  simpa [ringKrullDim_eq_bot_of_subsingleton] using
-    (ringKrullDim_quotient_hankelIdeal_zero (R := ZMod 1))
+  rw [ringKrullDim_quotient_hankelIdeal_zero]
+  simp [ringKrullDim_eq_bot_of_subsingleton]
 
 private theorem zeroRingOne :
     ringKrullDim (Source (ZMod 1) 1 ⧸ hankelIdeal (ZMod 1) 1) = ⊥ := by
-  simpa [ringKrullDim_eq_bot_of_subsingleton] using
-    (ringKrullDim_quotient_hankelIdeal_one (R := ZMod 1))
+  rw [ringKrullDim_quotient_hankelIdeal_one]
+  simp [ringKrullDim_eq_bot_of_subsingleton]
 
 private theorem infiniteZero (hR : ringKrullDim R = ⊤) :
     ringKrullDim (Source R 0 ⧸ hankelIdeal R 0) = ⊤ := by

@@ -43,9 +43,6 @@ noncomputable section
 
 universe u
 
-#check (∀ (R : Type u) [CommRing R] (n : ℕ),
-  Module.Finite R (Source R n ⧸ hankelIdeal R n) ↔ Subsingleton R : Prop)
-
 /-- The degree-zero integer quotient is the full polynomial ring, not constants,
 and is not finite for the canonical integer action. -/
 private theorem integer_degree_zero_quotient_not_finite :

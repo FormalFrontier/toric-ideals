@@ -29,7 +29,7 @@ private theorem quotientMap_commutes (R : Type u) [CommRing R] (n : ℕ) (r : R)
 private theorem quotientMap_toRingHom_eq_lift (R : Type u) [CommRing R] (n : ℕ) :
     (quotientMap R n).toRingHom =
       Ideal.Quotient.lift (hankelIdeal R n) (rncMap R n)
-        (fun p hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp)) :=
+        (fun _ hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp)) :=
   quotientMap_toRingHom R n
 
 -- Degree zero retains its variable, although its image is one.
@@ -42,4 +42,4 @@ private theorem quotientMap_two_ne_zero : quotientMap ℤ 0
   rw [quotientMap_C]
   intro h
   have hc := congrArg (fun p : Target ℤ => p.coeff (0 : Fin 2 →₀ ℕ)) h
-  exact (by decide : (2 : ℤ) ≠ 0) (by simpa using hc)
+  simp at hc

@@ -21,8 +21,6 @@ import ToricIdeals.RationalNormalCurve
 
 These models concern the whole two-variable target as a module over the
 whole source through `rncMap`, not its coefficient module or its image.
-The type expression below includes every commutative coefficient ring and
-every degree, including the zero ring and degree zero.
 
 The degree-one map is the identity. The zero coefficient ring gives flat
 maps at degrees zero and two. Over the integers, the degree-zero relation
@@ -53,9 +51,6 @@ namespace ToricIdeals.RationalNormalCurve.FlatnessModels
 noncomputable section
 
 universe u
-
-#check (∀ (R : Type u) [CommRing R] (n : ℕ),
-  (rncMap R n).Flat ↔ n = 1 ∨ Subsingleton R : Prop)
 
 /-- At degree one, the exponent identity gives the identity on polynomial rings. -/
 private theorem degree_one_map_eq_id (R : Type u) [CommRing R] :

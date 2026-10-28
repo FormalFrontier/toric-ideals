@@ -68,13 +68,20 @@ def coefficientMap : A →+* CoordinateRing A := algebraMap A (CoordinateRing A)
 /-- A coordinate class in the quotient. -/
 def coordinate (i : Fin 4) : CoordinateRing A := quotientMap A (MvPolynomial.X i)
 
+/-- The class of the coordinate w in the split-quadric coordinate ring. -/
 abbrev w : CoordinateRing A := coordinate A 0
+/-- The class of the coordinate x in the split-quadric coordinate ring. -/
 abbrev x : CoordinateRing A := coordinate A 1
+/-- The class of the coordinate y in the split-quadric coordinate ring. -/
 abbrev y : CoordinateRing A := coordinate A 2
+/-- The class of the coordinate z in the split-quadric coordinate ring. -/
 abbrev z : CoordinateRing A := coordinate A 3
 
+/-- The first parameter variable W. -/
 abbrev W : ParameterPolynomial A := MvPolynomial.X 0
+/-- The second parameter variable Y. -/
 abbrev Y : ParameterPolynomial A := MvPolynomial.X 1
+/-- The third parameter variable T. -/
 abbrev T : ParameterPolynomial A := MvPolynomial.X 2
 
 @[simp]
@@ -157,7 +164,6 @@ def theta : Polynomial A →ₐ[A] ParameterPolynomial A := MvPolynomial.aeval (
 theorem theta_X (i : Fin 4) : theta A (MvPolynomial.X i) = parameterValues A i := by
   simp [theta]
 
-@[simp]
 theorem theta_C (a : A) : theta A (MvPolynomial.C a) = MvPolynomial.C a := by
   simp [theta]
 
@@ -182,10 +188,10 @@ theorem phi_coefficientMap (a : A) : phi A (coefficientMap A a) = MvPolynomial.C
 theorem phi_coordinate (i : Fin 4) : phi A (coordinate A i) = parameterValues A i :=
   lift_coordinate A _ _ i
 
-@[simp] theorem phi_w : phi A (w A) = W A := by simp [w, parameterValues]
-@[simp] theorem phi_x : phi A (x A) = W A * T A := by simp [x, parameterValues]
-@[simp] theorem phi_y : phi A (y A) = Y A := by simp [y, parameterValues]
-@[simp] theorem phi_z : phi A (z A) = Y A * T A := by simp [z, parameterValues]
+theorem phi_w : phi A (w A) = W A := by simp [w, parameterValues]
+theorem phi_x : phi A (x A) = W A * T A := by simp [x, parameterValues]
+theorem phi_y : phi A (y A) = Y A := by simp [y, parameterValues]
+theorem phi_z : phi A (z A) = Y A * T A := by simp [z, parameterValues]
 
 /-! ## The chart where `w` is invertible
 
@@ -216,19 +222,16 @@ theorem inversePolynomial_X (i : Fin 3) :
   simp only [inversePolynomial, MvPolynomial.aeval_X]
 
 omit [IsScalarTower A (CoordinateRing A) LQ] in
-@[simp]
 theorem inversePolynomial_W :
     inversePolynomial A LQ (W A) = algebraMap (CoordinateRing A) LQ (w A) := by
   simp [inversePolynomial, W]
 
 omit [IsScalarTower A (CoordinateRing A) LQ] in
-@[simp]
 theorem inversePolynomial_Y :
     inversePolynomial A LQ (Y A) = algebraMap (CoordinateRing A) LQ (y A) := by
   simp [inversePolynomial, Y]
 
 omit [IsScalarTower A (CoordinateRing A) LQ] in
-@[simp]
 theorem inversePolynomial_T : inversePolynomial A LQ (T A) =
     algebraMap (CoordinateRing A) LQ (x A) * IsLocalization.Away.invSelf (w A) := by
   simp [inversePolynomial, T]

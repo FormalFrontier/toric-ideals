@@ -269,13 +269,13 @@ private theorem parametrized_wz :
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.exponentMap_apply_zero (w + z)).trans (by
       norm_num only [w, z, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.exponentMap_apply_one (w + z)).trans (by
       norm_num only [w, z, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.exponentMap_apply_two (w + z)).trans (by
       norm_num only [w, z, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
 
 private theorem parametrized_xy :
     ToricIdeals.SplitQuadric.exponentMap (x + y) = targetTuple 1 1 1 := by
@@ -322,32 +322,32 @@ private theorem replacement_wz : ToricIdeals.SplitQuadric.reduce (w + z) = x + y
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.reduce_apply_zero (w + z)).trans (by
       norm_num only [w, x, y, z, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.reduce_apply_one (w + z)).trans (by
       norm_num only [w, x, y, z, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.reduce_apply_two (w + z)).trans (by
       norm_num only [w, x, y, z, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.reduce_apply_three (w + z)).trans (by
       norm_num only [w, x, y, z, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
 
 private theorem replacement_xy : ToricIdeals.SplitQuadric.reduce (x + y) = x + y := by
   ext i
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.reduce_apply_zero (x + y)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.reduce_apply_one (x + y)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.reduce_apply_two (x + y)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.reduce_apply_three (x + y)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
 
 private theorem reduce_wz_eq_reduce_xy : ToricIdeals.SplitQuadric.reduce (w + z) =
     ToricIdeals.SplitQuadric.reduce (x + y) :=
@@ -440,8 +440,8 @@ private theorem reduced_w_z_sum_not_reduced :
     ¬ ToricIdeals.SplitQuadric.Reduced (w + z) := by
   refine ⟨(ToricIdeals.SplitQuadric.reduced_iff w).2 (Or.inr ?_),
     (ToricIdeals.SplitQuadric.reduced_iff z).2 (Or.inl ?_), ?_⟩
-  · simp only [w, Finsupp.single_apply] ; rfl
-  · simp only [z, Finsupp.single_apply] ; rfl
+  · simp only [w, Finsupp.single_apply]; rfl
+  · simp only [z, Finsupp.single_apply]; rfl
   · intro h
     have h' := (ToricIdeals.SplitQuadric.reduced_iff (w + z)).1 h
     rcases h' with h₀ | h₃
@@ -456,16 +456,16 @@ private theorem selector_tAlone : ToricIdeals.SplitQuadric.normal tAlone = z := 
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.normal_apply_zero tAlone).trans (by
       norm_num only [tAlone, z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_one tAlone).trans (by
       norm_num only [tAlone, z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_two tAlone).trans (by
       norm_num only [tAlone, z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_three tAlone).trans (by
       norm_num only [tAlone, z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
 
 private theorem selector_boundary_tAlone_not_right_inverse : ¬ tAlone 2 ≤ tAlone 0 + tAlone 1 ∧
     ToricIdeals.SplitQuadric.normal tAlone = z ∧
@@ -492,16 +492,16 @@ private theorem selector_image_w :
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.normal_apply_zero (targetTuple 1 0 0)).trans (by
       norm_num only [w, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_one (targetTuple 1 0 0)).trans (by
       norm_num only [w, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_two (targetTuple 1 0 0)).trans (by
       norm_num only [w, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_three (targetTuple 1 0 0)).trans (by
       norm_num only [w, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
 
 private theorem selector_image_z :
     ToricIdeals.SplitQuadric.normal (ToricIdeals.SplitQuadric.exponentMap z) = z := by
@@ -510,16 +510,16 @@ private theorem selector_image_z :
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.normal_apply_zero (targetTuple 0 1 1)).trans (by
       norm_num only [z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_one (targetTuple 0 1 1)).trans (by
       norm_num only [z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_two (targetTuple 0 1 1)).trans (by
       norm_num only [z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_three (targetTuple 0 1 1)).trans (by
       norm_num only [z, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
 
 private theorem selector_image_sum :
     ToricIdeals.SplitQuadric.normal
@@ -530,16 +530,16 @@ private theorem selector_image_sum :
   fin_cases i
   · exact (ToricIdeals.SplitQuadric.normal_apply_zero (targetTuple 1 1 1)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_one (targetTuple 1 1 1)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_two (targetTuple 1 1 1)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
   · exact (ToricIdeals.SplitQuadric.normal_apply_three (targetTuple 1 1 1)).trans (by
       norm_num only [x, y, Finsupp.add_apply, Finsupp.single_apply,
-        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte] ; rfl)
+        Fin.ext_iff, Fin.coe_ofNat_eq_mod, ↓reduceIte]; rfl)
 
 private theorem selector_w_z_not_additive : ToricIdeals.SplitQuadric.normal
       (ToricIdeals.SplitQuadric.exponentMap w + ToricIdeals.SplitQuadric.exponentMap z) ≠

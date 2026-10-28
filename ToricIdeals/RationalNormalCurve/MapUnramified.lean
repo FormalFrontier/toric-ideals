@@ -92,15 +92,15 @@ private theorem not_formallyUnramified_rncMap (R : Type u) [CommRing R] [Nontriv
   have hnil : IsNilpotent (RingHom.ker ρ) := by
     exact ⟨2, TrivSqZeroExt.kerIdeal_sq R R⟩
   intro h
-  letI : Algebra (Source R n) (Target R) := (rncMap R n).toAlgebra
-  letI : Algebra (Source R n) (DualNumber R) := (e₀.comp (rncMap R n)).toAlgebra
+  let : Algebra (Source R n) (Target R) := (rncMap R n).toAlgebra
+  let : Algebra (Source R n) (DualNumber R) := (e₀.comp (rncMap R n)).toAlgebra
   let gε : Target R →ₐ[Source R n] DualNumber R :=
     { toRingHom := eε
       commutes' := fun x => RingHom.congr_fun hbase x }
   let g₀ : Target R →ₐ[Source R n] DualNumber R :=
     { toRingHom := e₀
       commutes' := fun _ => rfl }
-  letI : Algebra.FormallyUnramified (Source R n) (Target R) := h
+  let : Algebra.FormallyUnramified (Source R n) (Target R) := h
   have hg : gε = g₀ :=
     Algebra.FormallyUnramified.lift_unique_of_ringHom ρ hnil gε g₀ hproj
   have heq := AlgHom.congr_fun hg (MvPolynomial.X (0 : Fin 2))
@@ -118,7 +118,7 @@ theorem rncMap_formallyUnramified_iff (R : Type u) [CommRing R] (n : ℕ) :
   · intro h
     rcases subsingleton_or_nontrivial R with hR | hR
     · exact Or.inr hR
-    · letI : Nontrivial R := hR
+    · let : Nontrivial R := hR
       left
       by_contra hn
       exact not_formallyUnramified_rncMap R n hn h

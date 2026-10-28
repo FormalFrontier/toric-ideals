@@ -16,9 +16,7 @@ Integer coefficients, the two-element field `ZMod 2`, the product `ℤ × ℤ`,
 `ZMod 4` and the zero ring `ZMod 1` give Noetherian Hankel quotients in every
 degree. The source-and-quotient models use Mathlib's finite-variable Hilbert
 basis theorem and Noetherian quotient instance, independently of the quotient
-criterion. Further examples apply both directions of the criterion over an
-arbitrary commutative ring and specialize it to the nonreduced, zero and
-product coefficient rings.
+criterion. Further examples specialize the criterion to nonreduced, zero and product coefficients.
 
 The product and `ZMod 4` models allow zero divisors and nonreduced coefficients,
 respectively; the zero-ring model allows `1 = 0`. The small-degree models use
@@ -95,20 +93,6 @@ private theorem degree_one_two_variable_quotient_noetherian
   let : IsNoetherianRing (Source R 1) := MvPolynomial.isNoetherianRing_fin
   exact Ideal.Quotient.isNoetherianRing _
 
-/-- A supplied Noetherian coefficient hypothesis gives a Noetherian Hankel
-quotient in every degree, over a commutative ring in any universe. -/
-private theorem hankel_quotient_noetherian_of_noetherian_coefficients
-    (R : Type u) [CommRing R] (n : ℕ) (hR : IsNoetherianRing R) :
-    IsNoetherianRing (Source R n ⧸ hankelIdeal R n) := by
-  exact (quotient_isNoetherianRing_iff R n).mpr hR
-
-/-- Noetherianity of a Hankel quotient recovers Noetherianity of its
-coefficient ring without a positivity or nontriviality assumption. -/
-private theorem coefficients_noetherian_of_noetherian_hankel_quotient
-    (R : Type u) [CommRing R] (n : ℕ)
-    (hQ : IsNoetherianRing (Source R n ⧸ hankelIdeal R n)) :
-    IsNoetherianRing R := by
-  exact (quotient_isNoetherianRing_iff R n).mp hQ
 
 /-- The quotient criterion applies uniformly to nonreduced coefficients,
 the zero ring and a product of integer rings. -/

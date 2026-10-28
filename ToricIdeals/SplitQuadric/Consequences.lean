@@ -48,7 +48,6 @@ noncomputable def rangeEquiv : CoordinateRing A ≃ₐ[A] (theta A).range :=
     (Ideal.quotientKerEquivRange (theta A))
 
 /-- The range equivalence computes substitution on a polynomial representative. -/
-@[simp]
 theorem rangeEquiv_quotientMap (p : Polynomial A) :
     (rangeEquiv A (quotientMap A p) : ParameterPolynomial A) = theta A p := by
   -- Both quotient transports keep the representative, and the final quotient lift

@@ -29,10 +29,10 @@ homogeneous quartics, retaining the nonzero square-zero coefficient `2` in a
 positive-degree component. Zero coefficients and independently lifted integer
 coefficients are also included. All model declarations are private.
 
-The dependent `#check` records a prospective basis-data signature; it does not
-define a basis for arbitrary `n` and `d`. A public component API would expose
-homogeneous representatives and quotient membership, and a public basis would
-need vector, coordinate and reconstruction formulas, not just freeness.
+The models use the public homogeneous-submodule, representative and quotient-map
+API. Their local bases and coordinate equivalences are constructed explicitly;
+they do not compare the chosen public homogeneous basis or its normalization.
+The three self-representation reconstructions check the local basis interfaces.
 
 ## References
 
@@ -49,37 +49,6 @@ namespace ToricIdeals.RationalNormalCurve.HomogeneousQuotientModels
 noncomputable section
 
 universe u v
-
--- This is a dependent function TYPE, with no basis-existence premise.
-#check ((R : Type u) → [CommRing R] → (n d : ℕ) →
-  Module.Basis (Fin (n * d + 1)) R
-    ((MvPolynomial.homogeneousSubmodule (Fin (n + 1)) R d).map
-      (Ideal.Quotient.mkₐ R (hankelIdeal R n)).toLinearMap))
-
--- A private abbreviation of the stock object, not another grading or action.
-private abbrev component (R : Type u) [CommRing R] (n d : ℕ) :=
-  (MvPolynomial.homogeneousSubmodule (Fin (n + 1)) R d).map
-    (Ideal.Quotient.mkₐ R (hankelIdeal R n)).toLinearMap
-
-private theorem component_mem_iff (R : Type u) [CommRing R] (n d : ℕ)
-    (x : Source R n ⧸ hankelIdeal R n) :
-    x ∈ component R n d ↔ ∃ p : Source R n,
-      p.IsHomogeneous d ∧ Ideal.Quotient.mkₐ R (hankelIdeal R n) p = x :=
-  Submodule.mem_map
-
-private def representative (R : Type u) [CommRing R] (n d : ℕ)
-    (p : Source R n) (hp : p.IsHomogeneous d) : component R n d :=
-  ⟨Ideal.Quotient.mkₐ R (hankelIdeal R n) p, Submodule.mem_map_of_mem hp⟩
-
-private theorem representative_coe (R : Type u) [CommRing R] (n d : ℕ)
-    (p : Source R n) (hp : p.IsHomogeneous d) :
-    (representative R n d p hp : Source R n ⧸ hankelIdeal R n) =
-      Ideal.Quotient.mk (hankelIdeal R n) p := rfl
-
-private theorem component_ext (R : Type u) [CommRing R] (n d : ℕ)
-    (x y : component R n d)
-    (h : (x : Source R n ⧸ hankelIdeal R n) = y) : x = y :=
-  Subtype.ext h
 
 /-! ## One variable: source degree is not lost at `n = 0` -/
 
@@ -100,18 +69,11 @@ private def oneExponentIndex (d : ℕ) :
 
 private theorem zero_mk_injective (R : Type u) [CommRing R] :
     Function.Injective (Ideal.Quotient.mkₐ R (hankelIdeal R 0)).toLinearMap := by
-  intro p q h
-  apply sub_eq_zero.mp
-  apply Ideal.mem_bot.mp
-  rw [← hankelIdeal_zero R]
-  apply Ideal.Quotient.eq_zero_iff_mem.mp
-  change Ideal.Quotient.mkₐ R (hankelIdeal R 0) (p - q) = 0
-  change Ideal.Quotient.mkₐ R (hankelIdeal R 0) p =
-    Ideal.Quotient.mkₐ R (hankelIdeal R 0) q at h
-  rw [map_sub, h, sub_self]
+  exact ((Ideal.Quotient.mk_bijective_iff_eq_bot (hankelIdeal R 0)).mpr
+    (hankelIdeal_zero R)).1
 
 private def oneVariableBasis (R : Type u) [CommRing R] (d : ℕ) :
-    Module.Basis (Fin 1) R (component R 0 d) :=
+    Module.Basis (Fin 1) R (quotientHomogeneousSubmodule R 0 d) :=
   (((MvPolynomial.basisRestrictSupport R {e : Fin 1 →₀ ℕ | e.degree = d}).map
       (LinearEquiv.ofEq _ _
         (MvPolynomial.homogeneousSubmodule_eq_finsupp_supported (Fin 1) R d).symm)).reindex
@@ -136,7 +98,7 @@ private theorem oneVariableBasis_apply (R : Type u) [CommRing R] (d : ℕ) (i : 
   rfl
 
 private theorem oneVariable_reconstruction (R : Type u) [CommRing R] (d : ℕ)
-    (x : component R 0 d) :
+    (x : quotientHomogeneousSubmodule R 0 d) :
     (oneVariableBasis R d).repr x 0 • oneVariableBasis R d 0 = x := by
   simpa only [Fin.sum_univ_one] using (oneVariableBasis R d).sum_repr x
 
@@ -164,9 +126,9 @@ private theorem zero_parameter_is_not_the_component (R : Type u) [CommRing R] :
 /-! ## Degree zero: the actual coefficient component -/
 
 private def constantEquiv (R : Type u) [CommRing R] (n : ℕ) :
-    component R n 0 ≃ₗ[R] R where
+    quotientHomogeneousSubmodule R n 0 ≃ₗ[R] R where
   toFun x := quotientAugmentation R n x.1
-  invFun r := representative R n 0 (C r) (isHomogeneous_C (Fin (n + 1)) r)
+  invFun r := quotientHomogeneousRepresentative R n 0 (C r) (isHomogeneous_C (Fin (n + 1)) r)
   left_inv x := by
     rcases x with ⟨x, p, hp, rfl⟩
     apply Subtype.ext
@@ -183,7 +145,7 @@ private def constantEquiv (R : Type u) [CommRing R] (n : ℕ) :
   map_smul' r x := (quotientAugmentation R n).toLinearMap.map_smul r x.1
 
 private def constantBasis (R : Type u) [CommRing R] (n : ℕ) :
-    Module.Basis (Fin 1) R (component R n 0) :=
+    Module.Basis (Fin 1) R (quotientHomogeneousSubmodule R n 0) :=
   (Module.Basis.singleton (Fin 1) R).map (constantEquiv R n).symm
 
 private theorem constantBasis_apply (R : Type u) [CommRing R] (n : ℕ) (i : Fin 1) :
@@ -199,11 +161,11 @@ private theorem constant_scalar_action (R : Type u) [CommRing R] (n : ℕ) (r : 
 
 private theorem constant_scalar_coordinate (R : Type u) [CommRing R] (n : ℕ) (r : R) :
     (constantEquiv R n)
-      (representative R n 0 (C r) (isHomogeneous_C (Fin (n + 1)) r)) = r :=
+      (quotientHomogeneousRepresentative R n 0 (C r) (isHomogeneous_C (Fin (n + 1)) r)) = r :=
   (constantEquiv R n).apply_symm_apply r
 
 private theorem constant_reconstruction (R : Type u) [CommRing R] (n : ℕ)
-    (x : component R n 0) :
+    (x : quotientHomogeneousSubmodule R n 0) :
     (constantBasis R n).repr x 0 • constantBasis R n 0 = x := by
   simpa only [Fin.sum_univ_one] using (constantBasis R n).sum_repr x
 
@@ -234,18 +196,11 @@ private theorem twoExponentIndex_symm (d : ℕ) (i : Fin (d + 1)) :
 
 private theorem one_mk_injective (R : Type u) [CommRing R] :
     Function.Injective (Ideal.Quotient.mkₐ R (hankelIdeal R 1)).toLinearMap := by
-  intro p q h
-  apply sub_eq_zero.mp
-  apply Ideal.mem_bot.mp
-  rw [← hankelIdeal_one R]
-  apply Ideal.Quotient.eq_zero_iff_mem.mp
-  change Ideal.Quotient.mkₐ R (hankelIdeal R 1) (p - q) = 0
-  change Ideal.Quotient.mkₐ R (hankelIdeal R 1) p =
-    Ideal.Quotient.mkₐ R (hankelIdeal R 1) q at h
-  rw [map_sub, h, sub_self]
+  exact ((Ideal.Quotient.mk_bijective_iff_eq_bot (hankelIdeal R 1)).mpr
+    (hankelIdeal_one R)).1
 
 private def twoVariableBasis (R : Type u) [CommRing R] (d : ℕ) :
-    Module.Basis (Fin (d + 1)) R (component R 1 d) :=
+    Module.Basis (Fin (d + 1)) R (quotientHomogeneousSubmodule R 1 d) :=
   (((MvPolynomial.basisRestrictSupport R {e : Fin 2 →₀ ℕ | e.degree = d}).map
       (LinearEquiv.ofEq _ _
         (MvPolynomial.homogeneousSubmodule_eq_finsupp_supported (Fin 2) R d).symm)).reindex
@@ -272,7 +227,7 @@ private theorem twoVariableBasis_apply (R : Type u) [CommRing R] (d : ℕ)
   rfl
 
 private theorem twoVariable_reconstruction (R : Type u) [CommRing R] (d : ℕ)
-    (x : component R 1 d) :
+    (x : quotientHomogeneousSubmodule R 1 d) :
     ∑ i, (twoVariableBasis R d).repr x i • twoVariableBasis R d i = x :=
   (twoVariableBasis R d).sum_repr x
 
@@ -290,8 +245,8 @@ private theorem conicPolynomial_homogeneous (i : Fin 5) :
   · exact (isHomogeneous_X (ZMod 4) 1).mul (isHomogeneous_X (ZMod 4) 2)
   · exact isHomogeneous_X_pow (R := ZMod 4) (2 : Fin 3) 2
 
-private def conicVector (i : Fin 5) : component (ZMod 4) 2 2 :=
-  representative (ZMod 4) 2 2 (conicPolynomial i) (conicPolynomial_homogeneous i)
+private def conicVector (i : Fin 5) : quotientHomogeneousSubmodule (ZMod 4) 2 2 :=
+  quotientHomogeneousRepresentative (ZMod 4) 2 2 (conicPolynomial i) (conicPolynomial_homogeneous i)
 
 private theorem conic_relation :
     Ideal.Quotient.mkₐ (ZMod 4) (hankelIdeal (ZMod 4) 2) (X 0 * X 2) =
@@ -302,69 +257,42 @@ private theorem conic_relation :
   simpa only [hminor, pow_two] using
     minor_mem (ZMod 4) 2 ⟨(0, 1), by decide⟩
 
-private def conicDescend :
-    (Source (ZMod 4) 2 ⧸ hankelIdeal (ZMod 4) 2) →ₐ[ZMod 4] Target (ZMod 4) :=
-  Ideal.Quotient.liftₐ (hankelIdeal (ZMod 4) 2)
-    (AddMonoidAlgebra.mapDomainAlgHom (ZMod 4) (ZMod 4) (rncExponent 2))
-    (fun _p hp => hankelIdeal_le_ker (ZMod 4) 2 hp)
+private theorem conic_quotientMap_injective :
+    Function.Injective (quotientMap (ZMod 4) 2) := by
+  change Function.Injective (quotientMap (ZMod 4) 2).toRingHom
+  rw [quotientMap_toRingHom]
+  exact RingHom.lift_injective_of_ker_le_ideal _ _
+    (hankelIdeal_eq_ker (ZMod 4) 2 (by decide)).ge
 
-private theorem conicDescend_mk (p : Source (ZMod 4) 2) :
-    conicDescend (Ideal.Quotient.mkₐ (ZMod 4) (hankelIdeal (ZMod 4) 2) p) =
-      rncMap (ZMod 4) 2 p := rfl
-
-private theorem conicDescend_injective : Function.Injective conicDescend := by
-  intro x y h
-  obtain ⟨p, rfl⟩ := Ideal.Quotient.mkₐ_surjective (ZMod 4) (hankelIdeal (ZMod 4) 2) x
-  obtain ⟨q, rfl⟩ := Ideal.Quotient.mkₐ_surjective (ZMod 4) (hankelIdeal (ZMod 4) 2) y
-  apply (Ideal.Quotient.mk_eq_mk_iff_sub_mem _ _).mpr
-  rw [hankelIdeal_eq_ker (ZMod 4) 2 (by decide)]
-  change rncMap (ZMod 4) 2 (p - q) = 0
-  rw [conicDescend_mk, conicDescend_mk] at h
-  rw [map_sub, h, sub_self]
-
-private def conicCoordinates : component (ZMod 4) 2 2 →ₗ[ZMod 4] (Fin 5 → ZMod 4) where
-  toFun x i := (conicDescend x.1).coeff ((twoExponentIndex 4).symm i).1
+private def conicCoordinates :
+    quotientHomogeneousSubmodule (ZMod 4) 2 2 →ₗ[ZMod 4] (Fin 5 → ZMod 4) where
+  toFun x i := (quotientMap (ZMod 4) 2 x.1).coeff ((twoExponentIndex 4).symm i).1
   map_add' x y := by ext i; simp
   map_smul' r x := by ext i; simp
 
 private theorem conicCoordinates_vector (i : Fin 5) :
     conicCoordinates (conicVector i) = Pi.single i 1 := by
   ext j
-  change (conicDescend
+  change (quotientMap (ZMod 4) 2
       (Ideal.Quotient.mkₐ (ZMod 4) (hankelIdeal (ZMod 4) 2) (conicPolynomial i))).coeff
       ((twoExponentIndex 4).symm j).1 = (Pi.single i (1 : ZMod 4) : Fin 5 → ZMod 4) j
-  rw [conicDescend_mk, twoExponentIndex_symm]
+  rw [Ideal.Quotient.mkₐ_eq_mk, quotientMap_mk, twoExponentIndex_symm]
   fin_cases i <;> fin_cases j <;>
     simp [conicPolynomial, map_mul, map_pow, rncMap_X, coordinateExponent,
       monomial_mul_monomial, monomial_pow, Finsupp.ext_iff, Fin.forall_fin_two]
 
-private theorem conic_image_homogeneous (p : Source (ZMod 4) 2)
-    (hp : p.IsHomogeneous 2) : (rncMap (ZMod 4) 2 p).IsHomogeneous 4 := by
-  rw [p.as_sum, map_sum]
-  apply (homogeneousSubmodule (Fin 2) (ZMod 4) 4).sum_mem
-  intro e he
-  rw [rncMap_monomial]
-  apply isHomogeneous_monomial
-  have hedegree : e.degree = 2 := by
-    rw [Finsupp.degree_eq_weight_one]
-    exact hp (MvPolynomial.mem_support_iff.mp he)
-  have htotal := rncExponent_total 2 e
-  change rncExponent 2 e 0 + rncExponent 2 e 1 = 2 * e.degree at htotal
-  rw [hedegree] at htotal
-  simpa only [Finsupp.degree_eq_sum, Fin.sum_univ_two] using htotal
-
 private theorem conicCoordinates_injective : Function.Injective conicCoordinates := by
   intro x y h
   apply Subtype.ext
-  apply conicDescend_injective
-  obtain ⟨p, hp, hpx⟩ := (component_mem_iff (ZMod 4) 2 2 x.1).mp x.2
-  obtain ⟨q, hq, hqy⟩ := (component_mem_iff (ZMod 4) 2 2 y.1).mp y.2
-  have hph : (conicDescend x.1).IsHomogeneous 4 := by
-    rw [← hpx, conicDescend_mk]
-    exact conic_image_homogeneous p hp
-  have hqh : (conicDescend y.1).IsHomogeneous 4 := by
-    rw [← hqy, conicDescend_mk]
-    exact conic_image_homogeneous q hq
+  apply conic_quotientMap_injective
+  obtain ⟨p, hp, hpx⟩ := (mem_quotientHomogeneousSubmodule_iff (ZMod 4) 2 2 x.1).mp x.2
+  obtain ⟨q, hq, hqy⟩ := (mem_quotientHomogeneousSubmodule_iff (ZMod 4) 2 2 y.1).mp y.2
+  have hph : (quotientMap (ZMod 4) 2 x.1).IsHomogeneous 4 := by
+    rw [← hpx, Ideal.Quotient.mkₐ_eq_mk, quotientMap_mk]
+    exact rncMap_isHomogeneous (ZMod 4) 2 2 p hp
+  have hqh : (quotientMap (ZMod 4) 2 y.1).IsHomogeneous 4 := by
+    rw [← hqy, Ideal.Quotient.mkₐ_eq_mk, quotientMap_mk]
+    exact rncMap_isHomogeneous (ZMod 4) 2 2 q hq
   apply MvPolynomial.ext
   intro e
   by_cases he : e.degree = 4
@@ -372,8 +300,8 @@ private theorem conicCoordinates_injective : Function.Injective conicCoordinates
     have hi := congrFun h i
     have hindex : ((twoExponentIndex 4).symm i).1 = e :=
       congrArg Subtype.val ((twoExponentIndex 4).symm_apply_apply ⟨e, he⟩)
-    change (conicDescend x.1).coeff ((twoExponentIndex 4).symm i).1 =
-      (conicDescend y.1).coeff ((twoExponentIndex 4).symm i).1 at hi
+    change (quotientMap (ZMod 4) 2 x.1).coeff ((twoExponentIndex 4).symm i).1 =
+      (quotientMap (ZMod 4) 2 y.1).coeff ((twoExponentIndex 4).symm i).1 at hi
     simpa only [hindex] using hi
   · rw [hph.coeff_eq_zero he, hqh.coeff_eq_zero he]
 
@@ -383,11 +311,12 @@ private theorem conicCoordinates_surjective : Function.Surjective conicCoordinat
   ext j
   simp [map_sum, map_smul, conicCoordinates_vector, Pi.single_apply]
 
-private def conicEquiv : component (ZMod 4) 2 2 ≃ₗ[ZMod 4] (Fin 5 → ZMod 4) :=
+private def conicEquiv : quotientHomogeneousSubmodule (ZMod 4) 2 2 ≃ₗ[ZMod 4] (Fin 5 → ZMod 4) :=
   LinearEquiv.ofBijective conicCoordinates
     ⟨conicCoordinates_injective, conicCoordinates_surjective⟩
 
-private def conicBasis : Module.Basis (Fin 5) (ZMod 4) (component (ZMod 4) 2 2) :=
+private def conicBasis :
+    Module.Basis (Fin 5) (ZMod 4) (quotientHomogeneousSubmodule (ZMod 4) 2 2) :=
   Module.Basis.ofEquivFun conicEquiv
 
 private theorem conicBasis_apply (i : Fin 5) : conicBasis i = conicVector i := by
@@ -397,12 +326,13 @@ private theorem conicBasis_apply (i : Fin 5) : conicBasis i = conicVector i := b
   rw [hb, LinearEquiv.apply_symm_apply]
   exact (conicCoordinates_vector i).symm
 
-private theorem conicBasis_repr (x : component (ZMod 4) 2 2) (i : Fin 5) :
-    conicBasis.repr x i = (conicDescend x.1).coeff ((twoExponentIndex 4).symm i).1 :=
+private theorem conicBasis_repr (x : quotientHomogeneousSubmodule (ZMod 4) 2 2) (i : Fin 5) :
+    conicBasis.repr x i = (quotientMap (ZMod 4) 2 x.1).coeff ((twoExponentIndex 4).symm i).1 :=
   Module.Basis.ofEquivFun_repr_apply conicEquiv x i
 
-private theorem conic_reconstruction (x : component (ZMod 4) 2 2) :
-    ∑ i, (conicDescend x.1).coeff ((twoExponentIndex 4).symm i).1 • conicVector i = x := by
+private theorem conic_reconstruction (x : quotientHomogeneousSubmodule (ZMod 4) 2 2) :
+    ∑ i, (quotientMap (ZMod 4) 2 x.1).coeff ((twoExponentIndex 4).symm i).1 •
+      conicVector i = x := by
   simpa only [conicBasis_repr, conicBasis_apply] using conicBasis.sum_repr x
 
 private theorem conic_nilpotent_positive_coordinate :
@@ -426,22 +356,19 @@ private theorem conic_nilpotent_positive_coordinate :
 /-! ## Zero coefficients and an independent coefficient universe -/
 
 private def zeroCoefficientBasis (n d : ℕ) :
-    Module.Basis (Fin (n * d + 1)) (ZMod 1) (component (ZMod 1) n d) :=
+    Module.Basis (Fin (n * d + 1)) (ZMod 1) (quotientHomogeneousSubmodule (ZMod 1) n d) :=
   Module.Basis.ofRepr
-    (Module.subsingletonEquiv (ZMod 1) (component (ZMod 1) n d) (Fin (n * d + 1)))
+    (Module.subsingletonEquiv (ZMod 1)
+      (quotientHomogeneousSubmodule (ZMod 1) n d) (Fin (n * d + 1)))
 
-private theorem zeroCoefficient_coordinates (n d : ℕ) (x : component (ZMod 1) n d)
-    (i : Fin (n * d + 1)) :
+private theorem zeroCoefficient_coordinates (n d : ℕ)
+    (x : quotientHomogeneousSubmodule (ZMod 1) n d) (i : Fin (n * d + 1)) :
     (zeroCoefficientBasis n d).repr x i = 0 :=
   Subsingleton.elim _ _
 
 private theorem zeroCoefficient_vectors_coincide (n d : ℕ) (i j : Fin (n * d + 1)) :
     zeroCoefficientBasis n d i = zeroCoefficientBasis n d j :=
   Subsingleton.elim _ _
-
-private def liftedIntegerBasis (d : ℕ) :
-    Module.Basis (Fin 1) (ULift.{v} ℤ) (component (ULift.{v} ℤ) 0 d) :=
-  oneVariableBasis (ULift.{v} ℤ) d
 
 private theorem liftedInteger_power_survives (d : ℕ) :
     Ideal.Quotient.mkₐ (ULift.{v} ℤ) (hankelIdeal (ULift.{v} ℤ) 0) (X 0 ^ d) ≠ 0 :=

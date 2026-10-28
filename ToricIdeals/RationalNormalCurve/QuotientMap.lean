@@ -34,20 +34,20 @@ polynomial ring, with its coefficient algebra structure. -/
 noncomputable def quotientMap : (Source R n ⧸ hankelIdeal R n) →ₐ[R] Target R :=
   Ideal.Quotient.liftₐ (hankelIdeal R n)
     (AddMonoidAlgebra.mapDomainAlgHom R R (rncExponent n))
-    (fun p hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp))
+    (fun _ hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp))
 
 /-- On representatives the quotient parametrization is the original map. -/
 @[simp] theorem quotientMap_mk (p : Source R n) :
     quotientMap R n (Ideal.Quotient.mk (hankelIdeal R n) p) = rncMap R n p := rfl
 
 /-- The quotient parametrization fixes coefficients. -/
-@[simp] theorem quotientMap_C (r : R) :
+theorem quotientMap_C (r : R) :
     quotientMap R n (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.C r)) =
       MvPolynomial.C r := by
   rw [quotientMap_mk, rncMap_C]
 
 /-- A quotient coordinate has its designated monomial image. -/
-@[simp] theorem quotientMap_X (i : Fin (n + 1)) :
+theorem quotientMap_X (i : Fin (n + 1)) :
     quotientMap R n (Ideal.Quotient.mk (hankelIdeal R n) (MvPolynomial.X i)) =
       MvPolynomial.monomial (coordinateExponent n i) 1 := by
   rw [quotientMap_mk, rncMap_X]
@@ -56,7 +56,7 @@ noncomputable def quotientMap : (Source R n ⧸ hankelIdeal R n) →ₐ[R] Targe
 theorem quotientMap_toRingHom :
     (quotientMap R n).toRingHom =
       Ideal.Quotient.lift (hankelIdeal R n) (rncMap R n)
-        (fun p hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp)) := rfl
+        (fun _ hp => RingHom.mem_ker.mp (hankelIdeal_le_ker R n hp)) := rfl
 
 /-- Composing with the quotient projection recovers the parametrization. -/
 theorem quotientMap_comp_mk :

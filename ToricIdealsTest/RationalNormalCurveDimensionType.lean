@@ -68,14 +68,14 @@ private theorem nonreducedTwo :
 
 private theorem zeroCoefficients (n : ℕ) :
     ringKrullDim (Source (ZMod 1) n ⧸ hankelIdeal (ZMod 1) n) = ⊥ := by
-  simpa [ringKrullDim_eq_bot_of_subsingleton] using
-    (ringKrullDim_quotient_hankelIdeal (ZMod 1) n)
+  rw [ringKrullDim_quotient_hankelIdeal]
+  simp [ringKrullDim_eq_bot_of_subsingleton]
 
 private theorem uliftDimension (R : Type u) [CommRing R] [IsNoetherianRing R]
     (n : ℕ) :
     ringKrullDim (Source (ULift.{v} R) n ⧸ hankelIdeal (ULift.{v} R) n) =
       ringKrullDim R + (if n = 0 then 1 else 2) := by
-  letI : IsNoetherianRing (ULift.{v} R) :=
+  let : IsNoetherianRing (ULift.{v} R) :=
     isNoetherianRing_of_ringEquiv R ULift.ringEquiv.symm
   calc
     ringKrullDim (Source (ULift.{v} R) n ⧸ hankelIdeal (ULift.{v} R) n) =
