@@ -5,8 +5,9 @@ project:
   description: >-
     Reusable Lean theory of coefficientwise fiber normalization over arbitrary
     rings, its kernel and ideal-membership criteria for additive monoid
-    algebras, all-coefficient binomial membership for coprime bivariate
-    weights over arbitrary possibly noncommutative rings, and the Hankel-minor presentation of the degree-n rational
+    algebras, coprime bivariate natural-weight kernel presentations and
+    all-coefficient binomial membership over arbitrary possibly noncommutative
+    rings, and the Hankel-minor presentation of the degree-n rational
     normal curve's monomial-map kernel for positive n over arbitrary commutative
     rings, with low-degree boundaries, a quotient-to-image equivalence,
     domain-dependent consequences, all-degree freeness, flatness and faithful
@@ -67,8 +68,10 @@ sources:
       terminal-exponent uniqueness, the reverse Hankel-ideal inclusion and the
       arithmetic exponent-image criterion. Coprime weighted-fiber membership
       uses natural-number coprime divisibility and a left-multiple telescoping
-      argument in the existing additive monoid algebra; it constructs no
-      normal-form selector or kernel presentation. The raw-map surjectivity criterion
+      argument in the existing additive monoid algebra. Its kernel presentation
+      combines that congruence with imagewise preimage choice and the existing
+      coefficientwise normalization theorem; no public selector or global
+      target section is constructed. The raw-map surjectivity criterion
       combines that exponent criterion and the coefficient-vanishing API with
       Mathlib's Finsupp coefficient-transport surjectivity and subsingleton-target
       surjectivity. The Jacobson quotient criterion
@@ -119,7 +122,12 @@ status:
     satisfying b*d(0)+a*d(1) = b*e(0)+a*e(1), every coefficient c : R gives
     single d c - single e c in the left ideal spanned by X₀^a - X₁^b.
     It includes noncommutative rings, zero rings and coprime zero-weight axes,
-    without positivity or nontriviality assumptions. The scope also includes
+    without positivity or nontriviality assumptions.
+    ker_mapDomainRingHom_weight_eq_span_of_coprime identifies this span with
+    the kernel of the stock mapDomainRingHom for the stock Finsupp.weight
+    with natural weights (b,a). Its characteristic membership theorem detects
+    vanishing under mapDomain, without a full-target surjectivity claim.
+    The scope also includes
     the specified Hankel-minor
     presentation, degree-zero and degree-one boundaries, quotient-to-image
     equivalence, domain-dependent prime/spectrum results, and coefficient
@@ -265,8 +273,10 @@ fidelity:
     commutativity; its arbitrary-function form asserts membership of elements
     with vanishing fiber sums, not multiplicativity. Kernel equality for additive
     exponent homomorphisms separately requires the ideal to lie in the kernel.
-    Coprime two-variable fiber membership likewise concerns a left ideal,
-    not a quotient ring, and supplies no selector or full kernel equality.
+    Coprime two-variable fiber membership and its kernel presentation concern
+    the left span of X₀^a - X₁^b, not a quotient-ring construction or a
+    surjection onto every natural target weight. The exponent scalars and
+    target are natural numbers, independently of the coefficient ring.
     Its possibly noncommutative coefficient rings are broader than the
     polynomial and commutative-ring applications elsewhere in the library.
     The curve kernel equality generalizes the motivating example to arbitrary

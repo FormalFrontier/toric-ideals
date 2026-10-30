@@ -5,8 +5,11 @@ Ravi Vakil's *The Rising Sea: Foundations of Algebraic Geometry* (October 21,
 criterion. No source text or PDF is reproduced, and the citation implies
 neither participation nor endorsement. The curve definitions, descent,
 terminal-exponent uniqueness and normalization proofs are Formal Frontier
-work. The Jacobson proof follows the constant-coefficient augmentation argument
-of this library's Noetherian module and uses the Jacobson providers in
+work. The coprime natural-weight kernel presentation reuses this library's
+all-coefficient binomial congruence and coefficientwise normalization theorem,
+with imagewise preimage choice and Mathlib's natural-weight and monoid-algebra
+pushforward APIs. The Jacobson proof follows the constant-coefficient
+augmentation argument of this library's Noetherian module and uses the Jacobson providers in
 `Mathlib.RingTheory.Jacobson.Ring`. The left coefficient-module criteria use
 this library's coordinate-axis surjection, the polynomial coefficient-module
 criteria in [multivariate-polynomials](https://github.com/FormalFrontier/multivariate-polynomials),

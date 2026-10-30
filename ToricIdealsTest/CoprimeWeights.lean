@@ -11,6 +11,7 @@ import Mathlib.Tactic.NormNum
 
 The two exponent vectors below have weight `17` for weights `(3,2)`.
 The binomial is not the defining generator and is nonzero over the integers.
+Its ideal membership is detected by the natural-weight pushforward.
 -/
 
 open AddMonoidAlgebra
@@ -24,9 +25,12 @@ private theorem cusp_binomial_mem_and_ne_zero :
       (single d (1 : ℤ) - single e 1 : AddMonoidAlgebra ℤ (Fin 2 →₀ ℕ)) ≠ 0 := by
   dsimp only
   constructor
-  · apply single_sub_single_mem_span_of_coprime_weight_eq (a := 2) (b := 3)
-      (by decide) 1
-    norm_num [Finsupp.single_apply]
+  · apply (mem_span_iff_mapDomain_weight_eq_zero_of_coprime
+      (a := 2) (b := 3) (by decide)).2
+    change (mapDomainRingHom ℤ (Finsupp.weight
+      (fun i : Fin 2 => if i = 0 then 3 else 2))) _ = 0
+    rw [map_sub]
+    norm_num [mapDomain_single, map_add, Finsupp.weight_single]
   · intro h
     have hd : (Finsupp.single (0 : Fin 2) 1 + Finsupp.single 1 7 : Fin 2 →₀ ℕ) ≠
         Finsupp.single 0 5 + Finsupp.single 1 1 := by
