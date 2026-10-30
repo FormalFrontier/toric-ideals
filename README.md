@@ -32,6 +32,14 @@ Here `Subsingleton R` means the zero coefficient ring or semiring.
   membership criterion additionally need the reverse ideal inclusion. No
   commutativity, section or surjectivity is needed; an arbitrary index function
   need not induce a ring map. See the [normalization contract](docs/FiberNormalization.md).
+- **Coprime weighted fibers:** In `AddMonoidAlgebra R (Fin 2 →₀ ℕ)` for any
+  ring `R`, `Nat.Coprime a b` and equal weights
+  `b*d(0)+a*d(1) = b*e(0)+a*e(1)` imply that
+  `single d c - single e c` belongs to the principal **left** ideal generated
+  by `X₀^a - X₁^b`, for every `c : R`. Noncommutative coefficient rings, zero
+  rings and the coprime axes `(0,1)` and `(1,0)` are included. See
+  [`single_sub_single_mem_span_of_coprime_weight_eq`](ToricIdeals/MonoidAlgebra/CoprimeWeights.lean).
+  This is a pairwise congruence, not a selector or a full kernel theorem.
 - **Hankel presentation:** For `1 ≤ n`,
   [`hankelIdeal_eq_ker`](ToricIdeals/RationalNormalCurve.lean) identifies `I(R,n)`
   with the kernel of `f` and the quotient with its **image subring**, not the
@@ -127,6 +135,7 @@ The root import `ToricIdeals` re-exports the leaves below except
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for the re-exported public APIs |
 | [`ToricIdeals.HomogeneousImage`](ToricIdeals/HomogeneousImage.lean) | Transport of internal submodule decompositions under surjective linear maps with homogeneous kernel |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
+| [`ToricIdeals.MonoidAlgebra.CoprimeWeights`](ToricIdeals/MonoidAlgebra/CoprimeWeights.lean) | All-coefficient binomial membership in the coprime two-variable principal left ideal over any ring |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.Cotangent`](ToricIdeals/RationalNormalCurve/Cotangent.lean) | Coefficient-ring basis of the augmentation kernel modulo its square, prescribed quotient-variable vectors and raw linear coordinates; direct import |
@@ -202,6 +211,12 @@ private theorem readme_degree_two_kernel (k : Type u) [CommRing k] :
     hankelIdeal k 2 = RingHom.ker (rncMap k 2) :=
   hankelIdeal_eq_ker k 2 (by decide)
 ```
+
+The root-import client in
+[`ToricIdealsTest/CoprimeWeights.lean`](ToricIdealsTest/CoprimeWeights.lean)
+uses the coprime weighted-fiber theorem at `(a,b)=(2,3)` for the distinct
+exponents `(5,1)` and `(1,7)`. It proves ideal membership and nonvanishing of
+the integer binomial, whose common weight is `17`.
 
 See the [API guide](docs/README.md) for theorem usage and stored boundary examples.
 

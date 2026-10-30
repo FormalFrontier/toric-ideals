@@ -48,7 +48,8 @@ weak.linter.privateModule = false
 # so recheck ownership if these selected modules gain submodules.
 [[lean_lib]]
 name = "ToricIdealsModelTests"
-roots = ["ToricIdealsTest.RationalNormalCurveArtinianModels",
+roots = ["ToricIdealsTest.CoprimeWeights",
+  "ToricIdealsTest.RationalNormalCurveArtinianModels",
   "ToricIdealsTest.CoefficientAlgebraModels",
   "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousBasisNaturalityModels",
   "ToricIdealsTest.Audit.RationalNormalCurveHomogeneousBasisClients",
@@ -95,7 +96,8 @@ roots = ["ToricIdealsTest.RationalNormalCurveArtinianModels",
   "ToricIdealsTest.RationalNormalCurveMapUnramifiedSmallModels",
   "ToricIdealsTest.Audit",
   "ToricIdealsTest.RationalNormalCurveJacobsonModels"]
-globs = ["ToricIdealsTest.RationalNormalCurveArtinianModels",
+globs = ["ToricIdealsTest.CoprimeWeights",
+  "ToricIdealsTest.RationalNormalCurveArtinianModels",
   "ToricIdealsTest.RationalNormalCurveArtinianModels.Integer",
   "ToricIdealsTest.RationalNormalCurveArtinianModels.ModFour",
   "ToricIdealsTest.RationalNormalCurveArtinianModels.Product",
