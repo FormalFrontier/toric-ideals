@@ -5,10 +5,11 @@ project:
   description: >-
     Reusable Lean theory of coefficientwise fiber normalization over arbitrary
     rings, its kernel and ideal-membership criteria for additive monoid
-    algebras, coprime bivariate natural-weight kernel presentations and
-    all-coefficient binomial membership over arbitrary possibly noncommutative
-    rings, and the Hankel-minor presentation of the degree-n rational
-    normal curve's monomial-map kernel for positive n over arbitrary commutative
+    algebras, gcd-reduced bivariate natural-weight kernel presentations for
+    pairs not both zero and coprime all-coefficient binomial membership over
+    arbitrary possibly noncommutative rings, and the Hankel-minor presentation
+    of the degree-n rational normal curve's monomial-map kernel for positive n
+    over arbitrary commutative
     rings, with low-degree boundaries, a quotient-to-image equivalence,
     domain-dependent consequences, all-degree freeness, flatness and faithful
     flatness of the full Hankel quotient for its canonical coefficient action
@@ -71,7 +72,11 @@ sources:
       argument in the existing additive monoid algebra. Its kernel presentation
       combines that congruence with imagewise preimage choice and the existing
       coefficientwise normalization theorem; no public selector or global
-      target section is constructed. The raw-map surjectivity criterion
+      target section is constructed. The general nonzero natural-weight pair
+      is reduced to coprime gcd quotients using Mathlib's natural gcd arithmetic,
+      injective multiplication of exponent indices, pushforward composition
+      and kernel invariance under injective postcomposition.
+      The raw-map surjectivity criterion
       combines that exponent criterion and the coefficient-vanishing API with
       Mathlib's Finsupp coefficient-transport surjectivity and subsingleton-target
       surjectivity. The Jacobson quotient criterion
@@ -127,6 +132,12 @@ status:
     the kernel of the stock mapDomainRingHom for the stock Finsupp.weight
     with natural weights (b,a). Its characteristic membership theorem detects
     vanishing under mapDomain, without a full-target surjectivity claim.
+    ToricIdeals.MonoidAlgebra.NaturalWeights extends the kernel and raw-image
+    membership criteria to all natural pairs a,b with a != 0 or b != 0:
+    the generator is X₀^(a / Nat.gcd a b) - X₁^(b / Nat.gcd a b).
+    Both axes, arbitrary coefficient universes, noncommutative rings and zero
+    rings are included. The pair (0,0) is excluded; its zero-weight kernel
+    generally requires both X₀-1 and X₁-1.
     The scope also includes
     the specified Hankel-minor
     presentation, degree-zero and degree-one boundaries, quotient-to-image

@@ -8,8 +8,12 @@ terminal-exponent uniqueness and normalization proofs are Formal Frontier
 work. The coprime natural-weight kernel presentation reuses this library's
 all-coefficient binomial congruence and coefficientwise normalization theorem,
 with imagewise preimage choice and Mathlib's natural-weight and monoid-algebra
-pushforward APIs. The Jacobson proof follows the constant-coefficient
-augmentation argument of this library's Noetherian module and uses the Jacobson providers in
+pushforward APIs. The gcd-reduced natural-weight presentation reuses that
+coprime theorem with Mathlib's coprime gcd quotients, injectivity of natural
+exponent multiplication, monoid-algebra pushforward composition and invariance
+of kernels under injective postcomposition. The Jacobson proof follows the
+constant-coefficient augmentation argument of this library's Noetherian module
+and uses the Jacobson providers in
 `Mathlib.RingTheory.Jacobson.Ring`. The left coefficient-module criteria use
 this library's coordinate-axis surjection, the polynomial coefficient-module
 criteria in [multivariate-polynomials](https://github.com/FormalFrontier/multivariate-polynomials),

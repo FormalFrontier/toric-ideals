@@ -45,6 +45,16 @@ Here `Subsingleton R` means the zero coefficient ring or semiring.
   `mem_span_iff_mapDomain_weight_eq_zero_of_coprime` detects membership by
   vanishing of that image. No full-target surjectivity is asserted: weights
   `(3,2)` miss `1`.
+- **Gcd-reduced natural-weight kernels:** For any `R : Type u` with `[Ring R]`
+  and `a,b : ℕ` with `a ≠ 0 ∨ b ≠ 0`, the same stock pushforward for weights
+  `(b,a)` has kernel generated as a **left** ideal by
+  `X₀^(a / Nat.gcd a b) - X₁^(b / Nat.gcd a b)`.
+  [`ker_mapDomainRingHom_weight_eq_span`](ToricIdeals/MonoidAlgebra/NaturalWeights.lean)
+  and `mem_span_iff_mapDomain_weight_eq_zero` include noncommutative rings,
+  zero rings and both axes: `(0,b)` gives `1-X₁` for `b ≠ 0`, and `(a,0)`
+  gives `X₀-1` for `a ≠ 0`. Weights `(6,4)` give `X₀²-X₁³`.
+  The pair `(0,0)` is excluded; its kernel generally needs both `X₀-1` and
+  `X₁-1`. No full-target surjectivity is assumed or asserted.
 - **Hankel presentation:** For `1 ≤ n`,
   [`hankelIdeal_eq_ker`](ToricIdeals/RationalNormalCurve.lean) identifies `I(R,n)`
   with the kernel of `f` and the quotient with its **image subring**, not the
@@ -141,6 +151,7 @@ The root import `ToricIdeals` re-exports the leaves below except
 | [`ToricIdeals.HomogeneousImage`](ToricIdeals/HomogeneousImage.lean) | Transport of internal submodule decompositions under surjective linear maps with homogeneous kernel |
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.MonoidAlgebra.CoprimeWeights`](ToricIdeals/MonoidAlgebra/CoprimeWeights.lean) | Coprime two-variable weight kernels and all-coefficient binomial membership over any ring |
+| [`ToricIdeals.MonoidAlgebra.NaturalWeights`](ToricIdeals/MonoidAlgebra/NaturalWeights.lean) | Gcd-reduced two-variable natural-weight kernels and membership criteria over any ring |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.Cotangent`](ToricIdeals/RationalNormalCurve/Cotangent.lean) | Coefficient-ring basis of the augmentation kernel modulo its square, prescribed quotient-variable vectors and raw linear coordinates; direct import |
