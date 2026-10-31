@@ -7,7 +7,8 @@ uses AI-assisted formalization and review.
 Reusable Lean 4 theory of coefficientwise normalization over rings, monomial-map
 kernels, the Hankel ideal of the rational normal curve over arbitrary
 commutative coefficient rings, and natural-number exponent normal forms for
-the split quadric, together with its coordinate algebra and localization charts.
+the split quadric, together with its coordinate algebra and localization charts,
+and finiteness of polynomial rings over subalgebras containing a positive power.
 
 ## Headline results
 
@@ -17,6 +18,21 @@ Unless stated otherwise, `R` is any commutative ring and `n : ℕ` includes zero
 In particular, `Q(R,0) = R[X₀]`, **not** the raw parametrization image `R`.
 Here `Subsingleton R` means the zero coefficient ring or semiring.
 
+- **Two-generator polynomial conductor:** For a commutative semiring `R` and
+  coprime natural numbers `a, b`, the greatest ideal of `R[X]` contained in
+  the canonical subalgebra `R[X^a, X^b]` is `(X^((a - 1)*(b - 1)))`.
+  This concerns every ambient polynomial ideal, includes exponents zero and
+  one, and permits the zero semiring. Membership in the subalgebra is also
+  characterized by the additive submonoid containing the support. See
+  [the conductor theorem](ToricIdeals/Polynomial/Conductor.lean) and its
+  [natural-coefficient example](ToricIdealsTest/PolynomialConductor.lean).
+- **Polynomial subalgebras containing a power:** For every commutative semiring
+  `R : Type u`, `A : Subalgebra R R[X]`, and positive natural number `n` with
+  `X ^ n ∈ A`, `Polynomial.span_X_pow_eq_top_of_X_pow_mem` shows that the first
+  `n` powers of `X` span `R[X]` for the canonical multiplication action of `A`.
+  `Polynomial.moduleFinite_of_X_pow_mem` consequently gives `Module.Finite A R[X]`.
+  No ring, domain, nontriviality or Noetherian hypothesis is needed, and no basis
+  or freeness is asserted. See [finite polynomial subalgebras](ToricIdeals/Polynomial/FiniteSubalgebra.lean).
 - **Coefficient change on full Hankel quotients:** For commutative rings
   `R : Type u`, `S : Type v` in independent universes and any `φ : R →+* S`, the
   induced stock ideal quotient map `Q(R,n) →+* Q(S,n)` is injective exactly when
@@ -152,6 +168,7 @@ The root import `ToricIdeals` re-exports the leaves below except
 | [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
 | [`ToricIdeals.MonoidAlgebra.CoprimeWeights`](ToricIdeals/MonoidAlgebra/CoprimeWeights.lean) | Coprime two-variable weight kernels and all-coefficient binomial membership over any ring |
 | [`ToricIdeals.MonoidAlgebra.NaturalWeights`](ToricIdeals/MonoidAlgebra/NaturalWeights.lean) | Gcd-reduced two-variable natural-weight kernels and membership criteria over any ring |
+| [`ToricIdeals.Polynomial.FiniteSubalgebra`](ToricIdeals/Polynomial/FiniteSubalgebra.lean) | Finite spanning powers and module finiteness over a subalgebra containing a positive power of `X`, over any commutative semiring |
 | [`ToricIdeals.RationalNormalCurve`](ToricIdeals/RationalNormalCurve.lean) | Hankel presentation, reduction, kernel and quotient criteria |
 | [`ToricIdeals.RationalNormalCurve.Augmentation`](ToricIdeals/RationalNormalCurve/Augmentation.lean) | Coefficient augmentation, its variable-span kernel and membership criterion in every degree |
 | [`ToricIdeals.RationalNormalCurve.Cotangent`](ToricIdeals/RationalNormalCurve/Cotangent.lean) | Coefficient-ring basis of the augmentation kernel modulo its square, prescribed quotient-variable vectors and raw linear coordinates; direct import |

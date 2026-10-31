@@ -8,6 +8,8 @@ public import ToricIdeals.MonoidAlgebra.CoprimeWeights
 public import ToricIdeals.MonoidAlgebra.Evaluation
 public import ToricIdeals.MonoidAlgebra.FiberNormalization
 public import ToricIdeals.MonoidAlgebra.NaturalWeights
+public import ToricIdeals.Polynomial.Conductor
+public import ToricIdeals.Polynomial.FiniteSubalgebra
 public import ToricIdeals.RationalNormalCurve
 public import ToricIdeals.RationalNormalCurve.Artinian
 public import ToricIdeals.RationalNormalCurve.Augmentation
@@ -42,6 +44,9 @@ public import ToricIdeals.RationalNormalCurve.QuotientMapFlatness
 
 Root import for reusable Lean theory of monomial maps, toric ideals, and
 rational normal curves. Import the leaves directly when only one part is needed:
+`ToricIdeals.Polynomial.FiniteSubalgebra` proves that, over a commutative semiring,
+any polynomial subalgebra containing a positive power `X ^ n` makes `R[X]` a finite
+module, with spanning family `1, X, ..., X ^ (n - 1)` for the multiplication action.
 `ToricIdeals.MonoidAlgebra.FiberNormalization` supplies the independent-universe
 coefficientwise kernel principle.
 `ToricIdeals.MonoidAlgebra.CoprimeWeights` identifies the kernel of the stock

@@ -30,6 +30,7 @@ name = "ToricIdeals"
 [[lean_lib]]
 name = "ToricIdealsTest"
 roots = ["ToricIdealsTest.FiberNormalizationExamples", "ToricIdealsTest.FiberNormalizationClient",
+  "ToricIdealsTest.PolynomialConductor",
   "ToricIdealsTest.RationalNormalCurveDomainModels",
   "ToricIdealsTest.RationalNormalCurveCoordinateLocalization",
   "ToricIdealsTest.RationalNormalCurveReducedModels"]
