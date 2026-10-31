@@ -21,11 +21,13 @@ Here `Subsingleton R` means the zero coefficient ring or semiring.
 - **Two-generator polynomial conductor:** For a commutative semiring `R` and
   coprime natural numbers `a, b`, the greatest ideal of `R[X]` contained in
   the canonical subalgebra `R[X^a, X^b]` is `(X^((a - 1)*(b - 1)))`.
-  This concerns every ambient polynomial ideal, includes exponents zero and
-  one, and permits the zero semiring. Membership in the subalgebra is also
-  characterized by the additive submonoid containing the support. See
+  If `a, b` are not coprime, the greatest contained ambient ideal is zero.
+  These statements concern every ambient polynomial ideal, include exponents
+  zero and one (also `(a, b) = (0, 0)`), and permit the zero semiring.
+  Membership in the subalgebra is also characterized by the additive submonoid
+  containing the support. See
   [the conductor theorem](ToricIdeals/Polynomial/Conductor.lean) and its
-  [natural-coefficient example](ToricIdealsTest/PolynomialConductor.lean).
+  [natural-coefficient examples](ToricIdealsTest/PolynomialConductor.lean).
 - **Polynomial subalgebras containing a power:** For every commutative semiring
   `R : Type u`, `A : Subalgebra R R[X]`, and positive natural number `n` with
   `X ^ n ∈ A`, `Polynomial.span_X_pow_eq_top_of_X_pow_mem` shows that the first
