@@ -33,6 +33,10 @@ Here `Subsingleton R` means the zero coefficient ring or semiring.
   `X ^ n ∈ A`, `Polynomial.span_X_pow_eq_top_of_X_pow_mem` shows that the first
   `n` powers of `X` span `R[X]` for the canonical multiplication action of `A`.
   `Polynomial.moduleFinite_of_X_pow_mem` consequently gives `Module.Finite A R[X]`.
+  For arbitrary `ι : Type v` and `a : ι → ℕ`, `Polynomial.moduleFinite_adjoin_X_pow_iff`
+  says that `R[X]` is finite over `Algebra.adjoin R (Set.range (fun i => X ^ a i))`
+  exactly when `(∃ i, 0 < a i) ∨ Subsingleton R`. The index universe is independent
+  of the coefficient universe; empty and all-zero families are included.
   No ring, domain, nontriviality or Noetherian hypothesis is needed, and no basis
   or freeness is asserted. See [finite polynomial subalgebras](ToricIdeals/Polynomial/FiniteSubalgebra.lean).
 - **Coefficient change on full Hankel quotients:** For commutative rings

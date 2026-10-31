@@ -5,13 +5,15 @@ Authors: Formal Frontier Agents
 module
 
 public import ToricIdeals.Polynomial.Conductor
+public import ToricIdeals.Polynomial.FiniteSubalgebra
 
 /-!
 # The two-generator conductor over the natural numbers
 
 The subalgebra `ℕ[X², X³]` is proper, but contains the nonzero ambient ideal `(X²)`.
 In contrast, `ℕ[X², X⁴]` contains `X²` but no nonzero ambient ideal: the ideal
-`(X²)` also contains `X³`, which is absent from this subalgebra.
+`(X²)` also contains `X³`, which is absent from this subalgebra. Nevertheless, the
+ambient polynomial ring is finite over the even-power subalgebra.
 -/
 
 @[expose] public section
@@ -75,5 +77,9 @@ theorem even_power_conductor_nontrivial :
       Ideal.subset_span (by simp)
     simpa only [SetLike.mem_coe, ← pow_succ] using
       (Ideal.span ({X ^ 2} : Set ℕ[X])).mul_mem_right X hX2
+
+-- Finiteness of the ambient module is compatible with a zero conductor.
+example : Module.Finite (Algebra.adjoin ℕ ({X ^ 2, X ^ 4} : Set ℕ[X])) ℕ[X] :=
+  moduleFinite_of_X_pow_mem _ (by decide : 0 < 2) even_power_conductor_nontrivial.2.1
 
 end Polynomial
