@@ -1,5 +1,13 @@
 # Mathematical references and credits
 
+Arithmetic gcd recognition reuses Mathlib's natural-number set gcd and forward
+conductor theorem in `Mathlib.NumberTheory.FrobeniusNumber`, by Alex Zhao, Daniel
+Buth, Sebastian Meier and Junyan Xu. Its converse follows the adjacent-member
+divisibility argument in Mathlib's `exists_frobeniusNumber_iff`, applied to
+consecutive large multiples of the proposed arithmetic step. The numerical
+semigroup example reuses Mathlib's two-generator Frobenius theorem. No source
+text or implementation is reproduced.
+
 Ravi Vakil's *The Rising Sea: Foundations of Algebraic Geometry* (October 21,
 2025 draft, Exercise 3.6.F) motivates the Hankel presentation, not the Jacobson
 criterion. No source text or PDF is reproduced, and the citation implies

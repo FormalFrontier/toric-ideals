@@ -8,6 +8,7 @@ public import ToricIdeals.MonoidAlgebra.CoprimeWeights
 public import ToricIdeals.MonoidAlgebra.Evaluation
 public import ToricIdeals.MonoidAlgebra.FiberNormalization
 public import ToricIdeals.MonoidAlgebra.NaturalWeights
+public import ToricIdeals.NumberTheory.FrobeniusNumber
 public import ToricIdeals.Polynomial.Conductor
 public import ToricIdeals.Polynomial.FiniteSubalgebra
 public import ToricIdeals.Polynomial.MonomialIntegralClosure
