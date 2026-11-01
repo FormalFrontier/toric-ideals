@@ -51,8 +51,17 @@ injective-integral dimension theorem in
 [minimal-primes](https://github.com/FormalFrontier/minimal-primes/blob/537058e2a3f4610d3126f22af057a1f6cd96c886/MinimalPrimes/RingTheory/KrullDimension/Integral.lean),
 whose finite-chain proof uses incomparability, lying-over and going-up,
 and Mathlib's Noetherian polynomial dimension formula. The code depends on
-mathlib, multivariate-polynomials and minimal-primes (all Apache-2.0; see the
-[complete minimal-primes license](https://github.com/FormalFrontier/minimal-primes/blob/537058e2a3f4610d3126f22af057a1f6cd96c886/LICENSE)).
+mathlib, multivariate-polynomials, minimal-primes and integral-closure (all
+Apache-2.0; see the
+[complete minimal-primes license](https://github.com/FormalFrontier/minimal-primes/blob/537058e2a3f4610d3126f22af057a1f6cd96c886/LICENSE)
+and [complete integral-closure license](https://github.com/FormalFrontier/integral-closure/blob/3e89fa94dfa32e9d4f4c43fca8dd15462686201c/LICENSE)).
+Base-ring normality of monomial exponent subalgebras directly applies
+`IsIntegrallyClosed.of_linearRetract` from the Formal Frontier integral-closure
+library. The scalar retraction is Mathlib's polynomial evaluation at zero,
+composed with the subalgebra inclusion and converted to a linear map. The
+polynomial evaluation development credits Chris Hughes, Johannes Hölzl,
+Kim Morrison and Jens Wagemaker; the algebra-homomorphism API credits Kenny Lau
+and Yury Kudryashov.
 Lean and doc-gen4 are separately credited tools, not bundled sources. The Markdown adapter follows earlier
 Formal Frontier documentation tooling.
 Contributions use AI-assisted development and independent agent review;

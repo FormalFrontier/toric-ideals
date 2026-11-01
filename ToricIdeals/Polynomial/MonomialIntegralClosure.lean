@@ -8,6 +8,7 @@ public import ToricIdeals.Polynomial.MonomialSubalgebra
 public import Mathlib.RingTheory.IntegralClosure.IntegrallyClosed
 import Mathlib.Algebra.Group.Submonoid.Membership
 import Mathlib.RingTheory.Polynomial.IsIntegral
+import IntegralClosure.LinearRetract
 
 /-!
 # Integral closedness of polynomial exponent subalgebras
@@ -40,7 +41,17 @@ gives its constants, while positive degree uses the power-substitution algebra
 equivalence with the polynomial ring. All normality assertions are absolute,
 in the subalgebra's own fraction ring, not relative to the ambient polynomial ring.
 
+Evaluation at zero also restricts to an `R`-linear retraction from every monomial
+exponent subalgebra to its coefficients. Consequently, absolute integral closedness
+of that subalgebra forces the coefficient domain to be integrally closed, for every
+additive submonoid of `ℕ`. Here absolute integral closedness concerns the subalgebra's
+own fraction field, not merely closure inside `R[X]`.
+
 ## References
+
+Base-ring descent uses `IsIntegrallyClosed.of_linearRetract` from the Formal Frontier
+`integral-closure` library and Mathlib's polynomial evaluation and algebra-homomorphism
+APIs.
 
 The fraction-field argument is Mathlib's `IsIntegrallyClosed.pow_dvd_pow_iff`,
 from Anne Baanen's development of integrally closed rings. Exponent membership
@@ -55,6 +66,24 @@ Kenny Lau's power-substitution API and the generic algebra range equivalences.
 namespace Polynomial
 
 universe u
+
+/-- Absolute integral closedness of a monomial exponent subalgebra forces its
+coefficient domain to be integrally closed, for every additive submonoid of `ℕ`.
+The proof applies `IsIntegrallyClosed.of_linearRetract` to evaluation at zero,
+restricted to the subalgebra as an `R`-linear left inverse of the scalar map. -/
+theorem isIntegrallyClosed_of_isIntegrallyClosed_adjoin_X_pow
+    {R : Type u} [CommRing R] [IsDomain R] (S : AddSubmonoid ℕ)
+    (h : IsIntegrallyClosed ↥(Algebra.adjoin R
+      (Set.range fun s : S => (X : R[X]) ^ (s : ℕ)))) :
+    IsIntegrallyClosed R := by
+  let A := Algebra.adjoin R (Set.range fun s : S => (X : R[X]) ^ (s : ℕ))
+  let r : A →ₗ[R] R := ((aeval (0 : R)).comp A.val).toLinearMap
+  have hr (a : R) : r (algebraMap R A a) = a :=
+    ((aeval (0 : R)).comp A.val).commutes a
+  let : IsIntegrallyClosed A := h
+  refine IsIntegrallyClosed.of_linearRetract ?_ r hr
+  intro a b hab
+  simpa only [hr] using congrArg r hab
 
 section CommRing
 

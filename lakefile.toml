@@ -24,6 +24,11 @@ name = "minimal-primes"
 git = "https://github.com/FormalFrontier/minimal-primes.git"
 rev = "537058e2a3f4610d3126f22af057a1f6cd96c886"
 
+[[require]]
+name = "integral-closure"
+git = "https://github.com/FormalFrontier/integral-closure.git"
+rev = "3e89fa94dfa32e9d4f4c43fca8dd15462686201c"
+
 [[lean_lib]]
 name = "ToricIdeals"
 
