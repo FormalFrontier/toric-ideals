@@ -50,10 +50,13 @@ rational normal curves. Import the leaves directly when only one part is needed:
 `ToricIdeals.Polynomial.FiniteSubalgebra` proves that, over a commutative semiring,
 any polynomial subalgebra containing a positive power `X ^ n` makes `R[X]` a finite
 module, with spanning family `1, X, ..., X ^ (n - 1)` for the multiplication action.
-`ToricIdeals.MvPolynomial.MonomialIntegralClosure` proves relative root-closure
-necessity for monomial subalgebras over any commutative domain, with arbitrary,
-independently universed variables. It uses the subalgebra's own fraction field
-and requires no normality of the coefficients or finiteness of the variables.
+`ToricIdeals.MvPolynomial.MonomialIntegralClosure` proves that integrality over a
+monomial subalgebra passes to every fine monomial component over any commutative
+ring. A non-nilpotent coefficient forces a positive exponent multiple into the
+submonoid; over a reduced ring this applies to every support exponent. It also proves
+relative root-closure necessity for monomial subalgebras over any commutative
+domain, in the subalgebra's own fraction field. Variables have an independent
+universe, with no normality or finiteness hypothesis on the coefficients.
 `ToricIdeals.MonoidAlgebra.FiberNormalization` supplies the independent-universe
 coefficientwise kernel principle.
 `ToricIdeals.MonoidAlgebra.CoprimeWeights` identifies the kernel of the stock
