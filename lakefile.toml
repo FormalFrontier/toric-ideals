@@ -31,6 +31,7 @@ rev = "3e89fa94dfa32e9d4f4c43fca8dd15462686201c"
 
 [[lean_lib]]
 name = "ToricIdeals"
+roots = ["ToricIdeals", "ToricIdeals.Polynomial.MonomialFractionField"]
 
 [[lean_lib]]
 name = "ToricIdealsTest"
@@ -39,7 +40,8 @@ roots = ["ToricIdealsTest.ArithmeticConductor",
   "ToricIdealsTest.PolynomialConductor",
   "ToricIdealsTest.RationalNormalCurveDomainModels",
   "ToricIdealsTest.RationalNormalCurveCoordinateLocalization",
-  "ToricIdealsTest.RationalNormalCurveReducedModels"]
+  "ToricIdealsTest.RationalNormalCurveReducedModels",
+  "ToricIdealsTest.MonomialFractionField"]
 
 [[lean_lib]]
 name = "ToricIdealsKernelTests"
