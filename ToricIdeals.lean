@@ -4,6 +4,8 @@ Authors: Formal Frontier Agents
 -/
 module
 
+public import ToricIdeals.AddMonoidAlgebra.NatMonomialFinite
+public import ToricIdeals.AddSubmonoid.NatFiniteRemainder
 public import ToricIdeals.MonoidAlgebra.CoprimeWeights
 public import ToricIdeals.MonoidAlgebra.Evaluation
 public import ToricIdeals.MonoidAlgebra.FiberNormalization
