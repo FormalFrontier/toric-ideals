@@ -14,8 +14,14 @@ The additive monomial adjoins are transported along
 `AddMonoidAlgebra.toMultiplicativeAlgEquiv`. Their canonical inclusion modules
 are finite precisely when the larger exponent submonoid has a finite cover by
 left translates of the smaller one. Only the converse requires nontrivial
-coefficients. Neither the additive monoid nor its submonoids need be commutative,
-cancellative, or finitely generated.
+coefficients. This finite-cover criterion does not require commutativity,
+cancellation, or finite generation of the additive exponent monoid.
+
+For a cancellative commutative additive exponent monoid, module finiteness also
+implies that either the coefficient semiring is subsingleton or one positive
+natural-number multiplier sends every target exponent into the source submonoid.
+The module structure is the left action induced by inclusion of the coefficient-one
+monomial adjoins.
 
 ## References
 
@@ -140,5 +146,26 @@ theorem moduleFinite_adjoin_single_iff [Nontrivial R] {S T : AddSubmonoid N} (hS
   · exact exists_finite_cover_of_moduleFinite_adjoin_single hST
   · rintro ⟨E, hE, hET, hcover⟩
     exact moduleFinite_adjoin_single_of_subset_add hST hE hET hcover
+
+/-- Finiteness of the left inclusion module between coefficient-one additive
+monomial adjoins implies that either the coefficient semiring is subsingleton
+or one positive natural-number multiplier sends every target exponent into the
+source submonoid. -/
+theorem subsingleton_or_exists_forall_nsmul_mem_of_moduleFinite_adjoin_single
+    {R : Type u} {N : Type v} [CommSemiring R] [AddCancelCommMonoid N]
+    {S T : AddSubmonoid N} (hST : S ≤ T)
+    (hfinite : @Module.Finite
+      (Algebra.adjoin R (Set.range fun s : S => single (s : N) (1 : R)))
+      (Algebra.adjoin R (Set.range fun t : T => single (t : N) (1 : R))) _ _
+      (Subalgebra.inclusion (adjoin_single_mono (R := R) hST)).toRingHom.toModule) :
+    Subsingleton R ∨ ∃ n : ℕ, 0 < n ∧ ∀ t ∈ T, n • t ∈ S := by
+  rcases subsingleton_or_nontrivial R with hR | hR
+  · exact Or.inl hR
+  · let : Nontrivial R := hR
+    obtain ⟨E, hE, hET, hcover⟩ :=
+      exists_finite_cover_of_moduleFinite_adjoin_single hST hfinite
+    refine Or.inr ⟨E.ncard.factorial, Nat.factorial_pos _, ?_⟩
+    intro t ht
+    exact AddSubmonoid.factorial_nsmul_mem_of_finite_cover hE hET hcover ht
 
 end AddMonoidAlgebra
