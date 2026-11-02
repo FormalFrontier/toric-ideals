@@ -10,6 +10,7 @@ public import ToricIdeals.MonoidAlgebra.CoprimeWeights
 public import ToricIdeals.MonoidAlgebra.Evaluation
 public import ToricIdeals.MonoidAlgebra.FiberNormalization
 public import ToricIdeals.MonoidAlgebra.NaturalWeights
+public import ToricIdeals.MonoidAlgebra.Regular
 public import ToricIdeals.MvPolynomial.MonomialCosetSupport
 public import ToricIdeals.MvPolynomial.MonomialIntegralClosure
 public import ToricIdeals.MvPolynomial.MonomialNormalization
