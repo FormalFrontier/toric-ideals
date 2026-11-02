@@ -97,4 +97,47 @@ theorem support_subset_groupClosure_of_mul_mem_adjoin_monomial
   change e n ∈ H
   exact (QuotientAddGroup.eq_zero_iff (e n)).1 (hf0 n hn)
 
+/-- Under a regular denominator from a monomial subalgebra, every support exponent
+of the quotient is a difference of two exponents in the defining submonoid. -/
+theorem exists_mem_add_mem_of_mul_mem_adjoin_monomial
+    (S : AddSubmonoid (σ →₀ ℕ)) {b f : MvPolynomial σ R}
+    (hb : b ∈ Algebra.adjoin R
+      (Set.range fun s : S => monomial (s : σ →₀ ℕ) (1 : R)))
+    (hbreg : IsLeftRegular b)
+    (hbf : b * f ∈ Algebra.adjoin R
+      (Set.range fun s : S => monomial (s : σ →₀ ℕ) (1 : R)))
+    {n : σ →₀ ℕ} (hn : n ∈ f.support) : ∃ s ∈ S, s + n ∈ S := by
+  let e : (σ →₀ ℕ) →+ (σ →₀ ℤ) :=
+    Finsupp.mapRange.addMonoidHom (Nat.castAddMonoidHom ℤ)
+  have hdiff (z : σ →₀ ℤ)
+      (hz : z ∈ AddSubgroup.closure (e '' (S : Set (σ →₀ ℕ)))) :
+      ∃ s ∈ S, ∃ t ∈ S, z + e s = e t := by
+    induction hz using AddSubgroup.closure_induction with
+    | mem z hz =>
+      obtain ⟨t, ht, rfl⟩ := hz
+      exact ⟨0, S.zero_mem, t, ht, by simp⟩
+    | zero => exact ⟨0, S.zero_mem, 0, S.zero_mem, by simp⟩
+    | add z w _ _ hz hw =>
+      obtain ⟨s, hs, t, ht, hst⟩ := hz
+      obtain ⟨s', hs', t', ht', hst'⟩ := hw
+      refine ⟨s + s', S.add_mem hs hs', t + t', S.add_mem ht ht', ?_⟩
+      rw [map_add, map_add, ← hst, ← hst']
+      abel
+    | neg z _ hz =>
+      obtain ⟨s, hs, t, ht, hst⟩ := hz
+      refine ⟨t, ht, s, hs, ?_⟩
+      rw [← hst]
+      abel
+  obtain ⟨s, hs, t, ht, hnst⟩ := hdiff _
+    (support_subset_groupClosure_of_mul_mem_adjoin_monomial S hb hbreg hbf n hn)
+  refine ⟨s, hs, ?_⟩
+  have hnst' : s + n = t := by
+    ext i
+    have hi := congrArg (fun z : σ →₀ ℤ => z i) hnst
+    change (n i : ℤ) + (s i : ℤ) = (t i : ℤ) at hi
+    have hi' : (s i : ℤ) + (n i : ℤ) = (t i : ℤ) := (add_comm _ _).trans hi
+    change s i + n i = t i
+    exact_mod_cast hi'
+  rwa [hnst']
+
 end MvPolynomial

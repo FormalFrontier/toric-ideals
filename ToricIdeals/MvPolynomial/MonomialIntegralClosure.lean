@@ -294,43 +294,16 @@ theorem isIntegrallyClosed_adjoin_monomial_iff (S : AddSubmonoid (σ →₀ ℕ)
       apply IsFractionRing.injective P (FractionRing P)
       rw [map_mul, hp, map_div₀, hθ, hθ]
       exact mul_div_cancel₀ _ hbF
-    have hgroup := support_subset_groupClosure_of_mul_mem_adjoin_monomial S
-      b.property (fun _ _ h => mul_left_cancel₀ hbP h) (by rw [hbp]; exact a.property)
-    let e : (σ →₀ ℕ) →+ (σ →₀ ℤ) :=
-      Finsupp.mapRange.addMonoidHom (Nat.castAddMonoidHom ℤ)
-    have hdiff (z : σ →₀ ℤ) (hz : z ∈ AddSubgroup.closure (e '' (S : Set (σ →₀ ℕ)))) :
-        ∃ s ∈ S, ∃ t ∈ S, z + e s = e t := by
-      induction hz using AddSubgroup.closure_induction with
-      | mem z hz =>
-        obtain ⟨t, ht, rfl⟩ := hz
-        exact ⟨0, S.zero_mem, t, ht, by simp⟩
-      | zero => exact ⟨0, S.zero_mem, 0, S.zero_mem, by simp⟩
-      | add z w _ _ hz hw =>
-        obtain ⟨s, hs, t, ht, hst⟩ := hz
-        obtain ⟨s', hs', t', ht', hst'⟩ := hw
-        refine ⟨s + s', S.add_mem hs hs', t + t', S.add_mem ht ht', ?_⟩
-        rw [map_add, map_add, ← hst, ← hst']
-        abel
-      | neg z _ hz =>
-        obtain ⟨s, hs, t, ht, hst⟩ := hz
-        refine ⟨t, ht, s, hs, ?_⟩
-        rw [← hst]
-        abel
     have hpA : p ∈ A := by
       rw [← support_sum_monomial_coeff p]
       apply A.sum_mem
       intro n hn
-      obtain ⟨s, hs, t, ht, hnst⟩ := hdiff _ (hgroup n hn)
-      have hnst' : s + n = t := by
-        ext i
-        have hi := congrArg (fun z : σ →₀ ℤ => z i) hnst
-        change (n i : ℤ) + (s i : ℤ) = (t i : ℤ) at hi
-        have hi' : (s i : ℤ) + (n i : ℤ) = (t i : ℤ) := (add_comm _ _).trans hi
-        change s i + n i = t i
-        exact_mod_cast hi'
+      obtain ⟨s, hs, hsn⟩ := exists_mem_add_mem_of_mul_mem_adjoin_monomial S
+        b.property (fun _ _ h => mul_left_cancel₀ hbP h)
+        (by rw [hbp]; exact a.property) hn
       obtain ⟨k, hk, hkn⟩ :=
         exists_pos_nsmul_mem_of_isIntegral_of_mem_support S hpint hn
-      have hnS : n ∈ S := hS s n k hk hs (by rwa [hnst']) hkn
+      have hnS : n ∈ S := hS s n k hk hs hsn hkn
       have hm : monomial n (1 : R) ∈ A := Algebra.subset_adjoin ⟨⟨n, hnS⟩, rfl⟩
       have heq : monomial n (p.coeff n) = C (p.coeff n) * monomial n (1 : R) := by
         rw [C_mul_monomial, mul_one]

@@ -10,6 +10,7 @@ public import ToricIdeals.MonoidAlgebra.FiberNormalization
 public import ToricIdeals.MonoidAlgebra.NaturalWeights
 public import ToricIdeals.MvPolynomial.MonomialCosetSupport
 public import ToricIdeals.MvPolynomial.MonomialIntegralClosure
+public import ToricIdeals.MvPolynomial.MonomialNormalization
 public import ToricIdeals.NumberTheory.FrobeniusNumber
 public import ToricIdeals.Polynomial.Conductor
 public import ToricIdeals.Polynomial.FiniteSubalgebra
@@ -58,6 +59,11 @@ submonoid; over a reduced ring this applies to every support exponent. It also p
 relative root-closure necessity for monomial subalgebras over any commutative
 domain, in the subalgebra's own fraction field. Variables have an independent
 universe, with no normality or finiteness hypothesis on the coefficients.
+`ToricIdeals.MvPolynomial.MonomialNormalization` identifies the image of the
+subalgebra's own normalization over an integrally closed coefficient domain: its
+monomials have exponents that are both differences of admissible exponents and
+roots of positive multiples in the original submonoid. The comparison is the
+canonical inclusion-induced fraction-field embedding, not ambient saturation.
 `ToricIdeals.MonoidAlgebra.FiberNormalization` supplies the independent-universe
 coefficientwise kernel principle.
 `ToricIdeals.MonoidAlgebra.CoprimeWeights` identifies the kernel of the stock
