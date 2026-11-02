@@ -20,6 +20,7 @@ public import ToricIdeals.NumberTheory.FrobeniusNumber
 public import ToricIdeals.Polynomial.Conductor
 public import ToricIdeals.Polynomial.FiniteSubalgebra
 public import ToricIdeals.Polynomial.MonomialIntegralClosure
+public import ToricIdeals.Polynomial.MonomialIntegrallyClosed
 public import ToricIdeals.RationalNormalCurve
 public import ToricIdeals.RationalNormalCurve.Artinian
 public import ToricIdeals.RationalNormalCurve.Augmentation

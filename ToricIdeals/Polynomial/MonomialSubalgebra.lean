@@ -29,6 +29,8 @@ Power substitution has range the subalgebra whose exponents are multiples of the
 substitution degree, including degree zero. For a positive degree this gives an
 algebra equivalence from the polynomial ring, with inverse coefficients read at
 the corresponding multiples of that degree.
+At degree zero the exponent subalgebra is the bottom coefficient subalgebra;
+its coefficient equivalence works without a nontriviality assumption.
 
 ## References
 
@@ -253,5 +255,46 @@ theorem coeff_expandEquivAdjoinXPow_symm (d : ℕ) (hd : 0 < d)
   have h := congrArg (fun f : R[X] => f.coeff (n * d))
     (coe_expandEquivAdjoinXPow_apply d hd ((expandEquivAdjoinXPow d hd).symm p))
   simpa only [AlgEquiv.apply_symm_apply, coeff_expand_mul hd] using h.symm
+
+/-- Powers whose exponents are multiples of zero generate only the coefficients. -/
+@[simp]
+theorem adjoin_X_pow_multiples_zero :
+    Algebra.adjoin R
+      (Set.range fun s : AddSubmonoid.multiples (0 : ℕ) => (X : R[X]) ^ (s : ℕ)) =
+        (⊥ : Subalgebra R R[X]) := by
+  apply le_antisymm _ bot_le
+  apply Algebra.adjoin_le
+  rintro _ ⟨s, rfl⟩
+  obtain ⟨n, hn⟩ := (AddSubmonoid.mem_multiples_iff (s : ℕ) 0).mp s.property
+  have hs : (s : ℕ) = 0 := by simpa using hn.symm
+  change (X : R[X]) ^ (s : ℕ) ∈ (⊥ : Subalgebra R R[X])
+  rw [hs, pow_zero]
+  exact (⊥ : Subalgebra R R[X]).one_mem
+
+/-- The degree-zero exponent subalgebra is canonically the coefficient semiring. -/
+noncomputable def adjoinXPowZeroEquiv :
+    ↥(Algebra.adjoin R
+      (Set.range fun s : AddSubmonoid.multiples (0 : ℕ) => (X : R[X]) ^ (s : ℕ))) ≃ₐ[R] R :=
+  (Subalgebra.equivOfEq _ _ (adjoin_X_pow_multiples_zero (R := R))).trans
+    (Algebra.botEquivOfInjective (R := R) (A := R[X]) C_injective)
+
+/-- The inverse coefficient equivalence includes a coefficient as a constant polynomial. -/
+@[simp]
+theorem coe_adjoinXPowZeroEquiv_symm_apply (r : R) :
+    ((adjoinXPowZeroEquiv (R := R)).symm r : R[X]) = C r := by
+  simpa using congrArg
+    (fun p : Algebra.adjoin R
+      (Set.range fun s : AddSubmonoid.multiples (0 : ℕ) => (X : R[X]) ^ (s : ℕ)) =>
+        (p : R[X])) ((adjoinXPowZeroEquiv (R := R)).symm.commutes r)
+
+/-- The coefficient equivalence reads the constant coefficient. -/
+@[simp]
+theorem adjoinXPowZeroEquiv_apply
+    (p : Algebra.adjoin R
+      (Set.range fun s : AddSubmonoid.multiples (0 : ℕ) => (X : R[X]) ^ (s : ℕ))) :
+    adjoinXPowZeroEquiv p = (p : R[X]).coeff 0 := by
+  have h := congrArg (fun q : R[X] => q.coeff 0)
+    (coe_adjoinXPowZeroEquiv_symm_apply (adjoinXPowZeroEquiv p))
+  simpa using h.symm
 
 end Polynomial
