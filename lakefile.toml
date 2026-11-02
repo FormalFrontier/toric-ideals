@@ -107,6 +107,7 @@ roots = ["ToricIdealsTest.MonomialCosetSupport",
   "ToricIdealsTest.RationalNormalCurveFormallySmoothSmallModels",
   "ToricIdealsTest.RationalNormalCurveMapUnramifiedSmallModels",
   "ToricIdealsTest.Audit",
+  "ToricIdealsTest.MonomialTranslateCover",
   "ToricIdealsTest.RationalNormalCurveJacobsonModels"]
 globs = ["ToricIdealsTest.MonomialCosetSupport",
   "ToricIdealsTest.CoprimeWeights",
@@ -159,6 +160,7 @@ globs = ["ToricIdealsTest.MonomialCosetSupport",
   "ToricIdealsTest.RationalNormalCurveFormallySmoothSmallModels",
   "ToricIdealsTest.RationalNormalCurveMapUnramifiedSmallModels",
   "ToricIdealsTest.Audit",
+  "ToricIdealsTest.MonomialTranslateCover",
   "ToricIdealsTest.RationalNormalCurveJacobsonModels"]
 
 [lean_lib.leanOptions]

@@ -12,6 +12,7 @@ public import ToricIdeals.MvPolynomial.MonomialCosetSupport
 public import ToricIdeals.MvPolynomial.MonomialIntegralClosure
 public import ToricIdeals.MvPolynomial.MonomialNormalization
 public import ToricIdeals.MvPolynomial.MonomialFinite
+public import ToricIdeals.MvPolynomial.MonomialModuleFinite
 public import ToricIdeals.NumberTheory.FrobeniusNumber
 public import ToricIdeals.Polynomial.Conductor
 public import ToricIdeals.Polynomial.FiniteSubalgebra
