@@ -7,6 +7,9 @@ module
 public import ToricIdeals.MvPolynomial.MonomialSubalgebra
 public import Mathlib.RingTheory.IntegralClosure.IntegrallyClosed
 public import Mathlib.RingTheory.Polynomial.IsIntegral
+import ToricIdeals.MvPolynomial.MonomialCosetSupport
+import MultivariatePolynomials.IntegrallyClosed
+import IntegralClosure.LinearRetract
 
 /-!
 # Integrality and relative root closure of multivariate monomial subalgebras
@@ -36,9 +39,12 @@ inside an unrelated ambient field is not substituted for this condition. The
 proof uses the existing power-divisibility theorem inside the subalgebra and
 then cancels the nonzero denominator monomial in the polynomial domain.
 
-This is a necessary relative root-closure condition, not an ambient saturation
-criterion or a converse normality classification. Zero exponents and empty
-variable types are included.
+Together with integral closedness of the coefficient domain, this relative
+root-closure condition is also sufficient. The proof embeds the adjoin's own
+fraction field into the polynomial fraction field, uses normality of the
+polynomial ring, and combines coset support with fine-component integrality.
+It is not an ambient saturation criterion. Zero exponents and empty variable
+types are included.
 
 ## References
 
@@ -52,6 +58,12 @@ variable types are included.
 * The polynomial-exponent argument in
   `ToricIdeals.Polynomial.MonomialIntegralClosure`, extended here to independently
   universed multivariate polynomials using the restricted-support API.
+* `MultivariatePolynomials.IntegrallyClosed` supplies arbitrary-variable polynomial
+  normality, following Stacks Project Tag 030A and Mathlib's coefficientwise proof.
+* `IntegralClosure.LinearRetract` supplies descent to the coefficients along the
+  constant-term retraction. The sufficiency proof composes Mathlib's fraction-ring
+  map and injective integrality-reflection APIs with the existing coset-support
+  and fine-component results.
 -/
 
 @[expose] public section
@@ -224,5 +236,109 @@ theorem mem_of_isIntegrallyClosed_adjoin_monomial (S : AddSubmonoid (σ →₀ �
       _ = monomial b (1 : R) * monomial n 1 := by simp
   exact ((monomial_mem_adjoin_monomial_iff S n 1).mp
     (hz' ▸ z.property)).resolve_right one_ne_zero
+
+/-- The standard monomial subalgebra over a commutative domain is integrally closed
+in its own fraction field exactly when the coefficient domain is integrally closed
+and the exponent submonoid is relatively root closed. The coefficient and variable
+types have independent universes; no finiteness assumption is required. -/
+theorem isIntegrallyClosed_adjoin_monomial_iff (S : AddSubmonoid (σ →₀ ℕ)) :
+    IsIntegrallyClosed ↥(Algebra.adjoin R
+      (Set.range fun s : S => monomial (s : σ →₀ ℕ) (1 : R))) ↔
+      IsIntegrallyClosed R ∧ ∀ (b n : σ →₀ ℕ) (k : ℕ),
+        0 < k → b ∈ S → b + n ∈ S → k • n ∈ S → n ∈ S := by
+  classical
+  let P := MvPolynomial σ R
+  let A := Algebra.adjoin R
+    (Set.range fun s : S => monomial (s : σ →₀ ℕ) (1 : R))
+  constructor
+  · intro h
+    refine ⟨?_, fun b n k hk hb hbn hkn =>
+      mem_of_isIntegrallyClosed_adjoin_monomial S h hb hbn hk hkn⟩
+    let r : A →ₗ[R] R := ((aeval fun _ : σ => (0 : R)).comp A.val).toLinearMap
+    have hr (a : R) : r (algebraMap R A a) = a :=
+      ((aeval fun _ : σ => (0 : R)).comp A.val).commutes a
+    let : IsIntegrallyClosed A := h
+    refine IsIntegrallyClosed.of_linearRetract ?_ r hr
+    intro a b hab
+    simpa only [hr] using congrArg r hab
+  · rintro ⟨hR, hS⟩
+    let : IsIntegrallyClosed R := hR
+    let θ : FractionRing A →+* FractionRing P :=
+      IsFractionRing.map (j := A.val.toRingHom) Subtype.val_injective
+    have hθ (a : A) : θ (algebraMap A (FractionRing A) a) =
+        algebraMap P (FractionRing P) (a : P) :=
+      IsLocalization.map_eq _ _
+    have hθcomp : (algebraMap A (FractionRing P)).comp (RingHom.id A) =
+        θ.comp (algebraMap A (FractionRing A)) := by
+      ext a
+      exact (hθ a).symm
+    apply (isIntegrallyClosed_iff (FractionRing A)).mpr
+    intro x hx
+    have hxA : IsIntegral A (θ x) := hx.map_of_comp_eq (RingHom.id A) θ hθcomp
+    obtain ⟨p, hp⟩ := IsIntegrallyClosed.algebraMap_eq_of_integral
+      (hxA.tower_top : IsIntegral P (θ x))
+    have hpint : IsIntegral A p := by
+      apply (isIntegral_algHom_iff (IsScalarTower.toAlgHom A P (FractionRing P))
+        (IsFractionRing.injective P (FractionRing P))).mp
+      change IsIntegral A (algebraMap P (FractionRing P) p)
+      rw [hp]
+      exact hxA
+    obtain ⟨a, b, hb, rfl⟩ := IsFractionRing.div_surjective A x
+    have hbP : (b : P) ≠ 0 := by
+      intro h
+      exact nonZeroDivisors.ne_zero hb (Subtype.ext h)
+    have hbF : algebraMap P (FractionRing P) (b : P) ≠ 0 := by
+      simpa only [map_zero] using
+        (IsFractionRing.injective P (FractionRing P)).ne hbP
+    have hbp : (b : P) * p = (a : P) := by
+      apply IsFractionRing.injective P (FractionRing P)
+      rw [map_mul, hp, map_div₀, hθ, hθ]
+      exact mul_div_cancel₀ _ hbF
+    have hgroup := support_subset_groupClosure_of_mul_mem_adjoin_monomial S
+      b.property (fun _ _ h => mul_left_cancel₀ hbP h) (by rw [hbp]; exact a.property)
+    let e : (σ →₀ ℕ) →+ (σ →₀ ℤ) :=
+      Finsupp.mapRange.addMonoidHom (Nat.castAddMonoidHom ℤ)
+    have hdiff (z : σ →₀ ℤ) (hz : z ∈ AddSubgroup.closure (e '' (S : Set (σ →₀ ℕ)))) :
+        ∃ s ∈ S, ∃ t ∈ S, z + e s = e t := by
+      induction hz using AddSubgroup.closure_induction with
+      | mem z hz =>
+        obtain ⟨t, ht, rfl⟩ := hz
+        exact ⟨0, S.zero_mem, t, ht, by simp⟩
+      | zero => exact ⟨0, S.zero_mem, 0, S.zero_mem, by simp⟩
+      | add z w _ _ hz hw =>
+        obtain ⟨s, hs, t, ht, hst⟩ := hz
+        obtain ⟨s', hs', t', ht', hst'⟩ := hw
+        refine ⟨s + s', S.add_mem hs hs', t + t', S.add_mem ht ht', ?_⟩
+        rw [map_add, map_add, ← hst, ← hst']
+        abel
+      | neg z _ hz =>
+        obtain ⟨s, hs, t, ht, hst⟩ := hz
+        refine ⟨t, ht, s, hs, ?_⟩
+        rw [← hst]
+        abel
+    have hpA : p ∈ A := by
+      rw [← support_sum_monomial_coeff p]
+      apply A.sum_mem
+      intro n hn
+      obtain ⟨s, hs, t, ht, hnst⟩ := hdiff _ (hgroup n hn)
+      have hnst' : s + n = t := by
+        ext i
+        have hi := congrArg (fun z : σ →₀ ℤ => z i) hnst
+        change (n i : ℤ) + (s i : ℤ) = (t i : ℤ) at hi
+        have hi' : (s i : ℤ) + (n i : ℤ) = (t i : ℤ) := (add_comm _ _).trans hi
+        change s i + n i = t i
+        exact_mod_cast hi'
+      obtain ⟨k, hk, hkn⟩ :=
+        exists_pos_nsmul_mem_of_isIntegral_of_mem_support S hpint hn
+      have hnS : n ∈ S := hS s n k hk hs (by rwa [hnst']) hkn
+      have hm : monomial n (1 : R) ∈ A := Algebra.subset_adjoin ⟨⟨n, hnS⟩, rfl⟩
+      have heq : monomial n (p.coeff n) = C (p.coeff n) * monomial n (1 : R) := by
+        rw [C_mul_monomial, mul_one]
+      rw [heq]
+      exact A.mul_mem (A.algebraMap_mem _) hm
+    refine ⟨⟨p, hpA⟩, ?_⟩
+    apply θ.injective
+    rw [hθ]
+    exact hp
 
 end MvPolynomial
