@@ -5,6 +5,7 @@ Authors: Formal Frontier Agents
 module
 
 public import ToricIdeals.AddSubmonoid.FiniteRemainder
+public import ToricIdeals.MvPolynomial.MonomialModuleFinite
 public import ToricIdeals.MvPolynomial.MonomialNormalization
 public import Mathlib.RingTheory.Finiteness.Basic
 
@@ -69,6 +70,21 @@ private theorem algebraMap_eq_inclusion_of_tower
     (hUV : U ≤ V) (a : U) : algebraMap U V a = Subalgebra.inclusion hUV a := by
   apply Subtype.ext
   exact (IsScalarTower.algebraMap_apply U V Q a).symm
+
+-- Keep the module-structure transport abstract to avoid reducing the monomial adjoins.
+private theorem moduleFinite_of_inclusion_of_tower
+    {K Q : Type*} [CommSemiring K] [CommSemiring Q] [Algebra K Q]
+    (U V : Subalgebra K Q) [Algebra U V] [IsScalarTower U V Q]
+    (hUV : U ≤ V)
+    (hfinite : @Module.Finite U V _ _ (Subalgebra.inclusion hUV).toRingHom.toModule) :
+    Module.Finite U V := by
+  have hmodule : (inferInstance : Module U V) =
+      (Subalgebra.inclusion hUV).toRingHom.toModule := by
+    apply Module.ext'
+    intro a b
+    change a • b = Subalgebra.inclusion hUV a * b
+    rw [Algebra.smul_def, algebraMap_eq_inclusion_of_tower U V hUV]
+  exact (congrArg (fun m : Module U V => @Module.Finite U V _ _ m) hmodule).mpr hfinite
 
 section Semiring
 
@@ -175,62 +191,29 @@ theorem mul_mem_adjoin_monomial_of_relative_root_conductor (c : S)
     simpa only [mul_smul_comm] using (A).smul_mem hp r
 
 /-- The relative-root monomial adjoin of a finitely generated exponent monoid
-is finite over its original monomial adjoin. The scalar tower with the ambient
-polynomial algebra fixes the algebra map and action to canonical inclusion. -/
+is finite over its original monomial adjoin, by the finite translate cover of
+relative-root remainders. The scalar tower with the ambient polynomial algebra
+fixes the algebra map and action to canonical inclusion. -/
 theorem moduleFinite_adjoin_monomial_relative_root
     [Algebra A B] [IsScalarTower A B P] (hS : S.FG) : Module.Finite A B := by
-  classical
-  let G : Set P := Set.range fun n : {n : σ →₀ ℕ //
-    (∃ b, b ∈ S ∧ b + n ∈ S) ∧ ∃ k : ℕ, 0 < k ∧ k • n ∈ S} =>
-      monomial n.val (1 : R)
-  have hspan : (B).toSubmodule = Submodule.span R G :=
-    adjoin_monomial_relative_root_toSubmodule S
+  let T : AddSubmonoid (σ →₀ ℕ) :=
+    { carrier := {n | (∃ b, b ∈ S ∧ b + n ∈ S) ∧ ∃ k : ℕ, 0 < k ∧ k • n ∈ S}
+      zero_mem' := relative_root_zero S
+      add_mem' := relative_root_add S }
+  have hST : S ≤ T := by
+    intro n hn
+    exact ⟨⟨0, S.zero_mem, by simpa only [zero_add] using hn⟩,
+      1, by decide, by simpa only [one_nsmul] using hn⟩
   obtain ⟨E, hE, hcover⟩ := S.exists_finset_relative_root_remainder hS
-  let g : E → B := fun e =>
-    ⟨monomial e.val 1, Algebra.subset_adjoin ⟨⟨e.val, hE e.val e.property⟩, rfl⟩⟩
-  let F : Finset B := Finset.univ.image g
-  let U : Submodule A B := Submodule.span A (F : Set B)
-  have hmono (n : σ →₀ ℕ)
-      (hn : (∃ b, b ∈ S ∧ b + n ∈ S) ∧ ∃ k : ℕ, 0 < k ∧ k • n ∈ S) :
-      (⟨monomial n 1, Algebra.subset_adjoin ⟨⟨n, hn⟩, rfl⟩⟩ : B) ∈ U := by
-    obtain ⟨s, hs, e, he, hne⟩ := hcover n hn
-    let a : A := ⟨monomial s 1, Algebra.subset_adjoin ⟨⟨s, hs⟩, rfl⟩⟩
-    have hg : g ⟨e, he⟩ ∈ U := Submodule.subset_span
-      (Finset.mem_image.mpr ⟨⟨e, he⟩, Finset.mem_univ _, rfl⟩)
-    have h := U.smul_mem a hg
-    convert h using 1
-    apply Subtype.ext
-    rw [coe_smul_adjoin_monomial_relative_root]
-    change monomial n 1 = monomial s 1 * monomial e 1
-    simp [hne]
-  have hU (p : P) (hp : p ∈ Submodule.span R G) :
-      ∃ hpB : p ∈ B, (⟨p, hpB⟩ : B) ∈ U := by
-    induction hp using Submodule.span_induction with
-    | mem p hp =>
-      obtain ⟨n, rfl⟩ := hp
-      exact ⟨Algebra.subset_adjoin ⟨n, rfl⟩, hmono n.val n.property⟩
-    | zero => exact ⟨(B).zero_mem, U.zero_mem⟩
-    | add p q _ _ hp hq =>
-      obtain ⟨hpB, hpU⟩ := hp
-      obtain ⟨hqB, hqU⟩ := hq
-      exact ⟨(B).add_mem hpB hqB, U.add_mem hpU hqU⟩
-    | smul c p _ hp =>
-      obtain ⟨hpB, hpU⟩ := hp
-      refine ⟨(B).smul_mem hpB c, ?_⟩
-      have h := U.smul_mem (algebraMap R A c) hpU
-      convert h using 1
-      apply Subtype.ext
-      rw [coe_smul_adjoin_monomial_relative_root]
-      exact Algebra.smul_def c p
-  have htop : U = ⊤ := by
-    apply top_unique
-    intro b _
-    have hb : (b : P) ∈ Submodule.span R G := by
-      rw [← hspan]
-      exact b.property
-    obtain ⟨_, h⟩ := hU b.val hb
-    exact h
-  exact Module.Finite.of_fg_top ⟨F, htop⟩
+  -- Identify the given action, rather than replace it with the inclusion action.
+  apply moduleFinite_of_inclusion_of_tower (K := R) (Q := P) A B
+    (adjoin_monomial_mono (R := R) (σ := σ) (S := S) (T := T) hST)
+  apply moduleFinite_adjoin_monomial_of_subset_add
+    (R := R) (σ := σ) (S := S) (T := T) (E := (E : Set (σ →₀ ℕ)))
+    hST E.finite_toSet (fun e he => hE e he)
+  intro n hn
+  obtain ⟨s, hs, e, he, hne⟩ := hcover n hn
+  exact ⟨s, hs, e, he, hne.symm⟩
 
 end Semiring
 
