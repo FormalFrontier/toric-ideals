@@ -3,9 +3,12 @@ version: "v0.4"
 project:
   name: "Toric Ideals"
   description: >-
-    Reusable Lean theory of coefficientwise fiber normalization over arbitrary
-    rings, its kernel and ideal-membership criteria for additive monoid
-    algebras, gcd-reduced bivariate natural-weight kernel presentations for
+    Reusable Lean theory of coefficient-independent finite binomial kernels
+    for monomial evaluation on finite variable types over arbitrary commutative
+    rings, with any commutative target monoid and independent coefficient,
+    variable and target universes, re-exported GroupRings coefficientwise
+    fiber-normalization criteria for additive monoid algebras over arbitrary
+    rings, gcd-reduced bivariate natural-weight kernel presentations for
     pairs not both zero and coprime all-coefficient binomial membership over
     arbitrary possibly noncommutative rings, and the Hankel-minor presentation
     of the degree-n rational normal curve's monomial-map kernel for positive n
@@ -48,6 +51,16 @@ project:
   license: "Apache-2.0"
 
 highlights:
+  - title: "Uniform monomial-evaluation kernels"
+    statement: >-
+      For any map from a finite variable type to a commutative monoid, one
+      finite set of same-product exponent pairs gives coefficient-one monomial
+      differences spanning the kernel of monomial evaluation in MvPolynomial
+      over every commutative coefficient ring, including empty variable types
+      and zero rings, with all three universes independent.
+    declarations:
+      - declaration: "MvPolynomial.uniform_monomial_kernel"
+        file: "ToricIdeals/MvPolynomial/UniformMonomialKernel.lean"
   - title: "Monomial conductors"
     statement: >-
       Every finitely generated additive submonoid S of finitely supported natural
@@ -81,16 +94,33 @@ sources:
       no book material is reproduced, and no author participation or endorsement
       is claimed. The exercise motivates the presentation, not the Jacobson
       quotient criterion. This library does not formalize the book as a whole.
-  - title: "Fiberwise normalization, terminal exponents, exponent images and Hankel quotient criteria"
+  - title: "Group Rings: fiber normalization and uniform binomial kernels"
+    authors:
+      - "Formal Frontier Agents"
+    id: "https://github.com/FormalFrontier/group-rings"
+    type: "software"
+    relationship: "adapts"
+    license: "Apache-2.0"
+    note: >-
+      MonoidAlgebra.uniform_fiber_span_of_fg supplies the coefficient-independent
+      finite family of same-fiber exponent pairs. The polynomial theorem applies
+      it to the finitely generated monoid of natural exponent vectors and
+      transports kernels and unit binomials through Mathlib's type-tag algebra
+      equivalences, using the weighted-evaluation identity from
+      ToricIdeals.MonoidAlgebra.Evaluation. GroupRings also supplies the canonical
+      coefficientwise fiber-normalization theorems in the root AddMonoidAlgebra
+      namespace; ToricIdeals re-exports them with deprecated compatibility aliases,
+      rather than a separate proof.
+  - title: "Terminal exponents, exponent images and Hankel quotient criteria"
     type: "original-proof"
     relationship: "independently-proves"
     note: >-
-      Original Formal Frontier proofs establish coefficientwise normalization,
-      terminal-exponent uniqueness, the reverse Hankel-ideal inclusion and the
-      arithmetic exponent-image criterion. Coprime weighted-fiber membership
+      Original Formal Frontier proofs establish terminal-exponent uniqueness,
+      the reverse Hankel-ideal inclusion and the arithmetic exponent-image
+      criterion. Coprime weighted-fiber membership
       uses natural-number coprime divisibility and a left-multiple telescoping
       argument in the existing additive monoid algebra. Its kernel presentation
-      combines that congruence with imagewise preimage choice and the existing
+      combines that congruence with imagewise preimage choice and GroupRings'
       coefficientwise normalization theorem; no public selector or global
       target section is constructed. The general nonzero natural-weight pair
       is reduced to coprime gcd quotients using Mathlib's natural gcd arithmetic,
@@ -135,14 +165,30 @@ sources:
       Motivation for the determinant model wz - xy. The coordinate-algebra results
       use arbitrary commutative coefficient rings, rather than only fields.
       Polynomial evaluation, quotient, localization and domain-transport APIs
-      come from Mathlib. The normal-form proof uses this library's coefficientwise
-      fiber-normalization theorem; no source text is reproduced.
+      come from Mathlib. The normal-form proof uses the coefficientwise
+      fiber-normalization theorem re-exported from GroupRings; no source text
+      is reproduced.
 
 status:
   scope: >-
+    MvPolynomial.uniform_monomial_kernel: for Finite ι and any g : ι → M to
+    a commutative monoid M, there exists E : Finset ((ι →₀ ℕ) × (ι →₀ ℕ))
+    whose pairs have equal products under g and whose coefficient-one monomial
+    differences span the kernel of
+    MvPolynomial.aeval (fun i => MonoidAlgebra.single (g i) (1 : R)) for every
+    commutative coefficient ring R. The source is MvPolynomial ι R with the
+    canonical coefficient algebra structure; E is chosen before R, and the
+    coefficient, variable and target universes are independent. Empty variable
+    types and zero rings are included, with no field, domain, coefficient-Noetherian,
+    target-cancellation, target-finite-generation, surjectivity or generation-by-images
+    hypothesis.
     The generic coefficientwise normalization principle for arbitrary index
-    functions, its kernel criteria for additive exponent homomorphisms between
-    additive monoids over any ring. The coprime weighted-fiber theorem states
+    functions and its kernel criteria for additive exponent homomorphisms over
+    any ring are re-exported from GroupRings.MonoidAlgebra.FiberNormalization
+    in the root AddMonoidAlgebra namespace. The compatibility module retains
+    the former ToricIdeals.AddMonoidAlgebra names as deprecated aliases, and the
+    old ToricIdeals.MonoidAlgebra.FiberNormalization path re-exports it.
+    The coprime weighted-fiber theorem states
     that for every Ring R in any universe, Nat.Coprime a b, and d,e : Fin 2 →₀ ℕ
     satisfying b*d(0)+a*d(1) = b*e(0)+a*e(1), every coefficient c : R gives
     single d c - single e c in the left ideal spanned by X₀^a - X₁^b.
@@ -292,6 +338,9 @@ status:
     rings, general classification of toric ideals or whole-source coverage
     is asserted. In particular, indexed basis data over a zero ring does not
     assert distinct basis vectors.
+  main_results:
+    - declaration: "MvPolynomial.uniform_monomial_kernel"
+      file: "ToricIdeals/MvPolynomial/UniformMonomialKernel.lean"
 
 automation:
   methods:
@@ -309,6 +358,14 @@ fidelity:
     commutativity; its arbitrary-function form asserts membership of elements
     with vanishing fiber sums, not multiplicativity. Kernel equality for additive
     exponent homomorphisms separately requires the ideal to lie in the kernel.
+    Uniform polynomial monomial-evaluation kernels use commutative coefficient
+    rings and a finite variable type; finite generation is used only for the
+    source exponent monoid. The target is any commutative monoid, without
+    cancellation, finite-generation or generation-by-variable-images assumptions.
+    The finite family is chosen before the coefficient ring, not separately for
+    each ring; its same-product condition is coefficient-free.
+    The conclusion is an ideal equality in MvPolynomial, not merely in a
+    type-tagged monoid algebra, and needs no surjectivity of evaluation.
     Coprime two-variable fiber membership and its kernel presentation concern
     the left span of X₀^a - X₁^b, not a quotient-ring construction or a
     surjection onto every natural target weight. The exponent scalars and
@@ -392,6 +449,13 @@ review:
     criterion and quotient criteria, including their module and test interfaces.
 
 acknowledgements: >-
+  GroupRings supplies MonoidAlgebra.uniform_fiber_span_of_fg and the canonical
+  coefficientwise fiber-normalization API. Uniform polynomial kernels combine
+  that finite-family theorem with the weighted-evaluation identity in
+  ToricIdeals.MonoidAlgebra.Evaluation and Mathlib's Finsupp finite-generation,
+  type-tag algebra-equivalence and ideal map/comap APIs. The compatibility
+  module re-exports the generic normalization theorems with their former
+  ToricIdeals names; their proof is not duplicated here.
   Coefficient-normality descent for monomial exponent subalgebras directly
   applies the Formal Frontier integral-closure library's linear-retraction
   theorem to Mathlib's evaluation-at-zero and algebra-homomorphism APIs.

@@ -29,10 +29,26 @@ name = "integral-closure"
 git = "https://github.com/FormalFrontier/integral-closure.git"
 rev = "3e89fa94dfa32e9d4f4c43fca8dd15462686201c"
 
+[[require]]
+name = "coherent-modules"
+git = "https://github.com/FormalFrontier/coherent-modules.git"
+rev = "b9bb233399aab0f864a2a1a1bb3d414dff530812"
+
+[[require]]
+name = "groupTheory"
+git = "https://github.com/FormalFrontier/group-theory.git"
+rev = "07948c9888686ade711654c1433c3efb2652e1aa"
+
+[[require]]
+name = "group-rings"
+git = "https://github.com/FormalFrontier/group-rings.git"
+rev = "913e9cbeb108487cc8a384beb4045b2b7dc26ee7"
+
 [[lean_lib]]
 name = "ToricIdeals"
-roots = ["ToricIdeals", "ToricIdeals.Polynomial.MonomialFractionField",
-  "ToricIdeals.Polynomial.MonomialFinite", "ToricIdeals.Polynomial.MonomialTotalQuotient"]
+roots = ["ToricIdeals", "ToricIdeals.MonoidAlgebra.FiberNormalization",
+  "ToricIdeals.Polynomial.MonomialFractionField", "ToricIdeals.Polynomial.MonomialFinite",
+  "ToricIdeals.Polynomial.MonomialTotalQuotient"]
 
 [[lean_lib]]
 name = "ToricIdealsTest"

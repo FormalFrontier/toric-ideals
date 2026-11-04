@@ -9,7 +9,7 @@ public import Mathlib.Data.Finsupp.Weight
 import Mathlib.RingTheory.Ideal.Quotient.Nilpotent
 public import Mathlib.RingTheory.MvPolynomial.Ideal
 public import Mathlib.RingTheory.Spectrum.Prime.Topology
-public import ToricIdeals.MonoidAlgebra.FiberNormalization
+public import GroupRings.MonoidAlgebra.FiberNormalization
 
 /-!
 # The toric ideal of a rational normal curve
@@ -757,7 +757,7 @@ scaled by `C r` for every `r : k` and passed to the generic fiber theorem. -/
 theorem ker_le_hankelIdeal (n : ℕ) (hn : 1 ≤ n) :
     RingHom.ker (rncMap k n) ≤ hankelIdeal k n := by
   intro f hf
-  apply AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
+  apply _root_.AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
       (hankelIdeal k n) (rncExponent n) (fiberNormalExponent k n)
   · intro d r
     change (monomial d r -

@@ -8,7 +8,7 @@ public import Mathlib.Algebra.MonoidAlgebra.Basic
 public import Mathlib.Data.Finsupp.Weight
 public import Mathlib.Data.Nat.GCD.Basic
 public import Mathlib.RingTheory.Ideal.Span
-public import ToricIdeals.MonoidAlgebra.FiberNormalization
+public import GroupRings.MonoidAlgebra.FiberNormalization
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Tactic.Abel
 import Mathlib.Tactic.FinCases
@@ -38,7 +38,7 @@ No surjectivity onto all natural weights is asserted; for example, weights
 
 The proof uses Mathlib's natural-weight and additive-monoid-algebra pushforward
 APIs and the coefficientwise normalization theorem in
-`ToricIdeals.MonoidAlgebra.FiberNormalization`.
+`GroupRings.MonoidAlgebra.FiberNormalization`.
 -/
 
 @[expose] public section
@@ -189,7 +189,7 @@ theorem ker_mapDomainRingHom_weight_eq_span_of_coprime
     change (mapDomainRingHom R φ) _ = 0
     rw [map_sub]
     simp [mapDomain_single, φ, w, Finsupp.weight_single, smul_eq_mul, Nat.mul_comm]
-  exact (ToricIdeals.AddMonoidAlgebra.ideal_eq_ker_mapDomainRingHom
+  exact (_root_.AddMonoidAlgebra.ideal_eq_ker_mapDomainRingHom
     I φ normal hcongr hI).symm
 
 /-- Membership in the coprime weighted binomial's principal left ideal is

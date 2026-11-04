@@ -30,7 +30,7 @@ private theorem generic_fiber_normalization
         AddMonoidAlgebra.single (normal (exponentMap m)) r ∈ I)
     {f : AddMonoidAlgebra R M}
     (hf : AddMonoidAlgebra.mapDomain exponentMap f = 0) : f ∈ I :=
-  ToricIdeals.AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
+  _root_.AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
     I exponentMap normal basis_sub_normal_mem hf
 
 variable (k : Type u) [CommRing k]

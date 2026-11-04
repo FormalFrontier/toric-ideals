@@ -4,13 +4,27 @@ Authors: Formal Frontier Agents. Original Formal Frontier contributions are
 licensed under Apache-2.0; see the complete root `LICENSE` file. The project
 uses AI-assisted formalization and review.
 
-Reusable Lean 4 theory of coefficientwise normalization over rings, monomial-map
-kernels, the Hankel ideal of the rational normal curve over arbitrary
-commutative coefficient rings, and natural-number exponent normal forms for
+Reusable Lean 4 theory of monomial-map kernels, including coefficient-independent
+finite binomial presentations, the Hankel ideal of the rational normal curve over
+arbitrary commutative coefficient rings, and natural-number exponent normal forms for
 the split quadric, together with its coordinate algebra and localization charts,
 and finiteness of polynomial rings over subalgebras containing a positive power.
 
 ## Headline results
+
+- **Uniform monomial-evaluation kernels.** For a finite variable type `ι` and any
+  map `g : ι → M` to a commutative monoid, there is a finite set
+  `E : Finset ((ι →₀ ℕ) × (ι →₀ ℕ))` such that each pair has the same product
+  under `g`, and, for every commutative ring `R`, the kernel of
+  `MvPolynomial.aeval (fun i => MonoidAlgebra.single (g i) (1 : R))` is the ideal
+  spanned by `monomial d 1 - monomial e 1` for `(d,e) ∈ E`. The source is
+  `MvPolynomial ι R`, with its canonical coefficient algebra structure, and
+  `E` is chosen before `R`. Coefficient, variable and target universes are
+  independent; empty variable types and zero rings are included. No field,
+  domain, coefficient-Noetherian, target-cancellation, target-finite-generation,
+  generation-by-images or surjectivity hypothesis is needed. The proof uses GroupRings' uniform
+  monoid-algebra kernel theorem and polynomial evaluation and transport APIs.
+  See [`MvPolynomial.uniform_monomial_kernel`](ToricIdeals/MvPolynomial/UniformMonomialKernel.lean).
 
 - **Monomial conductors and canonical principal localization.** For a finitely
   generated `S : AddSubmonoid (σ →₀ ℕ)`, there is `c ∈ S` such that `c + n ∈ S`
@@ -198,15 +212,19 @@ Here `Subsingleton R` means the zero coefficient ring or semiring.
   `φ` is injective, and surjective exactly when `φ` is surjective, in every degree.
   No flatness, domain, nontriviality or `Algebra R S` is assumed. See the
   [coefficient-map criteria](ToricIdeals/RationalNormalCurve/CoefficientMap.lean).
-- **Coefficientwise normalization and monomial kernels:** Over any ring, an
-  additive source monoid and an arbitrary index function to a bare type, suppose
-  **every monomial and coefficient** is congruent modulo a left ideal to the term
+- **Coefficientwise normalization and monomial kernels (GroupRings API):** Over
+  any ring, an additive source monoid and an arbitrary index function to a bare
+  type, suppose **every monomial and coefficient** is congruent modulo a left ideal to the term
   at a source exponent chosen by its target index. Elements whose coefficients
   sum to zero along fibers then belong to the ideal, in independent universes.
   Additive exponent homomorphisms give kernel containment; equality and a
   membership criterion additionally need the reverse ideal inclusion. No
   commutativity, section or surjectivity is needed; an arbitrary index function
-  need not induce a ring map. See the [normalization contract](docs/FiberNormalization.md).
+  need not induce a ring map. The canonical results are in the root
+  `AddMonoidAlgebra` namespace of `GroupRings.MonoidAlgebra.FiberNormalization`.
+  The root `ToricIdeals` import retains their former `ToricIdeals.AddMonoidAlgebra`
+  names as deprecated aliases through the compatibility module. See the
+  [normalization contract](docs/FiberNormalization.md).
 - **Coprime weighted fibers:** In `AddMonoidAlgebra R (Fin 2 →₀ ℕ)` for any
   ring `R`, `Nat.Coprime a b` and equal weights
   `b*d(0)+a*d(1) = b*e(0)+a*e(1)` imply that
@@ -335,9 +353,10 @@ The root import `ToricIdeals` re-exports the leaves below except
 | --- | --- |
 | [`ToricIdeals`](ToricIdeals.lean) | Root import for the re-exported public APIs |
 | [`ToricIdeals.HomogeneousImage`](ToricIdeals/HomogeneousImage.lean) | Transport of internal submodule decompositions under surjective linear maps with homogeneous kernel |
-| [`ToricIdeals.MonoidAlgebra.FiberNormalization`](ToricIdeals/MonoidAlgebra/FiberNormalization.lean) | Coefficientwise normalization and kernel criteria |
+| [`ToricIdeals.MonoidAlgebra.FiberNormalization.Compatibility`](ToricIdeals/MonoidAlgebra/FiberNormalization/Compatibility.lean) | Re-exports GroupRings' coefficientwise normalization and kernel criteria, with deprecated aliases for their former ToricIdeals names |
 | [`ToricIdeals.MonoidAlgebra.CoprimeWeights`](ToricIdeals/MonoidAlgebra/CoprimeWeights.lean) | Coprime two-variable weight kernels and all-coefficient binomial membership over any ring |
 | [`ToricIdeals.MonoidAlgebra.NaturalWeights`](ToricIdeals/MonoidAlgebra/NaturalWeights.lean) | Gcd-reduced two-variable natural-weight kernels and membership criteria over any ring |
+| [`ToricIdeals.MvPolynomial.UniformMonomialKernel`](ToricIdeals/MvPolynomial/UniformMonomialKernel.lean) | One finite family of same-product exponent pairs spans the monomial-evaluation kernel over every commutative coefficient ring, for a finite variable type and any commutative target monoid |
 | [`ToricIdeals.MvPolynomial.MonomialSubalgebra`](ToricIdeals/MvPolynomial/MonomialSubalgebra.lean) | Support characterization of the generated multivariate monomial subalgebra over every commutative semiring |
 | [`ToricIdeals.MvPolynomial.MonomialIntegralClosure`](ToricIdeals/MvPolynomial/MonomialIntegralClosure.lean) | Intrinsic normality iff coefficient normality and relative root closure, over arbitrary commutative domains and independently universed variables |
 | [`ToricIdeals.MvPolynomial.MonomialNormalization`](ToricIdeals/MvPolynomial/MonomialNormalization.lean) | Normalization image generated by relative difference-and-root exponents over an integrally closed commutative domain |
@@ -400,7 +419,18 @@ update. To pin a release, replace `main` with a full commit from that history.
 Libraries used together must share a compatible Mathlib revision and toolchain;
 see [build](#build) for this checkout's pinned environment.
 
-Import `ToricIdeals` or a leaf directly. For vertex cotangents or quotient grading,
+Import `ToricIdeals` or a leaf directly. For uniform monomial-evaluation kernels,
+import `ToricIdeals.MvPolynomial.UniformMonomialKernel` and use
+`MvPolynomial.uniform_monomial_kernel` with a map `g : ι → M` and a proof of
+`Finite ι`; the resulting exponent pairs work for every commutative coefficient
+ring. For coefficientwise normalization, prefer
+`GroupRings.MonoidAlgebra.FiberNormalization` and its root `AddMonoidAlgebra`
+names. `ToricIdeals.MonoidAlgebra.FiberNormalization.Compatibility` preserves
+the former `ToricIdeals.AddMonoidAlgebra` names, and the old
+`ToricIdeals.MonoidAlgebra.FiberNormalization` path re-exports that compatibility
+module as a deprecated import.
+
+For vertex cotangents or quotient grading,
 import `ToricIdeals.RationalNormalCurve.Cotangent` or
 `ToricIdeals.RationalNormalCurve.GradedAlgebra` directly, respectively.
 This complete example is stored verbatim in
@@ -466,10 +496,18 @@ Ravi Vakil's *The Rising Sea: Foundations of Algebraic Geometry* (October 21,
 2025 draft, Exercise 3.6.F) motivates the Hankel presentation, not the Jacobson
 criterion. No source text or PDF is reproduced; the citation implies neither
 participation nor endorsement. Dependencies are mathlib, multivariate-polynomials,
-minimal-primes and integral-closure, all Apache-2.0. The [full credits](docs/Credits.md) preserve
+minimal-primes, integral-closure, coherent-modules, group-theory and
+[group-rings](https://github.com/FormalFrontier/group-rings), all Apache-2.0. The [full credits](docs/Credits.md) preserve
 proof-family attributions, dependency and complete-license links, and tool/AI
 credit. Lean and doc-gen4 are separately credited tools, not bundled sources.
 `Authors: Formal Frontier Agents` is collective credit, not a copyright-ownership claim.
+
+Uniform monomial-evaluation kernels use GroupRings'
+`MonoidAlgebra.uniform_fiber_span_of_fg` for a coefficient-independent finite
+family, the weighted-evaluation identity in `ToricIdeals.MonoidAlgebra.Evaluation`,
+and Mathlib's type-tag algebra equivalences and ideal map/comap transport.
+GroupRings also provides the canonical coefficientwise fiber-normalization API;
+the ToricIdeals compatibility module re-exports it rather than duplicating its proof.
 
 The relative root-closure theorem for multivariate monomial subalgebras extends the
 polynomial-exponent argument using Mathlib's restricted-support and subalgebra-span

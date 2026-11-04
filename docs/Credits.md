@@ -1,5 +1,18 @@
 # Mathematical references and credits
 
+Uniform monomial-evaluation kernels use
+`MonoidAlgebra.uniform_fiber_span_of_fg` from
+[group-rings](https://github.com/FormalFrontier/group-rings) for one finite family
+of same-fiber exponent pairs independent of the coefficient ring. The polynomial
+argument combines that theorem with the weighted-evaluation identity in
+`ToricIdeals.MonoidAlgebra.Evaluation`, Mathlib's finite-generation results for
+natural exponent vectors, its additive/multiplicative type-tag algebra
+equivalences, and ideal map/comap transport. GroupRings is also the canonical home
+of the coefficientwise fiber-normalization theorems in the root
+`AddMonoidAlgebra` namespace; ToricIdeals re-exports these Formal Frontier Agents
+results with compatibility aliases rather than a duplicate proof. GroupRings is
+Apache-2.0; see its [complete license](https://github.com/FormalFrontier/group-rings/blob/main/LICENSE).
+
 Arithmetic gcd recognition reuses Mathlib's natural-number set gcd and forward
 conductor theorem in `Mathlib.NumberTheory.FrobeniusNumber`, by Alex Zhao, Daniel
 Buth, Sebastian Meier and Junyan Xu. Its converse follows the adjacent-member
@@ -14,9 +27,9 @@ criterion. No source text or PDF is reproduced, and the citation implies
 neither participation nor endorsement. The curve definitions, descent,
 terminal-exponent uniqueness and normalization proofs are Formal Frontier
 work. The coprime natural-weight kernel presentation reuses this library's
-all-coefficient binomial congruence and coefficientwise normalization theorem,
-with imagewise preimage choice and Mathlib's natural-weight and monoid-algebra
-pushforward APIs. The gcd-reduced natural-weight presentation reuses that
+all-coefficient binomial congruence and the coefficientwise normalization theorem
+re-exported from GroupRings, with imagewise preimage choice and Mathlib's
+natural-weight and monoid-algebra pushforward APIs. The gcd-reduced natural-weight presentation reuses that
 coprime theorem with Mathlib's coprime gcd quotients, injectivity of natural
 exponent multiplication, monoid-algebra pushforward composition and invariance
 of kernels under injective postcomposition. The Jacobson proof follows the
@@ -59,8 +72,10 @@ injective-integral dimension theorem in
 [minimal-primes](https://github.com/FormalFrontier/minimal-primes/blob/537058e2a3f4610d3126f22af057a1f6cd96c886/MinimalPrimes/RingTheory/KrullDimension/Integral.lean),
 whose finite-chain proof uses incomparability, lying-over and going-up,
 and Mathlib's Noetherian polynomial dimension formula. The code depends on
-mathlib, multivariate-polynomials, minimal-primes and integral-closure (all
-Apache-2.0; see the
+mathlib, multivariate-polynomials, minimal-primes, integral-closure,
+coherent-modules, group-theory and group-rings (all Apache-2.0; see the
+[complete coherent-modules license](https://github.com/FormalFrontier/coherent-modules/blob/b9bb233399aab0f864a2a1a1bb3d414dff530812/LICENSE),
+[complete group-theory license](https://github.com/FormalFrontier/group-theory/blob/07948c9888686ade711654c1433c3efb2652e1aa/LICENSE), and the
 [complete minimal-primes license](https://github.com/FormalFrontier/minimal-primes/blob/537058e2a3f4610d3126f22af057a1f6cd96c886/LICENSE)
 and [complete integral-closure license](https://github.com/FormalFrontier/integral-closure/blob/3e89fa94dfa32e9d4f4c43fca8dd15462686201c/LICENSE)).
 Base-ring normality of monomial exponent subalgebras directly applies

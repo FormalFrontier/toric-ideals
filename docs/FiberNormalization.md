@@ -1,8 +1,13 @@
 # Normalization and monomial-map kernels
 
-Import `ToricIdeals.MonoidAlgebra.FiberNormalization`, or the root `ToricIdeals`.
-The four results are in `ToricIdeals.AddMonoidAlgebra`. All coefficient and index
-universes are independent.
+Import `GroupRings.MonoidAlgebra.FiberNormalization` for the canonical results
+in the root `AddMonoidAlgebra` namespace. The root `ToricIdeals` import also
+re-exports them. All coefficient and index universes are independent.
+
+`ToricIdeals.MonoidAlgebra.FiberNormalization.Compatibility` additionally retains
+the four former names in `ToricIdeals.AddMonoidAlgebra` as deprecated aliases.
+The old `ToricIdeals.MonoidAlgebra.FiberNormalization` import path is a deprecated
+shim re-exporting that compatibility module; it does not contain a separate proof.
 
 ## Coefficientwise criterion
 
@@ -15,7 +20,7 @@ AddMonoidAlgebra.single m r -
   AddMonoidAlgebra.single (normal (exponentMap m)) r ∈ I
 ```
 
-Then `mem_ideal_of_mapDomain_eq_zero` shows that
+Then `AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero` shows that
 `AddMonoidAlgebra.mapDomain exponentMap f = 0` implies `f ∈ I`.
 This map sums coefficients over the fibers of the index function. With a bare
 target type it has no asserted multiplication, and even when the target carries
@@ -33,11 +38,11 @@ Now also assume `[AddMonoid N]` and take `exponentMap : M →+ N`.
 Mathlib supplies `AddMonoidAlgebra.mapDomainRingHom R exponentMap`.
 The same all-coefficient basis congruences give:
 
-- `ker_mapDomainRingHom_le`: its kernel is contained in `I`.
-- `ideal_eq_ker_mapDomainRingHom`: `I` equals that kernel, provided separately
-  that `I ≤ RingHom.ker (AddMonoidAlgebra.mapDomainRingHom R exponentMap)`.
-- `mem_ideal_iff_mapDomain_eq_zero`: under that same separate inclusion,
-  membership in `I` is equivalent to the coefficient map vanishing.
+- `AddMonoidAlgebra.ker_mapDomainRingHom_le`: its kernel is contained in `I`.
+- `AddMonoidAlgebra.ideal_eq_ker_mapDomainRingHom`: `I` equals that kernel, provided
+  separately that `I ≤ RingHom.ker (AddMonoidAlgebra.mapDomainRingHom R exponentMap)`.
+- `AddMonoidAlgebra.mem_ideal_iff_mapDomain_eq_zero`: under that same separate
+  inclusion, membership in `I` is equivalent to the coefficient map vanishing.
 
 The reverse inclusion is essential: the top ideal always satisfies any basis
 congruences, but it is not the kernel of an identity map over a nonzero ring.

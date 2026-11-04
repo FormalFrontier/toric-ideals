@@ -6,7 +6,7 @@ module
 
 public import ToricIdeals.SplitQuadric.MonomialReduction
 public import ToricIdeals.SplitQuadric.ExponentParametrization
-public import ToricIdeals.MonoidAlgebra.FiberNormalization
+public import GroupRings.MonoidAlgebra.FiberNormalization
 
 /-!
 # The kernel of the split-quadric parametrization
@@ -16,7 +16,7 @@ For every commutative coefficient ring, the kernel of the substitution
 quotient parametrization is injective, including over the zero ring.
 
 The monomial reduction congruence holds for every coefficient, not only `1`.
-The generic coefficient-fiber theorem in ToricIdeals applies to these
+The generic coefficient-fiber theorem in GroupRings applies to these
 congruences via `theta_eq_mapDomainAlgHom`. The total exponent normalizer
 need not be additive or a global section; its off-cone values are unchanged.
 No coefficient cancellation or exponent surjectivity is used.
@@ -25,7 +25,7 @@ No coefficient cancellation or exponent surjectivity is used.
 
 * Formal Frontier Agents: the monomial normal-form proof for this determinant
   model and its supporting exponent and polynomial calculations.
-* ToricIdeals, `MonoidAlgebra/FiberNormalization`: the generic all-coefficient
+* GroupRings, `MonoidAlgebra/FiberNormalization`: the generic all-coefficient
   kernel-membership theorem, reused without copying its proof.
 * Mathlib, `RingTheory/Ideal/Quotient/Operations`: injectivity of a quotient lift.
 * Ravi Vakil, *The Rising Sea: Foundations of Algebraic Geometry* (October 21, 2025),
@@ -45,7 +45,7 @@ open ToricIdeals.SplitQuadric
 variable (A : Type u) [CommRing A]
 
 /-- The determinant generates the full kernel over every commutative ring.
-The normal-form proof uses the all-coefficient fiber theorem of ToricIdeals. -/
+The normal-form proof uses the all-coefficient fiber theorem of GroupRings. -/
 theorem kernel_theta : RingHom.ker (theta A).toRingHom = relationIdeal A := by
   apply le_antisymm
   · intro p hp
@@ -54,7 +54,7 @@ theorem kernel_theta : RingHom.ker (theta A).toRingHom = relationIdeal A := by
         exponentMap p = 0 := by
       rw [theta_eq_mapDomainAlgHom A] at hθ
       exact hθ
-    exact ToricIdeals.AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
+    exact _root_.AddMonoidAlgebra.mem_ideal_of_mapDomain_eq_zero
       (R := A) (M := Fin 4 →₀ ℕ) (N := Fin 3 →₀ ℕ)
       (relationIdeal A) exponentMap
       normal
