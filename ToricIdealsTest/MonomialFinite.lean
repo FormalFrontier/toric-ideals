@@ -5,14 +5,22 @@ Authors: Formal Frontier Agents
 module
 
 public import ToricIdeals.Polynomial.MonomialFinite
+public import ToricIdeals.MvPolynomial.MonomialConductor
 
 /-!
-# A noncoprime finite monomial extension
+# Finite monomial extensions and a principal-localization inverse
 
 For exponents `4, 6` over the commutative semiring `ℕ × ℕ`, the canonical gcd
 extension is finite but its target is not the ambient polynomial ring. This
 checks the inclusion-induced action and the target for a noncoprime pair over
 coefficients that are neither a ring nor a domain.
+
+The multivariate example uses infinitely many variables and the monoid whose
+first coordinate is not one. Its relative-root extension contains the first
+unit exponent, and the fixed conductor is twice that exponent. The localization
+inverse sends the corresponding linear monomial to the cubic monomial divided
+by the conductor monomial. This checks the public inverse formula and canonical
+action over `ℕ × ℕ`, without a finite-generation hypothesis.
 -/
 
 @[expose] public section
@@ -58,3 +66,91 @@ example : Module.Finite A B ∧ (X : (ℕ × ℕ)[X]) ∉ B := by
   exact (by decide : ¬ (2 : ℕ) ∣ 1) hdvd
 
 end Polynomial
+
+namespace MvPolynomial
+
+private def firstCoordinateNeOne : AddSubmonoid (ℕ →₀ ℕ) where
+  carrier := {n | n 0 ≠ 1}
+  zero_mem' := by simp
+  add_mem' := by
+    intro a b ha hb
+    change a 0 ≠ 1 at ha
+    change b 0 ≠ 1 at hb
+    change a 0 + b 0 ≠ 1
+    omega
+
+local notation "S" => firstCoordinateNeOne
+local notation "P" => MvPolynomial ℕ (ℕ × ℕ)
+local notation "A" => Algebra.adjoin (ℕ × ℕ)
+  (Set.range fun s : S => monomial (s : ℕ →₀ ℕ) (1 : ℕ × ℕ))
+local notation "B" => Algebra.adjoin (ℕ × ℕ)
+  (Set.range fun n : {n : ℕ →₀ ℕ //
+    (∃ b, b ∈ S ∧ b + n ∈ S) ∧ ∃ k : ℕ, 0 < k ∧ k • n ∈ S} =>
+      monomial (n : ℕ →₀ ℕ) (1 : ℕ × ℕ))
+
+@[instance_reducible]
+private def firstCoordinateInclusionAlgebra : Algebra A B :=
+  (Subalgebra.inclusion
+    (MvPolynomial.adjoin_monomial_le_adjoin_monomial_relative_root
+      (R := ℕ × ℕ) S)).toRingHom.toAlgebra
+
+attribute [local instance] firstCoordinateInclusionAlgebra
+
+private theorem firstCoordinateInclusionTower : IsScalarTower A B P :=
+  @Subalgebra.inclusion.isScalarTower_right
+    (ℕ × ℕ) P inferInstance inferInstance (inferInstance : Algebra (ℕ × ℕ) P) A B
+    (MvPolynomial.adjoin_monomial_le_adjoin_monomial_relative_root
+      (R := ℕ × ℕ) S) P inferInstance
+
+attribute [local instance] firstCoordinateInclusionTower
+
+private def firstCoordinateConductor : S :=
+  ⟨Finsupp.single 0 2, by simp [firstCoordinateNeOne]⟩
+
+private theorem firstCoordinateConductor_add_mem (n : ℕ →₀ ℕ) :
+    (firstCoordinateConductor : ℕ →₀ ℕ) + n ∈ S := by
+  change (Finsupp.single 0 2 + n : ℕ →₀ ℕ) 0 ≠ 1
+  simp only [Finsupp.add_apply, Finsupp.single_eq_same]
+  omega
+
+private theorem firstCoordinate_relative_one :
+    (∃ b, b ∈ S ∧ b + Finsupp.single 0 1 ∈ S) ∧
+      ∃ k : ℕ, 0 < k ∧ k • Finsupp.single 0 1 ∈ S := by
+  refine ⟨⟨Finsupp.single 0 2, by simp [firstCoordinateNeOne], ?_⟩,
+    2, by decide, ?_⟩ <;> simp [firstCoordinateNeOne]
+
+private def firstCoordinateLinearMonomial : B :=
+  ⟨monomial (Finsupp.single 0 1) 1,
+    Algebra.subset_adjoin ⟨⟨Finsupp.single 0 1, firstCoordinate_relative_one⟩, rfl⟩⟩
+
+private def firstCoordinateCubicMonomial : A :=
+  ⟨monomial (Finsupp.single 0 3) 1,
+    Algebra.subset_adjoin ⟨⟨Finsupp.single 0 3, by simp [firstCoordinateNeOne]⟩, rfl⟩⟩
+
+local notation "xA" => (Subtype.mk
+  (monomial (firstCoordinateConductor : ℕ →₀ ℕ) (1 : ℕ × ℕ))
+  (Algebra.subset_adjoin (Set.mem_range_self firstCoordinateConductor)) : A)
+local notation "LA" => Localization.Away xA
+local notation "LB" => Localization.Away (algebraMap A B xA)
+
+example : Finsupp.single 0 1 ∉ S := by simp [firstCoordinateNeOne]
+
+example :
+    (adjoinMonomialLocalizationEquiv S firstCoordinateConductor
+      (fun n _ => firstCoordinateConductor_add_mem n)).symm
+        (algebraMap B LB firstCoordinateLinearMonomial) =
+      algebraMap A LA firstCoordinateCubicMonomial * IsLocalization.Away.invSelf xA := by
+  apply adjoinMonomialLocalizationEquiv_symm_algebraMap S firstCoordinateConductor
+    (fun n _ => firstCoordinateConductor_add_mem n)
+  apply Subtype.ext
+  simp only [coe_algebraMap_adjoin_monomial_relative_root, Subalgebra.coe_mul]
+  change monomial (Finsupp.single 0 3) (1 : ℕ × ℕ) =
+    monomial (Finsupp.single 0 2) 1 * monomial (Finsupp.single 0 1) 1
+  rw [monomial_mul_monomial, one_mul]
+  have hexp : (Finsupp.single 0 3 : ℕ →₀ ℕ) =
+      Finsupp.single 0 2 + Finsupp.single 0 1 := by
+    ext i
+    by_cases hi : i = 0 <;> simp [hi]
+  exact congrArg (fun n : ℕ →₀ ℕ => monomial n (1 : ℕ × ℕ)) hexp
+
+end MvPolynomial

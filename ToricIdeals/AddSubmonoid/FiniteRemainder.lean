@@ -22,6 +22,11 @@ exponent in the finite interval bounded by the sum of the generators. Keeping
 the difference witness ensures that this remaining exponent is relative to
 the original monoid, rather than merely in its ambient root closure.
 
+Choosing one difference witness for each of the finitely many remainders and
+summing their monoid parts gives a common conductor. The finite-witness argument
+works in any additive commutative monoid, without cancellation; finite generation
+is used only to obtain the remainders for natural exponent vectors.
+
 ## References
 
 The proof uses Mathlib's finite-generation API by Riccardo Brasca, the closure
@@ -36,6 +41,27 @@ namespace AddSubmonoid
 universe v
 
 variable {σ : Type v}
+
+/-- Finitely many remainder classes with individual difference witnesses have
+one common additive conductor. No cancellation is required. -/
+theorem exists_conductor_of_finset_remainder
+    {M : Type*} [AddCommMonoid M] (S : AddSubmonoid M) (T : M → Prop)
+    (E : Finset M) (hE : ∀ e ∈ E, ∃ b, b ∈ S ∧ b + e ∈ S)
+    (hcover : ∀ n, T n → ∃ s, s ∈ S ∧ ∃ e, e ∈ E ∧ n = s + e) :
+    ∃ c, c ∈ S ∧ ∀ n, T n → c + n ∈ S := by
+  classical
+  choose b hb hbe using fun e : E => hE e.val e.property
+  let c := ∑ e : E, b e
+  refine ⟨c, S.sum_mem (fun e _ => hb e), ?_⟩
+  intro n hn
+  obtain ⟨s, hs, e, he, rfl⟩ := hcover n hn
+  let e' : E := ⟨e, he⟩
+  have hsplit : (∑ d ∈ Finset.univ.erase e', b d) + b e' = c :=
+    Finset.sum_erase_add _ _ (Finset.mem_univ e')
+  have hce : c + e ∈ S := by
+    rw [← hsplit, add_assoc]
+    exact S.add_mem (S.sum_mem fun d _ => hb d) (hbe e')
+  simpa only [add_left_comm c s e] using S.add_mem hs hce
 
 /-- A finitely generated exponent monoid has finitely many relative root
 remainders: every exponent that is both a difference of monoid elements and a
@@ -114,5 +140,16 @@ theorem exists_finset_relative_root_remainder
       · simpa only [add_assoc, ← hne] using hbn
       · rwa [her]
     exact ⟨q, hq, e, he, hne⟩
+
+/-- A finitely generated natural exponent monoid has a conductor for exponents
+that are both differences of its elements and roots of positive multiples.
+Finite generation is sufficient, not asserted necessary. -/
+theorem exists_relative_root_conductor
+    (S : AddSubmonoid (σ →₀ ℕ)) (hS : S.FG) :
+    ∃ c, c ∈ S ∧ ∀ n : σ →₀ ℕ,
+      ((∃ b, b ∈ S ∧ b + n ∈ S) ∧ ∃ k : ℕ, 0 < k ∧ k • n ∈ S) →
+      c + n ∈ S := by
+  obtain ⟨E, hE, hcover⟩ := S.exists_finset_relative_root_remainder hS
+  exact S.exists_conductor_of_finset_remainder _ E (fun e he => (hE e he).1) hcover
 
 end AddSubmonoid

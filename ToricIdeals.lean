@@ -16,6 +16,7 @@ public import ToricIdeals.MvPolynomial.MonomialIntegralClosure
 public import ToricIdeals.MvPolynomial.MonomialNormalization
 public import ToricIdeals.MvPolynomial.MonomialFinite
 public import ToricIdeals.MvPolynomial.MonomialModuleFinite
+public import ToricIdeals.MvPolynomial.MonomialConductor
 public import ToricIdeals.NumberTheory.FrobeniusNumber
 public import ToricIdeals.Polynomial.Conductor
 public import ToricIdeals.Polynomial.FiniteSubalgebra
@@ -75,6 +76,11 @@ exponent monoid, this relative-root adjoin is a finite module over the original
 monomial adjoin with arbitrary commutative semiring coefficients. For normal
 domain coefficients, the subalgebra's own normalization is consequently finite.
 The coefficient-free finite remainder theorem needs no finite-variable assumption.
+The same module exposes the own-normalization algebra equivalence without finite
+generation. `ToricIdeals.MvPolynomial.MonomialConductor` constructs a monomial
+conductor and the canonical principal-localization comparisons with the relative-root
+extension and, for normal domain coefficients, the own-fraction normalization.
+Fixed-conductor clearing and the first comparison require only commutative semirings.
 `ToricIdeals.MonoidAlgebra.FiberNormalization` supplies the independent-universe
 coefficientwise kernel principle.
 `ToricIdeals.MonoidAlgebra.CoprimeWeights` identifies the kernel of the stock
