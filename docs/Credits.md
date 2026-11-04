@@ -90,3 +90,33 @@ Formal Frontier documentation tooling.
 Contributions use AI-assisted development and independent agent review;
 `Authors: Formal Frontier Agents` is collective author credit, not a
 copyright-ownership claim.
+
+## Monomial support, spans and finite covers
+
+The monomial-subalgebra and three generic finite-cover interfaces have their
+canonical home in
+[GroupRings](https://github.com/FormalFrontier/group-rings/tree/8a10fb8c1285227a36501fa50206a0bed05fc98a/GroupRings/MonoidAlgebra).
+Their lineage is the multivariate-polynomial support proof, the monoid-algebra
+supported-span proof, and the finite-cover support-union argument formalized by
+Formal Frontier Agents. The monomial-subalgebra definition and characteristic
+support API retain expression from the ToricIdeals formalization; the scalar-action
+span and generic finite-module proofs use GroupRings' generalized map-domain
+engine. The predecessors already allowed arbitrary exponent monoids over
+commutative semirings. The broader engine allows possibly noncommutative
+semiring coefficients and a given-map action, including the
+subsingleton-coefficient alternative.
+
+Mathlib supplies adjoining and subalgebra lattices (Kenny Lau and Yury
+Kudryashov), monoid-algebra modules and restricted support (Johannes Hölzl, Yury
+Kudryashov and Kim Morrison), support estimates (Damiano Testa), finite generation
+(Johan Commelin), and scalar restriction (Nathaniel Thomas, Jeremy Avigad,
+Johannes Hölzl and Mario Carneiro). Its span API is due to Johannes Hölzl, Mario
+Carneiro, Kevin Buzzard, Yury Kudryashov, Frédéric Dupuis and Heather Macbeth.
+ToricIdeals retains the cancellative commutative power corollary through its
+finite-cover factorial argument; the generic engine has no ToricIdeals dependency.
+
+These are academic and expression-lineage credits, not copyright-ownership or
+redistribution-permission claims. Original Formal Frontier expression is
+Apache-2.0; authentic dependency licenses and notices remain with their
+contributions. See the [complete project license](../LICENSE) and
+[complete GroupRings license](https://github.com/FormalFrontier/group-rings/blob/8a10fb8c1285227a36501fa50206a0bed05fc98a/LICENSE).

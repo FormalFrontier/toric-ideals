@@ -4,7 +4,7 @@ Authors: Formal Frontier Agents
 -/
 module
 
-public import ToricIdeals.MonoidAlgebra.MonomialSubalgebra
+public import GroupRings.MonoidAlgebra.MonomialSubalgebra
 public import Mathlib.Algebra.Group.Submonoid.Operations
 
 /-!

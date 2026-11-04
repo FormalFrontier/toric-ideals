@@ -42,11 +42,12 @@ rev = "07948c9888686ade711654c1433c3efb2652e1aa"
 [[require]]
 name = "group-rings"
 git = "https://github.com/FormalFrontier/group-rings.git"
-rev = "913e9cbeb108487cc8a384beb4045b2b7dc26ee7"
+rev = "8a10fb8c1285227a36501fa50206a0bed05fc98a"
 
 [[lean_lib]]
 name = "ToricIdeals"
-roots = ["ToricIdeals", "ToricIdeals.MonoidAlgebra.FiberNormalization",
+roots = ["ToricIdeals", "ToricIdeals.MonoidAlgebra.MonomialSubalgebra",
+  "ToricIdeals.MonoidAlgebra.FiberNormalization",
   "ToricIdeals.Polynomial.MonomialFractionField", "ToricIdeals.Polynomial.MonomialFinite",
   "ToricIdeals.Polynomial.MonomialTotalQuotient"]
 
